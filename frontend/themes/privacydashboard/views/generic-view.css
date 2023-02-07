@@ -1,0 +1,72 @@
+
+.link{
+    color: var(--lumo-primary-text-color);
+}
+.link:hover{
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: var(--lumo-font-size-l);
+}
+.pointer:hover{
+    cursor: pointer;
+}
+vaadin-button:hover{
+    cursor: pointer;
+}
+
+.search{
+    font-size: var(--lumo-font-size-xs);
+    margin: var(--lumo-space-s);
+    /*background-color: var(--lumo-primary-color-10pct);*/
+    background-color: var(--lumo-primary-color-5pct);
+    border-radius: var(--lumo-border-radius);
+    padding-top: calc(var(--lumo-space-s) * (-1));
+    padding-bottom: calc(var(--lumo-space-s) * (-1));
+}
+
+.scroller{
+    height:calc(10.5*var(--lumo-size-l));
+    width:95%;
+    border-bottom: 1px solid var(--lumo-contrast-20pct);
+    padding: var(--lumo-space-m);
+}
+
+.info{
+    width: calc(20*var(--lumo-space-l));
+}
+
+.tabs{
+    margin-left: calc(3*var(--lumo-space-l));
+}
+
+.buuutton{
+  background-color: #4185DF;
+  color:white;
+}
+
+.buuutton:hover{
+  background-color: blue;
+  font-size: var(--lumo-font-size-m);
+  font-weight: bold;
+}
+
+.cancelButton{
+  background-color: #EF6690;
+  color:white;
+}
+
+.cancelButton:hover{
+  background-color: red;
+  background-color: #FF3630;
+  font-size: var(--lumo-font-size-m);
+  font-weight: bold;
+}
+
+.avatar:hover{
+  background-color: #7E98BA;
+  cursor:pointer;
+}
+
+.bold{
+  font-size: bold;
+}

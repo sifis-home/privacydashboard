@@ -1,0 +1,37 @@
+.messages-view {
+  height: 100%;
+}
+
+.messages-view vaadin-grid {
+  height: 89%;
+  line-height: var(--lumo-line-height-m);
+}
+
+.messages-view .card {
+  border-radius: var(--lumo-border-radius);
+  box-shadow: var(--lumo-box-shadow-xs);
+  max-width:60%;
+  margin-top: 1%;
+  /*padding: calc(var(--lumo-space-s) * 1.5) var(--lumo-space-m);*/
+}
+
+.messages-view .isUser{
+
+  background-color: #B7D0E5;
+  background-color: #C6D1DF;
+  margin-left: 40%;
+}
+
+.messages-view .isContact{
+  background-color: white;
+  background-color:#E7EEF5;
+}
+
+.messages-view .textAndButton{
+  padding-left:15%;
+}
+
+.messages-view .messageText{
+  width:700px;
+  width: 70%;
+}

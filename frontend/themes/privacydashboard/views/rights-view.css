@@ -1,0 +1,57 @@
+.rights-view {
+  height: 100%;
+}
+
+.rights-view vaadin-grid {
+  height: 90%;
+  line-height: var(--lumo-line-height-m);
+}
+
+.rights-view .card{
+  background-color: var(--lumo-contrast-5pct);
+  border-radius: var(--lumo-border-radius);
+  box-shadow: var(--lumo-box-shadow-xs);
+  padding: calc(var(--lumo-space-s) * 1.5) var(--lumo-space-m);
+}
+
+.rights-view .card:hover {
+  background-color: #B7D0E5;
+  background-color: #D4E9F9;
+}
+
+.rights-view .card:hover .name{
+  font-size: var(--lumo-font-size-l);
+}
+
+.rights-view .headerLayout{
+  margin-left:1%;
+}
+
+.rights-view .name{
+  font-size: var(--lumo-font-size-m);
+  font-weight: bold;
+  margin-right: var(--lumo-space-s);
+}
+
+.rights-view vaadin-grid .name {
+  font-size: var(--lumo-font-size-m);
+  margin-right: var(--lumo-space-s);
+  font-weight: normal;
+  width:20%;
+  text-align: center;
+}
+
+.rights-view .headerLayout .name{
+  color: black;
+  font-weight: bold;
+  width:20%;
+  text-align: center;
+}
+
+.rights-view .canOpen:hover{
+  cursor: pointer;
+}
+
+.rights-view .canOpen:hover .name{
+  font-size: var(--lumo-font-size-l);
+}

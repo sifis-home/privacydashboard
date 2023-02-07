@@ -1,0 +1,8 @@
+.app-view {
+  height: 100%;
+}
+
+.app-view vaadin-grid {
+  height: 90%;
+  line-height: var(--lumo-line-height-m);
+}

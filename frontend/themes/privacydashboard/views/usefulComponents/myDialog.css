@@ -1,0 +1,8 @@
+
+[theme~="my-dialog"] .myDialogCancelButton{
+    margin-right: auto;
+}
+
+[theme~="my-dialog"] dialogHeader{
+    color:red;
+}

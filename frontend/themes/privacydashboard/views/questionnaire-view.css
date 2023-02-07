@@ -1,0 +1,96 @@
+.drawer-questionnaire {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  min-height: 100%;
+}
+
+.title-questionnaire{
+    padding-left: calc(0.5*var(--lumo-size-s));
+    font-size: var(--lumo-font-size-l);
+}
+
+.textArea-questionnaire{
+    width: 50%;
+}
+
+.section-questionnaire{
+    min-height: 100%;
+    background-color: var(--lumo-contrast-10pct);
+}
+
+.singleQuestion-questionnaire{
+    background-color: white;
+    border-radius: var(--lumo-border-radius);
+    box-shadow: var(--lumo-box-shadow-xs);
+    padding: calc(var(--lumo-space-s) * 1.5) var(--lumo-space-m);
+}
+
+.singleQuestionHidden-questionnaire{
+    max-width:95%;
+    margin-left: calc(var(--lumo-space-l) * 1.5)
+}
+
+.buttonLayout-questionnaire{
+    min-width:90%;
+    max-width: 90%;
+    margin: auto;
+    display:flex;
+    justify-content: space-between;
+}
+
+.button-questionnaire{
+    color: grey;
+}
+
+.activeButton-questionnaire{
+    color: black;
+}
+
+.activeButton-questionnaire:hover{
+    color:#1A2189;
+}
+
+.green{
+    background-color:#3cb371;
+}
+
+.orange{
+    background-color:#ffa500;
+}
+
+.red{
+    background-color:#ff0000;
+}
+
+.greenName{
+    color:#3cb371;
+}
+
+.orangeName{
+    color:#ffa500;
+}
+
+.redName{
+    color:#ff0000;
+}
+
+.linkQuestionnaire:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+.goBackButton-questionnaire{
+    margin-left: calc(0.5*var(--lumo-size-s));
+    width:40%;
+}
+
+.goBackButton-questionnaire:hover{
+    margin-left: calc(0.5*var(--lumo-size-s));
+    width:45%;
+}

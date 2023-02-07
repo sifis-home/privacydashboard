@@ -1,0 +1,24 @@
+.privacy_notice-view {
+  height: 100%;
+}
+
+.privacy_notice-view  vaadin-grid {
+  height: 90%;
+  line-height: var(--lumo-line-height-m);
+}
+
+.privacy_notice-view .mainText {
+    font-weight: bold;
+}
+
+/* example style*/
+.privacy_notice-view p{
+    /*margin-top: var(--lumo-space-m);
+    margin-bottom: var(--lumo-space-m);*/
+    padding-left: var(--lumo-space-l);
+}
+
+.privacy_notice-view .textArea{
+    width: 100%;
+    margin-bottom: var(--lumo-space-l);
+}
