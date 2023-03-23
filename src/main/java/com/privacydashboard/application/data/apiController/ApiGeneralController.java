@@ -468,7 +468,7 @@ public class ApiGeneralController {
         userAppRelationJson.put("appName", userAppRelation.getUser().getName());
         userAppRelationJson.put("appId", userAppRelation.getApp().getId().toString());
 
-        List<String> consenses = userAppRelation.getConsenses();
+        String[] consenses = userAppRelation.getConsenses();
         if (consenses != null) {
             ArrayNode consensesArray = mapper.createArrayNode();
             for (String consens : consenses) {

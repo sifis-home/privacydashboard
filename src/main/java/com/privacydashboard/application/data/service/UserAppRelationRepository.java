@@ -66,6 +66,6 @@ public interface UserAppRelationRepository extends JpaRepository<UserAppRelation
     @Modifying
     @Query("UPDATE UserAppRelation SET consenses=:consenses WHERE id=:id")
     @Transactional
-    void updateConsenses(@Param("id") UUID id, @Param("consenses") List<String> consenses);
+    void updateConsenses(@Param("id") UUID id, @Param("consenses") String[] consenses);
 
 }

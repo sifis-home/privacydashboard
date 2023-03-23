@@ -133,7 +133,7 @@ public class DataBaseService {
         return appList;
     }
 
-    public List<String> getConsensesFromUserAndApp(User user, IoTApp app){
+    public String[] getConsensesFromUserAndApp(User user, IoTApp app){
         UserAppRelation userAppRelation=userAppRelationRepository.findByUserAndApp(user, app);
         if(userAppRelation==null){
             return null;
@@ -142,11 +142,19 @@ public class DataBaseService {
     }
 
     public void removeConsensesFromUserAppRelation(UserAppRelation userAppRelation, List<String> consenses){
-        List<String> actualConsenses= userAppRelation.getConsenses();
-        for(String consens : consenses){
-            actualConsenses.remove(consens);
+        if(userAppRelation.getConsenses()==null){
+            return;
         }
-        userAppRelationRepository.updateConsenses(userAppRelation.getId(), actualConsenses);
+        List<String> actualConsenses= new ArrayList<>(List.of(userAppRelation.getConsenses()));
+        for(String consens : consenses){
+            if(actualConsenses.contains(consens)){
+                actualConsenses.remove(consens);
+                if(actualConsenses.isEmpty()){
+                    break;
+                }
+            }
+        }
+        userAppRelationRepository.updateConsenses(userAppRelation.getId(), actualConsenses.toArray(new String[actualConsenses.size()]));
     }
 
     public void removeAllConsenses(UserAppRelation userAppRelation){
@@ -154,9 +162,12 @@ public class DataBaseService {
     }
 
     public void addConsenses(UserAppRelation userAppRelation, List<String> consenses){
-        List<String> actualConsenses= userAppRelation.getConsenses();
-        actualConsenses.addAll(consenses);
-        userAppRelationRepository.updateConsenses(userAppRelation.getId(), actualConsenses);
+        List<String> newConsenses= new ArrayList<>();
+        if(userAppRelation.getConsenses()!=null){
+            newConsenses.addAll(List.of(userAppRelation.getConsenses()));
+        }
+        newConsenses.addAll(consenses);
+        userAppRelationRepository.updateConsenses(userAppRelation.getId(), newConsenses.toArray(new String[newConsenses.size()]));
     }
 
     public List<User> getUsersFromApp(IoTApp app){

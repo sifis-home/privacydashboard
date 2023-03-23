@@ -1,10 +1,12 @@
 package com.privacydashboard.application.views.apps;
 
+import com.privacydashboard.application.data.GlobalVariables;
 import com.privacydashboard.application.data.GlobalVariables.RightType;
 import com.privacydashboard.application.data.GlobalVariables.Role;
 import com.privacydashboard.application.data.entity.IoTApp;
 import com.privacydashboard.application.data.entity.RightRequest;
 import com.privacydashboard.application.data.entity.User;
+import com.privacydashboard.application.data.entity.UserAppRelation;
 import com.privacydashboard.application.data.service.CommunicationService;
 import com.privacydashboard.application.data.service.DataBaseService;
 import com.privacydashboard.application.security.AuthenticatedUser;
@@ -30,8 +32,23 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.*;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.security.PermitAll;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,6 +61,7 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
     private final AuthenticatedUser authenticatedUser;
     private final CommunicationService communicationService;
 
+    private final Div summaryEvaluation= new Div();
     private final TextField searchText=new TextField();
     private final Grid<IoTApp> grid= new Grid<>();
 
@@ -59,9 +77,46 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
         this.authenticatedUser=authenticatedUser;
         this.communicationService=communicationService;
         addClassName("grid-view");
+        initilizeInfrastuctureEvaluation();
         initializeSearchText();
         initializeGrid();
-        add(searchText, grid);
+        add(summaryEvaluation, searchText, grid);
+    }
+
+    private void initilizeInfrastuctureEvaluation(){
+        Span evaluationDescription= new Span("Privacy Infrastructure Evaluation: ");
+        evaluationDescription.addClassName("bold");
+        Span evaluation= new Span();
+        GlobalVariables.QuestionnaireVote vote= GlobalVariables.QuestionnaireVote.GREEN;
+        int nRed=0;
+        for(IoTApp app : dataBaseService.getUserApps(authenticatedUser.getUser())){
+            if(app.getQuestionnaireVote().equals(GlobalVariables.QuestionnaireVote.RED)){
+                nRed++;
+                if(nRed>1){
+                    vote= GlobalVariables.QuestionnaireVote.RED;
+                    break;
+                }
+            }
+            if(app.getQuestionnaireVote().equals(GlobalVariables.QuestionnaireVote.RED) && vote.equals(GlobalVariables.QuestionnaireVote.GREEN)){
+                vote= GlobalVariables.QuestionnaireVote.ORANGE;
+            }
+        }
+        switch (vote){
+            case GREEN:
+                evaluation.setText("GREEN");
+                summaryEvaluation.addClassName("greenName");
+                break;
+            case ORANGE:
+                evaluation.setText("ORANGE");
+                summaryEvaluation.addClassName("orangeName");
+                break;
+            case RED:
+                evaluation.setText("RED");
+                summaryEvaluation.addClassName("redName");
+                break;
+        }
+        summaryEvaluation.add(evaluationDescription, evaluation);
+        summaryEvaluation.addClassName("summaryEvaluation");
     }
 
     private void initializeSearchText(){
@@ -214,9 +269,19 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
 
     private VerticalLayout getConsenses(IoTApp i){
         VerticalLayout layout=new VerticalLayout();
-        List<String> consenses=dataBaseService.getConsensesFromUserAndApp(authenticatedUser.getUser(), i);
-        for(String consens :  consenses){
-            HorizontalLayout l=new HorizontalLayout(new Span(consens), new Button("Withdraw consent", e -> withdrawConsent(i, consens)));
+        String[] appConsenses= i.getConsenses();
+        String[] userConsenses=dataBaseService.getConsensesFromUserAndApp(authenticatedUser.getUser(), i);
+        for(String consens :  appConsenses){
+            Button button= new Button();
+            if(userConsenses!=null && List.of(userConsenses).contains(consens)){
+                button.setText("Withdraw consent");
+                button.addClickListener(e -> changeConsent(i, consens, "withdraw"));
+            }
+            else{
+                button.setText("Accept consent");
+                button.addClickListener(e -> changeConsent(i, consens, "accept"));
+            }
+            HorizontalLayout l=new HorizontalLayout(new Span(consens), button);
             l.setAlignItems(FlexComponent.Alignment.CENTER);
             l.setVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
             layout.add(l);
@@ -224,7 +289,47 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
         return layout;
     }
 
-    private void withdrawConsent(IoTApp i, String consent){
+    private void changeConsent(IoTApp i, String consent, String action){
+
+        /*HttpClient httpclient = HttpClients.createDefault();
+        HttpPost httppost = new HttpPost("http://www.a-domain.example/foo/");
+
+// Request parameters and other properties.
+        List<NameValuePair> params = new ArrayList<NameValuePair>(4);
+        params.add(new BasicNameValuePair("user", authenticatedUser.getUser().getId().toString()));
+        params.add(new BasicNameValuePair("app", i.getId().toString()));
+        params.add(new BasicNameValuePair("consent", consent));
+        params.add(new BasicNameValuePair("action", action));
+        try {
+            httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+        } catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+
+//Execute and get the response.
+        try {
+            HttpResponse response = httpclient.execute(httppost);
+            HttpEntity entity = response.getEntity();
+
+            if (entity != null) {
+                try (InputStream instream = entity.getContent()) {
+                    // do something useful
+                }
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        */
+
+        // DA ELIMINARE
+        if(action.equals("withdraw")){
+            dataBaseService.removeConsensesFromUserAppRelation(dataBaseService.getUserAppRelationByUserAndApp(authenticatedUser.getUser(), i), List.of(consent));
+        }
+        else{
+            dataBaseService.addConsenses(dataBaseService.getUserAppRelationByUserAndApp(authenticatedUser.getUser(), i), List.of(consent));
+        }
+        // FINE DA ELIMINARE
+
         RightRequest request=new RightRequest();
         request.setSender(authenticatedUser.getUser());
         request.setRightType(RightType.WITHDRAWCONSENT);

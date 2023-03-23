@@ -49,7 +49,6 @@ public class DataGenerator {
             apps[i].setQuestionnaireVote(QuestionnaireVote.GREEN);
             apps[i].setDetailVote(greenAnswers);
             //apps[i].setOptionalAnswers();
-            ioTAppRepository.save(apps[i]);
             i++;
 
 
@@ -59,7 +58,6 @@ public class DataGenerator {
             apps[i].setQuestionnaireVote(QuestionnaireVote.ORANGE);
             apps[i].setDetailVote(orangeAnswers);
             //apps[i].setOptionalAnswers();
-            ioTAppRepository.save(apps[i]);
             i++;
 
             apps[i]= new IoTApp();
@@ -68,7 +66,6 @@ public class DataGenerator {
             apps[i].setQuestionnaireVote(QuestionnaireVote.RED);
             apps[i].setDetailVote(redAnswers);
             //apps[i].setOptionalAnswers();
-            ioTAppRepository.save(apps[i]);
             i++;
 
 
@@ -78,7 +75,6 @@ public class DataGenerator {
             apps[i].setQuestionnaireVote(QuestionnaireVote.ORANGE);
             apps[i].setDetailVote(orangeAnswers);
             //apps[i].setOptionalAnswers();
-            ioTAppRepository.save(apps[i]);
             i++;
 
             apps[i]= new IoTApp();
@@ -87,7 +83,6 @@ public class DataGenerator {
             apps[i].setQuestionnaireVote(QuestionnaireVote.RED);
             apps[i].setDetailVote(redAnswers);
             //apps[i].setOptionalAnswers();
-            ioTAppRepository.save(apps[i]);
             i++;
 
             apps[i]= new IoTApp();
@@ -96,7 +91,6 @@ public class DataGenerator {
             apps[i].setQuestionnaireVote(QuestionnaireVote.GREEN);
             apps[i].setDetailVote(greenAnswers);
             //apps[i].setOptionalAnswers();
-            ioTAppRepository.save(apps[i]);
             i++;
 
             apps[i]= new IoTApp();
@@ -105,7 +99,6 @@ public class DataGenerator {
             apps[i].setQuestionnaireVote(QuestionnaireVote.RED);
             apps[i].setDetailVote(redAnswers);
             //apps[i].setOptionalAnswers();
-            ioTAppRepository.save(apps[i]);
             i++;
 
             apps[i]= new IoTApp();
@@ -114,7 +107,6 @@ public class DataGenerator {
             apps[i].setQuestionnaireVote(QuestionnaireVote.GREEN);
             apps[i].setDetailVote(greenAnswers);
             //apps[i].setOptionalAnswers();
-            ioTAppRepository.save(apps[i]);
             i++;
 
             apps[i]= new IoTApp();
@@ -123,7 +115,6 @@ public class DataGenerator {
             apps[i].setQuestionnaireVote(QuestionnaireVote.ORANGE);
             apps[i].setDetailVote(orangeAnswers);
             //apps[i].setOptionalAnswers();
-            ioTAppRepository.save(apps[i]);
             i++;
 
             apps[i]= new IoTApp();
@@ -132,7 +123,17 @@ public class DataGenerator {
             apps[i].setQuestionnaireVote(QuestionnaireVote.GREEN);
             apps[i].setDetailVote(greenAnswers);
             //apps[i].setOptionalAnswers();
-            ioTAppRepository.save(apps[i]);
+
+            for(int m=0; m<10; m++){
+                if(m==2 || m==6){
+                    apps[m].setConsenses(new String[]{"processing of personal information to provide the service", "processing of personal information to personalize the content"});
+                }
+                else{
+                    apps[m].setConsenses(new String[]{"processing of personal information to provide the service"});
+                }
+                logger.info(apps[m].getName());
+                ioTAppRepository.save(apps[m]);
+            }
 
             // MAIN USERS
             User subject, controller, dpo;
@@ -166,10 +167,10 @@ public class DataGenerator {
                 userAppRelationSubject[j].setUser(subject);
                 userAppRelationSubject[j].setApp(apps[j]);
                 if(j==2 || j==6){
-                    userAppRelationSubject[j].setConsenses(List.of("processing of personal information to provide the service", "processing of personal information to personalize the content"));
+                    userAppRelationSubject[j].setConsenses(new String[]{"processing of personal information to provide the service", "processing of personal information to personalize the content"});
                 }
                 else{
-                    userAppRelationSubject[j].setConsenses(List.of("processing of personal information to provide the service"));
+                    userAppRelationSubject[j].setConsenses(new String[]{"processing of personal information to provide the service"});
                 }
                 userAppRelationRepository.save(userAppRelationSubject[j]);
 
@@ -177,10 +178,10 @@ public class DataGenerator {
                 userAppRelationController[j].setUser(controller);
                 userAppRelationController[j].setApp(apps[j]);
                 if(j==2 || j==6){
-                    userAppRelationController[j].setConsenses(List.of("processing of personal information to provide the service", "processing of personal information to personalize the content"));
+                    userAppRelationController[j].setConsenses(new String[]{"processing of personal information to provide the service", "processing of personal information to personalize the content"});
                 }
                 else{
-                    userAppRelationController[j].setConsenses(List.of("processing of personal information to provide the service"));
+                    userAppRelationController[j].setConsenses(new String[]{"processing of personal information to provide the service"});
                 }
                 userAppRelationRepository.save(userAppRelationController[j]);
 
@@ -188,10 +189,10 @@ public class DataGenerator {
                 userAppRelationDPO[j].setUser(dpo);
                 userAppRelationDPO[j].setApp(apps[j]);
                 if(j==2 || j==6){
-                    userAppRelationDPO[j].setConsenses(List.of("processing of personal information to provide the service", "processing of personal information to personalize the content"));
+                    userAppRelationDPO[j].setConsenses(new String[]{"processing of personal information to provide the service", "processing of personal information to personalize the content"});
                 }
                 else{
-                    userAppRelationDPO[j].setConsenses(List.of("processing of personal information to provide the service"));
+                    userAppRelationDPO[j].setConsenses(new String[]{"processing of personal information to provide the service"});
                 }
                 userAppRelationRepository.save(userAppRelationDPO[j]);
             }
@@ -219,10 +220,10 @@ public class DataGenerator {
                     userAppRelation.setApp(apps[m]);
                     userAppRelation.setUser(subjects[j]);
                     if(m==2 || m==6){
-                        userAppRelation.setConsenses(List.of("processing of personal information to provide the service", "processing of personal information to personalize the content"));
+                        userAppRelation.setConsenses(new String[]{"processing of personal information to provide the service", "processing of personal information to personalize the content"});
                     }
                     else{
-                        userAppRelation.setConsenses(List.of("processing of personal information to provide the service"));
+                        userAppRelation.setConsenses(new String[]{"processing of personal information to provide the service"});
                     }
                     userAppRelationRepository.save(userAppRelation);
                 }

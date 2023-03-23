@@ -70,3 +70,13 @@ vaadin-button:hover{
 .bold{
   font-size: bold;
 }
+
+.summaryEvaluation{
+    font-size: var(--lumo-font-size-m);
+    margin-left: var(--lumo-space-m);
+    /*background-color: var(--lumo-primary-color-10pct);*/
+    padding: calc(var(--lumo-space-s) * 0.5);
+    border-radius: var(--lumo-border-radius);
+    /*padding-top: calc(var(--lumo-space-s) * (-1));
+    padding-bottom: calc(var(--lumo-space-s) * (-1));*/
+}

@@ -14,8 +14,8 @@ public class UserAppRelation extends AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "appId")
     private IoTApp app;
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> consenses;
+    @Column(length=2000)
+    private String[] consenses;
     private Role role;
 
     public User getUser() {
@@ -31,10 +31,10 @@ public class UserAppRelation extends AbstractEntity{
     public void setApp(IoTApp app) {
         this.app = app;
     }
-    public List<String> getConsenses() {
+    public String[] getConsenses() {
         return consenses;
     }
-    public void setConsenses(List<String> consenses) {
+    public void setConsenses(String[] consenses) {
         this.consenses = consenses;
     }
 }
