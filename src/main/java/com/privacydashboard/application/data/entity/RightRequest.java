@@ -25,12 +25,30 @@ public class RightRequest extends AbstractEntity{
     private String other;
     private String response;
 
-    public User getSender(){ return sender;}
-    public void setSender(User sender){ this.sender=sender;}
-    public User getReceiver(){ return receiver;}
-    public void setReceiver(User receiver){ this.receiver=receiver;}
-    public IoTApp getApp(){ return app;}
-    public void setApp(IoTApp app){ this.app=app;}
+    public User getSender(){ 
+        return sender;
+    }
+
+    public void setSender(User sender){ 
+        this.sender=sender;
+    }
+
+    public User getReceiver(){ 
+        return receiver;
+    }
+
+    public void setReceiver(User receiver){ 
+        this.receiver=receiver;
+    }
+
+    public IoTApp getApp(){ 
+        return app;
+    }
+
+    public void setApp(IoTApp app){ 
+        this.app=app;
+    }
+
     public LocalDateTime getTime() {
         return time;
     }
@@ -49,10 +67,22 @@ public class RightRequest extends AbstractEntity{
     public void setDetails(String details) {
         this.details = details;
     }
-    public Boolean getHandled(){ return handled;}
-    public void setHandled(Boolean handled){ this.handled=handled;}
-    public String getOther(){ return other;}
-    public void setOther(String other){ this.other=other; }
+    public Boolean getHandled(){ 
+        return handled;
+    }
+
+    public void setHandled(Boolean handled){ 
+        this.handled=handled;
+    }
+
+    public String getOther(){ 
+        return other;
+    }
+
+    public void setOther(String other){ 
+        this.other=other; 
+    }
+    
     public String getResponse() {
         return response;
     }

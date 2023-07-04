@@ -293,10 +293,17 @@ public class ApiGeneralController {
         if (node.has("id")) {
             app.setId(UUID.fromString(node.get("id").asText()));
         }
-
-        if (node.has("description")) {
+        
+        //Codice originale, setta l'id con la descrizione
+        /*if (node.has("description")) {
             app.setId(UUID.fromString(node.get("description").asText()));
+        }*/
+
+        //Codice aggiornato, descrizione settata con la descrizione
+        if (node.has("description")) {
+            app.setDescription(node.get("description").asText());
         }
+
 
         if (node.has("questionnaireVote")) {
             switch (node.get("questionnaireVote").asText()) {

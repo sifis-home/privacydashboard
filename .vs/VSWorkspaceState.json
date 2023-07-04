@@ -1,0 +1,20 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\main",
+    "\\src\\main\\java",
+    "\\src\\main\\java\\com",
+    "\\src\\main\\java\\com\\privacydashboard",
+    "\\src\\main\\java\\com\\privacydashboard\\application",
+    "\\src\\test",
+    "\\src\\test\\java",
+    "\\src\\test\\java\\com",
+    "\\src\\test\\java\\com\\privacydashboard",
+    "\\src\\test\\java\\com\\privacydashboard\\application",
+    "\\src\\test\\java\\com\\privacydashboard\\application\\data",
+    "\\src\\test\\java\\com\\privacydashboard\\application\\data\\entity"
+  ],
+  "SelectedNode": "\\src\\main\\java\\com\\privacydashboard\\application\\Application.java",
+  "PreviewInSolutionExplorer": false
+}
