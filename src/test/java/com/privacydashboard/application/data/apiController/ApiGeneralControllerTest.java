@@ -8,6 +8,7 @@ import org.junit.platform.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.privacydashboard.application.data.GlobalVariables;
 import com.privacydashboard.application.data.GlobalVariables.QuestionnaireVote;
@@ -92,43 +93,28 @@ public class ApiGeneralControllerTest {
 
     @Test
     public void createJsonFromAppNullTest(){
-        IoTApp app = new IoTApp();
-        try{
+        IoTApp app = new IoTApp(); 
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromApp(app);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM APP NULL APP-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
     
     @Test
     public void createJsonFromAppNameNullTest(){
         IoTApp app = new IoTApp();
         app.setId(new UUID(0, 4));
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromApp(app);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM APP NULL APP NAME-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
     public void createJsonFromAppIDNullTest(){
         IoTApp app = new IoTApp();
         app.setName("TestApp");
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromApp(app);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM APP NULL APP ID-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -142,15 +128,14 @@ public class ApiGeneralControllerTest {
         assertEquals(api.createJsonFromApp(app), jsonTest);        
     }
 
-    //Il metodo createJsonFromApp richiede che ci siano
-    //un numero di optionalAnswers pari a nQuestions
-    //mentre non ha lo stesso requisito per detailVote,
-    //con il loro numero che può essere maggiore o minore.
-    //Questo va in contrasto con il metodo inverso,
-    //getAppFromJsonNode, che invece vuole che i detailVote
-    //siano al più nQuestions.
-    //Il metodo createJsonFromApp e il suo inverso
-    //non considerano l'attributo Consenses di IotApp.
+    //The method createJsonFromApp asks for a set number 
+    //of optionalAnswers equals to nQuestions, while it 
+    //does not hold the same requirement for detailVote, 
+    //which can in number be more or less than nQuestions.
+    //This is in contrast with the inverse method getAppFromJsonNode
+    //which asks for at most nQuestions detailVote.
+    //The method createJsonFromApp and its inverse 
+    //do not consider the Consenses attributes of IoTApp.
     @Test
     public void createJsonFromAppAllParametersTest(){
         IoTApp app = new IoTApp();
@@ -193,27 +178,17 @@ public class ApiGeneralControllerTest {
     public void getAppFromJsonNodeIDNotValidTest(){
         ObjectNode node = mapper.createObjectNode();
         node.put("id", "4");
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.getAppFromJsonNode(false, node);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START APP FROM NODE NULL APP ID-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
     public void getAppFromJsonNodeNullNameTest(){
         ObjectNode node = mapper.createObjectNode();
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.getAppFromJsonNode(true, node);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START APP FROM NODE NULL APP NAME-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -273,10 +248,9 @@ public class ApiGeneralControllerTest {
         assertEquals(api.getAppFromJsonNode(false, node), app);
     }
 
-
-    //Il test fallisce perché non si può assegnare
-    //come valore di un record Hashtable null.
-    //Errore alla linea 358 di ApiGeneralController
+    //Test fails because you cannot assign a null value
+    //to a Hashtable record.
+    //Error at line 358 of ApiGeneralController
     @Test
     public void getAppFromJsonNodeVoteAnswersNotFullArraysTest(){
         ObjectNode node = mapper.createObjectNode();
@@ -307,12 +281,8 @@ public class ApiGeneralControllerTest {
         optionalAnswersArrayNode.add("LineTest0");
         node.set("optionalAnswers", optionalAnswersArrayNode);
 
-        try{
-            assertEquals(api.getAppFromJsonNode(false, node), app);
-        }
-        catch(NullPointerException e){
-            System.out.println("Non si può assegnare null ad un record di una Hashtable: "+e);
-        }
+        assertEquals(api.getAppFromJsonNode(false, node), app);
+        
     }
 
     @Test
@@ -323,46 +293,25 @@ public class ApiGeneralControllerTest {
 
     @Test
     public void getAppFromJsonStringNotValidJsonTest(){
-        try{
+        assertThrows(IOException.class, () -> {
             api.getAppFromJsonString(false, "NotAJson");
-        }
-        catch(IOException e){
-            System.out.println("-----TEST START APP FROM STRING NULL BODY-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
     public void getAppFromJsonStringNameNullTest(){
         String body = "{\"id\":\""+new UUID(0, 0).toString()+"\"}";
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.getAppFromJsonString(true, body);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START APP FROM STRING NULL NAME-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
-        catch(IOException e){
-            System.out.println('\n'+"Impossible path: "+e);
-        }
+        });
     }
 
     @Test
     public void getAppFromJsonStringIDNotValidTest(){
         String body = "{\"id\":\""+"0"+"\"}";
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.getAppFromJsonString(false, body);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START APP FROM STRING NOT VALID ID-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
-        catch(IOException e){
-            System.out.println('\n'+"Impossible path: "+e);
-        }
+        });
     }
 
     @Test
@@ -384,14 +333,9 @@ public class ApiGeneralControllerTest {
     @Test
     public void createJsonFromUserNullTest(){
         User user = new User();
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromUser(user);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM USER NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -402,14 +346,9 @@ public class ApiGeneralControllerTest {
         user.setHashedPassword("HashedTest");
         user.setRole(Role.CONTROLLER);
 
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromUser(user);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM USER ID NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -420,14 +359,9 @@ public class ApiGeneralControllerTest {
         user.setHashedPassword("HashedTest");
         user.setRole(Role.CONTROLLER);
 
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromUser(user);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM USER NAME NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -438,14 +372,9 @@ public class ApiGeneralControllerTest {
         user.setId(new UUID(0, 0));
         user.setRole(Role.CONTROLLER);
 
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromUser(user);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM USER PASSWORD NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -456,14 +385,9 @@ public class ApiGeneralControllerTest {
         user.setId(new UUID(0, 0));
         user.setHashedPassword("HashedTest");
 
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromUser(user);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM USER ROLE NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -519,28 +443,17 @@ public class ApiGeneralControllerTest {
 
         node.put("id", "0");
 
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.getUserFromJsonNode(false, node);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START USER FROM JSON ID NOT VALID-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
     public void getUserFromJsonNodeNameNullTest(){
         ObjectNode node = mapper.createObjectNode();
-
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.getUserFromJsonNode(true, node);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START USER FROM JSON NAME NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -548,20 +461,13 @@ public class ApiGeneralControllerTest {
         ObjectNode node = mapper.createObjectNode();
 
         node.put("name", "TestName");
-
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.getUserFromJsonNode(true, node);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START USER FROM JSON PASSWORD NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
-    //Questo test e il successivo falliscono in quanto 
-    //userDetailsServiceImpl non è inizializzato
-    //e lancia una NullPointerException
+    //Test fails because userDetailsServiceImpl
+    //throws a NullPointerException
     @Test
     public void getUserFromJsonNodeRoleNullTest(){
         ObjectNode node = mapper.createObjectNode();
@@ -584,8 +490,8 @@ public class ApiGeneralControllerTest {
         }
     }
 
-    //Il campo ProfilePictureUrl non viene usato in
-    //questo metodo o nel suo inverso
+    //ProfilePictureUrl attribute is not used in 
+    //this method or its inverse
     @Test
     public void getUserFromJsonNodeAllParametersTest(){
         ObjectNode node = mapper.createObjectNode();
@@ -625,81 +531,44 @@ public class ApiGeneralControllerTest {
 
     @Test
     public void getUserFromJsonStringNotValidJsonTest(){
-        try{
+        assertThrows(IOException.class, () -> {
             api.getUserFromJsonString(false, "NotAJson");
-        }
-        catch(IOException e){
-            System.out.println("-----TEST START USER FROM JSON STRING JSON NOT VALID-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
     public void getUserFromJsonStringIDNotValidTest(){
         String body = "{\"id\":\""+"0"+"\"}";
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.getUserFromJsonString(false, body);
-        }
-        catch(IOException e){
-            System.out.println("Impossible path");
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START USER FROM JSON STRING ID NOT VALID-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
     public void getUserFromJsonStringNameNullTest(){
         String body = "{\"id\":\""+new UUID(0, 0).toString()+"\"}";
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.getUserFromJsonString(true, body);
-        }
-        catch(IOException e){
-            System.out.println("Impossible path");
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START USER FROM JSON STRING NAME NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
     public void getUserFromJsonStringRoleNullTest(){
         String body = "{\"name\":\""+"TestName"+"\",\"id\":\""+new UUID(0, 0).toString()+"\"}";
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.getUserFromJsonString(true, body);
-        }
-        catch(IOException e){
-            System.out.println("Impossible path");
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START USER FROM JSON STRING ROLE NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
     public void getUserFromJsonStringPasswordNullTest(){
         String body = "{\"role\":\""+Role.CONTROLLER.toString()+"\",\"name\":\""+"TestName"+"\",\"id\":\""+new UUID(0, 0).toString()+"\"}";
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.getUserFromJsonString(true, body);
-        }
-        catch(IOException e){
-            System.out.println("Impossible path");
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START USER FROM JSON STRING PASSWORD NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
-    //Il test fallisce perché userDetailsServiceImpl è null
+    //Test fails because userDetailServiceImpl is null
     @Test
     public void getUserFromJsonStringValidBodyTest(){
         String body = "{\"password\":\""+"TestHash"+"\",\"role\":\""+Role.CONTROLLER.toString()+"\",\"name\":\""+"TestName"+"\",\"id\":\""+new UUID(0, 0).toString()+"\"}";
@@ -722,15 +591,9 @@ public class ApiGeneralControllerTest {
     @Test
     public void createJsonFromUserAppRelationNullTest(){
         UserAppRelation relation = new UserAppRelation();
-
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromUserAppRelation(relation);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM USERAPPRELATION NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -739,15 +602,9 @@ public class ApiGeneralControllerTest {
 
         relation.setUser(new User());
         relation.setApp(new IoTApp());
-
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromUserAppRelation(relation);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM USERAPPRELATION ID NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -756,15 +613,9 @@ public class ApiGeneralControllerTest {
 
         relation.setId(new UUID(0, 0));
         relation.setApp(new IoTApp());
-
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromUserAppRelation(relation);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM USERAPPRELATION USER NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -773,18 +624,13 @@ public class ApiGeneralControllerTest {
 
         relation.setId(new UUID(0, 0));
         relation.setUser(new User());
-
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromUserAppRelation(relation);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM USERAPPRELATION APP NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
-    //Il test fallisce perché i parametri sono mappati male nel metodo
+    //Test fails because attributes 
+    //are not properly mapped in the method
     @Test
     public void createJsonFromUserAppRelationMinimalParametersTest(){
         UserAppRelation relation = new UserAppRelation();
@@ -811,7 +657,8 @@ public class ApiGeneralControllerTest {
         assertEquals(api.createJsonFromUserAppRelation(relation), node);
     }
 
-    //Il test fallisce perché i parametri sono mappati male nel metodo
+    //Test fails because attributes 
+    //are not properly mapped in the method
     @Test
     public void createJsonFromUserAppRelationAllParametersTest(){
         UserAppRelation relation = new UserAppRelation();
@@ -850,15 +697,9 @@ public class ApiGeneralControllerTest {
     @Test
     public void createJsonFromMessageNullTest(){
         Message mess = new Message();
-
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromMessage(mess);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM MESSAGE NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -869,15 +710,9 @@ public class ApiGeneralControllerTest {
         User receiver = new User();
         mess.setSender(sender);
         mess.setReceiver(receiver);
-
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromMessage(mess);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM MESSAGE ID NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -887,15 +722,9 @@ public class ApiGeneralControllerTest {
         mess.setId(new UUID(0, 0));
         User receiver = new User();
         mess.setReceiver(receiver);
-
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromMessage(mess);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM MESSAGE SENDER NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -905,23 +734,16 @@ public class ApiGeneralControllerTest {
         User sender = new User();
         mess.setId(new UUID(0, 0));
         mess.setSender(sender);
-
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.createJsonFromMessage(mess);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START JSON FROM MESSAGE RECEIVER NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
-    //Il test fallisce e mostra un falla nella logica del metodo
-    //Il quale ritiene obbligatori message id, sender e receiver
-    //Ma non può funzionare in assenza di tutti i parametri
-    //La mancanza o meno di ID per gli user coinvolti è relativa
-    //Il problema è nel non controllare Message e Time 
-    //Il che porta a non poter gestire l'eccezione NullPointer    
+    //Test fails and shows a hole in the method's logic,
+    //which considers only messageId, sender and receiver mandatory,  
+    //but it does not work in absence of all parameters.
+    //The problem lies in not checking Message and Time,
+    //which leads to a NullPointerException  
     @Test
     public void createJsonFromMessageMinimalParametersTest(){
         ObjectNode node = mapper.createObjectNode();
@@ -948,9 +770,8 @@ public class ApiGeneralControllerTest {
 
     }
 
-
-    //C'è una incongruenza con le nomenclature degli attributi
-    //In particolare message che il json chiama text
+    //There is an inconsistency with attributes' names
+    //In particular the Message attributes called text in the json
     @Test
     public void createJsonFromMessageAllParametersTest(){
         ObjectNode node = mapper.createObjectNode();
@@ -988,14 +809,9 @@ public class ApiGeneralControllerTest {
         ObjectNode node = mapper.createObjectNode();
         node.put("text", "TestMessage");
         node.put("receiverId", new UUID(0, 2).toString());
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.getMessageFromJsonNode(node);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START MESSAGE FROM JSON SENDER NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -1003,14 +819,9 @@ public class ApiGeneralControllerTest {
         ObjectNode node = mapper.createObjectNode();
         node.put("text", "TestMessage");
         node.put("senderId", new UUID(0, 1).toString());
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.getMessageFromJsonNode(node);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START MESSAGE FROM JSON RECEIVER NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -1018,14 +829,9 @@ public class ApiGeneralControllerTest {
         ObjectNode node = mapper.createObjectNode();
         node.put("senderId", new UUID(0, 1).toString());
         node.put("receiverId", new UUID(0, 2).toString());
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.getMessageFromJsonNode(node);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START MESSAGE FROM JSON MESSAGE NULL-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -1035,14 +841,9 @@ public class ApiGeneralControllerTest {
         node.put("receiverId", new UUID(0, 2).toString());
         node.put("text", "TestMessage");
         node.put("id", "0");
-        try{
+        assertThrows(IllegalArgumentException.class, () -> {
             api.getMessageFromJsonNode(node);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("-----TEST START MESSAGE FROM JSON ID NOT VALID-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
 
     @Test
@@ -1053,14 +854,9 @@ public class ApiGeneralControllerTest {
         node.put("text", "TestMessage");
         node.put("id", new UUID(0, 0).toString());
         node.put("time", "NotATime");
-        try{
+        assertThrows(DateTimeParseException.class, () -> {
             api.getMessageFromJsonNode(node);
-        }
-        catch(DateTimeParseException e){
-            System.out.println("-----TEST START MESSAGE FROM JSON TIME NOT VALID-----");
-            System.out.println("Caught Exception:" + e);
-            System.out.println("-----TEST END-----"+'\n');
-        }
+        });
     }
     
     
