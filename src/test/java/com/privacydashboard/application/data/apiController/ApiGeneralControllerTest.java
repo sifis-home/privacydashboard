@@ -1,11 +1,6 @@
 package com.privacydashboard.application.data.apiController;
 
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.engine.*;
-import org.junit.platform.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -859,5 +854,49 @@ public class ApiGeneralControllerTest {
         });
     }
     
+    //Other tests dealing with db queries for getMessageFromJsonNode
+
+    // String body = "{\"password\":\""+"TestHash"+"\",\"role\":\""+Role.CONTROLLER.toString()+"\",\"name\":\""+"TestName"+"\",\"id\":\""+new UUID(0, 0).toString()+"\"}";
+
+    @Test
+    public void getMessageFromJsonStringNotValidJsonTest(){
+        assertThrows(IOException.class, () -> {
+            api.getMessageFromJsonString("NotAJson");
+        });
+    }
     
+    @Test
+    public void getMessageFromJsonStringSenderNullTest(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            api.getMessageFromJsonString("{\"receiver\":\""+new UUID(0, 0).toString()+"\",\"id\":\""+new UUID(0, 1).toString()+"\"}");
+        });
+    }
+
+    @Test
+    public void getMessageFromJsonStringReceiverNullTest(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            api.getMessageFromJsonString("{\"sender\":\""+new UUID(0, 0).toString()+"\",\"id\":\""+new UUID(0, 1).toString()+"\"}");
+        });
+    }
+
+    @Test
+    public void getMessageFromJsonStringTextNullTest(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            api.getMessageFromJsonString("{\"receiver\":\""+new UUID(0, 0).toString()+"\",\"sender\":\""+new UUID(0, 2).toString()+"\",\"id\":\""+new UUID(0, 1).toString()+"\"}");
+        });
+    }
+
+    @Test
+    public void getMessageFromJsonStringIDNotValidTest(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            api.getMessageFromJsonString("{\"receiver\":\""+new UUID(0, 0).toString()+"\",\"text\":\""+"TestMessage"+"\",\"id\":\""+"2"+"\"}");
+        });
+    }
+
+    @Test
+    public void getMessageFromJsonStringTimeNotValidTest(){
+        assertThrows(DateTimeParseException.class, () -> {
+            api.getMessageFromJsonString("{\"receiver\":\""+new UUID(0, 0).toString()+"\",\"sender\":\""+new UUID(0, 2).toString()+"\",\"text\":\""+"TestMessage"+"\",\"time\":\""+"NotATime"+"\",\"id\":\""+new UUID(0, 1).toString()+"\"}");
+        });
+    }
 }
