@@ -49,7 +49,7 @@ jobs:
         if: ${{ matrix.java-version == '18' }}
         with:
           clean: true
-          folder: target/site/jacoco/index.html
+          folder: target/site/jacoco
           target-folder: reports
           branch: gh-pages
 
