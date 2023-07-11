@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MyDialog.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.views.usefulComponents</a> &gt; <span class="el_source">MyDialog.java</span></div><h1>MyDialog.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.views.usefulComponents;
+
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.icon.VaadinIcon;
+
+public class MyDialog extends Dialog{
+<span class="nc" id="L10">    private final Button closeButton=new Button(VaadinIcon.CLOSE_SMALL.create(), e-&gt;close());</span>
+<span class="nc" id="L11">    private Button continueButton=new Button(&quot;Continue&quot;);</span>
+<span class="nc" id="L12">    private final Button cancelButton=new Button(&quot;Cancel&quot;, e-&gt;close());</span>
+
+<span class="nc" id="L14">    public MyDialog(){</span>
+<span class="nc" id="L15">        getElement().getThemeList().add(&quot;my-dialog&quot;);</span>
+<span class="nc" id="L16">        initializeButtons();</span>
+<span class="nc" id="L17">        this.setDraggable(true);</span>
+<span class="nc" id="L18">    }</span>
+
+    private void initializeButtons(){
+<span class="nc" id="L21">        continueButton.addClassName(&quot;buuutton&quot;);</span>
+<span class="nc" id="L22">        closeButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST, ButtonVariant.LUMO_TERTIARY);</span>
+<span class="nc" id="L23">        cancelButton.addClassNames(&quot;cancelButton myDialogCancelButton&quot;);</span>
+<span class="nc" id="L24">    }</span>
+
+    public void setTitle(String title){
+<span class="nc" id="L27">        this.setHeaderTitle(title);</span>
+<span class="nc" id="L28">        this.getHeader().add(closeButton);</span>
+<span class="nc" id="L29">    }</span>
+
+    public void setContent(Component content){
+<span class="nc" id="L32">        add(content);</span>
+<span class="nc" id="L33">    }</span>
+
+    public void setContinueButton(Button button){
+<span class="nc" id="L36">        this.continueButton=button;</span>
+<span class="nc" id="L37">        continueButton.addClassName(&quot;buuutton&quot;);</span>
+<span class="nc" id="L38">        this.getFooter().add(cancelButton, continueButton);</span>
+<span class="nc" id="L39">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

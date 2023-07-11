@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataBaseService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.data.service</a> &gt; <span class="el_source">DataBaseService.java</span></div><h1>DataBaseService.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.data.service;
+
+import com.privacydashboard.application.data.GlobalVariables.QuestionnaireVote;
+import com.privacydashboard.application.data.GlobalVariables.RightType;
+import com.privacydashboard.application.data.GlobalVariables.Role;
+import com.privacydashboard.application.data.entity.*;
+import com.privacydashboard.application.security.AuthenticatedUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.*;
+
+@Service
+public class DataBaseService {
+    private final AuthenticatedUser authenticatedUser;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final MessageRepository messageRepository;
+    private final IoTAppRepository ioTAppRepository;
+    private final UserAppRelationRepository userAppRelationRepository;
+    private final RightRequestRepository rightRequestRepository;
+    private final PrivacyNoticeRepository privacyNoticeRepository;
+    private final NotificationRepository notificationRepository;
+
+<span class="nc" id="L29">    Logger logger = LoggerFactory.getLogger(getClass());</span>
+
+    @Autowired
+    public DataBaseService(AuthenticatedUser authenticatedUser, PasswordEncoder passwordEncoder, UserRepository userRepository , MessageRepository messageRepository,
+                           IoTAppRepository ioTAppRepository, UserAppRelationRepository userAppRelationRepository,
+                           RightRequestRepository rightRequestRepository, PrivacyNoticeRepository privacyNoticeRepository,
+<span class="nc" id="L35">                           NotificationRepository notificationRepository) {</span>
+<span class="nc" id="L36">        this.authenticatedUser= authenticatedUser;</span>
+<span class="nc" id="L37">        this.passwordEncoder= passwordEncoder;</span>
+<span class="nc" id="L38">        this.userRepository= userRepository;</span>
+<span class="nc" id="L39">        this.messageRepository= messageRepository;</span>
+<span class="nc" id="L40">        this.ioTAppRepository= ioTAppRepository;</span>
+<span class="nc" id="L41">        this.userAppRelationRepository= userAppRelationRepository;</span>
+<span class="nc" id="L42">        this.rightRequestRepository= rightRequestRepository;</span>
+<span class="nc" id="L43">        this.privacyNoticeRepository= privacyNoticeRepository;</span>
+<span class="nc" id="L44">        this.notificationRepository= notificationRepository;</span>
+<span class="nc" id="L45">    }</span>
+
+    // USER REPOSITORY
+
+    public Optional&lt;User&gt; getUser(UUID id) {
+<span class="nc" id="L50">        return userRepository.findById(id);</span>
+    }
+
+    public void addUser(User user){
+<span class="nc" id="L54">        userRepository.save(user);</span>
+<span class="nc" id="L55">    }</span>
+
+    public void deleteUser(UUID id){
+<span class="nc" id="L58">        userRepository.deleteById(id);</span>
+<span class="nc" id="L59">    }</span>
+
+    /**
+     * if 1 parameter is null, that parameter is not gonna change
+     */
+    public void changeValuesForUser(User user, String name, String hashedPassword, String mail){
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        String newName= name==null ? user.getName() : name;</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        String newHashedPassword= hashedPassword==null ? user.getHashedPassword() : hashedPassword;</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        String newMail= mail==null ? user.getMail() : mail;</span>
+<span class="nc" id="L68">        userRepository.changeValues(user.getId(), newName, newHashedPassword, newMail);</span>
+<span class="nc" id="L69">    }</span>
+
+
+
+    // IOTAPP REPOSITORY
+
+    public Optional&lt;IoTApp&gt; getApp(UUID id) {
+<span class="nc" id="L76">        return ioTAppRepository.findById(id);</span>
+    }
+
+    public void addApp(IoTApp app){
+<span class="nc" id="L80">        ioTAppRepository.save(app);</span>
+<span class="nc" id="L81">    }</span>
+
+    public void deleteApp(UUID id){
+<span class="nc" id="L84">        ioTAppRepository.deleteById(id);</span>
+<span class="nc" id="L85">    }</span>
+
+    /**
+     * if 1 parameter is null, that parameter is not gonna change
+     */
+    public void changeNameAndDescriptionForApp(IoTApp app, String name, String description){
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        String newName= name==null ? app.getName() : name;</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        String newDescription= description==null ? app.getDescription() : description;</span>
+<span class="nc" id="L93">        ioTAppRepository.changeNameAndDescription(app.getId(), newName, newDescription);</span>
+<span class="nc" id="L94">    }</span>
+
+    /**
+     * if 1 parameter is null, that parameter is not gonna change
+     */
+    public void updateQuestionnaireForApp(IoTApp app, QuestionnaireVote vote, String[] detailVote, Hashtable&lt;Integer, String&gt; optionalAnswers){
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        QuestionnaireVote newVote= vote==null ? app.getQuestionnaireVote() : vote;</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        String[] newDetailVote= detailVote==null ? app.getDetailVote() : detailVote;</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        Hashtable&lt;Integer, String&gt; newOptionalAnswers= optionalAnswers==null ? app.getOptionalAnswers() : optionalAnswers;</span>
+<span class="nc" id="L103">        ioTAppRepository.changeQuestionnaire(app.getId(), newVote, newDetailVote, newOptionalAnswers);</span>
+<span class="nc" id="L104">    }</span>
+
+    // USERAPPRELATION REPOSITORY
+
+    public Optional&lt;UserAppRelation&gt; getUserAppRelation(UUID id){
+<span class="nc" id="L109">        return userAppRelationRepository.findById(id);</span>
+    }
+
+    public UserAppRelation getUserAppRelationByUserAndApp(User user, IoTApp app){
+<span class="nc" id="L113">        return userAppRelationRepository.findByUserAndApp(user, app);</span>
+    }
+
+    public List&lt;IoTApp&gt; getUserApps(User user){
+<span class="nc" id="L117">        return userAppRelationRepository.getIoTAppsFromUser(user);</span>
+    }
+
+    public List&lt;IoTApp&gt; getUserAppsWithVote(User user){
+<span class="nc" id="L121">        List&lt;IoTApp&gt; appList= userAppRelationRepository.getIoTAppsFromUser(user);</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        appList.removeIf(app -&gt; app.getQuestionnaireVote() == null);</span>
+<span class="nc" id="L123">        return appList;</span>
+    }
+
+    public List&lt;IoTApp&gt; getUserAppsByName(User user, String name){
+<span class="nc" id="L127">        return userAppRelationRepository.getIoTAppsFromUserFilterByName(user, name);</span>
+    }
+
+    public List&lt;IoTApp&gt; getUserAppsWithVoteByName(User user, String name){
+<span class="nc" id="L131">        List&lt;IoTApp&gt; appList= userAppRelationRepository.getIoTAppsFromUserFilterByName(user, name);</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        appList.removeIf(app -&gt; app.getQuestionnaireVote() == null);</span>
+<span class="nc" id="L133">        return appList;</span>
+    }
+
+    public String[] getConsensesFromUserAndApp(User user, IoTApp app){
+<span class="nc" id="L137">        UserAppRelation userAppRelation=userAppRelationRepository.findByUserAndApp(user, app);</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        if(userAppRelation==null){</span>
+<span class="nc" id="L139">            return null;</span>
+        }
+<span class="nc" id="L141">        return userAppRelation.getConsenses();</span>
+    }
+
+    public void removeConsensesFromUserAppRelation(UserAppRelation userAppRelation, List&lt;String&gt; consenses){
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        if(userAppRelation.getConsenses()==null){</span>
+<span class="nc" id="L146">            return;</span>
+        }
+<span class="nc" id="L148">        List&lt;String&gt; actualConsenses= new ArrayList&lt;&gt;(List.of(userAppRelation.getConsenses()));</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        for(String consens : consenses){</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">            if(actualConsenses.contains(consens)){</span>
+<span class="nc" id="L151">                actualConsenses.remove(consens);</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">                if(actualConsenses.isEmpty()){</span>
+<span class="nc" id="L153">                    break;</span>
+                }
+            }
+<span class="nc" id="L156">        }</span>
+<span class="nc" id="L157">        userAppRelationRepository.updateConsenses(userAppRelation.getId(), actualConsenses.toArray(new String[actualConsenses.size()]));</span>
+<span class="nc" id="L158">    }</span>
+
+    public void removeAllConsenses(UserAppRelation userAppRelation){
+<span class="nc" id="L161">        userAppRelationRepository.updateConsenses(userAppRelation.getId(), null);</span>
+<span class="nc" id="L162">    }</span>
+
+    public void addConsenses(UserAppRelation userAppRelation, List&lt;String&gt; consenses){
+<span class="nc" id="L165">        List&lt;String&gt; newConsenses= new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">        if(userAppRelation.getConsenses()!=null){</span>
+<span class="nc" id="L167">            newConsenses.addAll(List.of(userAppRelation.getConsenses()));</span>
+        }
+<span class="nc" id="L169">        newConsenses.addAll(consenses);</span>
+<span class="nc" id="L170">        userAppRelationRepository.updateConsenses(userAppRelation.getId(), newConsenses.toArray(new String[newConsenses.size()]));</span>
+<span class="nc" id="L171">    }</span>
+
+    public List&lt;User&gt; getUsersFromApp(IoTApp app){
+<span class="nc" id="L174">        return userAppRelationRepository.getUsersFromApp(app);</span>
+    }
+
+    public List&lt;User&gt; getAllContactsFromUser(User user){
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        if(user.getRole()==Role.SUBJECT){</span>
+<span class="nc" id="L179">            return userAppRelationRepository.getAllContactsFilterBy2Roles(user, Role.CONTROLLER, Role.DPO);</span>
+        }
+        else{
+<span class="nc" id="L182">            return userAppRelationRepository.getAllDPOOrControllerContacts(user);</span>
+        }
+    }
+
+    public List&lt;User&gt; getAllContactsFromUserFilterByName(User user, String name){
+<span class="nc bnc" id="L187" title="All 2 branches missed.">        if(user.getRole()==Role.SUBJECT){</span>
+<span class="nc" id="L188">            return userAppRelationRepository.getAllContactsFilterBy2RolesFilterByName(user, Role.CONTROLLER, Role.DPO, name);</span>
+        }
+        else{
+<span class="nc" id="L191">            return userAppRelationRepository.getAllDPOOrControllerContactsFilterByName(user, name);</span>
+        }
+    }
+
+    public List&lt;IoTApp&gt; getAppsFrom2Users(User user1, User user2){
+<span class="nc" id="L196">        return userAppRelationRepository.getAppsFrom2Users(user1, user2);</span>
+    }
+
+    public List&lt;User&gt; getControllersFromApp(IoTApp app){
+<span class="nc" id="L200">        return userAppRelationRepository.getUsersFromAppFilterByRole(app, Role.CONTROLLER);</span>
+    }
+
+    public List&lt;User&gt; getDPOsFromApp(IoTApp app){
+<span class="nc" id="L204">        return userAppRelationRepository.getUsersFromAppFilterByRole(app, Role.DPO);</span>
+    }
+
+    public List&lt;User&gt; getSubjectsFromApp(IoTApp app){
+<span class="nc" id="L208">        return userAppRelationRepository.getUsersFromAppFilterByRole(app, Role.SUBJECT);</span>
+    }
+
+    public void addUserApp(User user, IoTApp app){
+<span class="nc" id="L212">        UserAppRelation userAppRelation=new UserAppRelation();</span>
+<span class="nc" id="L213">        userAppRelation.setApp(app);</span>
+<span class="nc" id="L214">        userAppRelation.setUser(user);</span>
+<span class="nc" id="L215">        userAppRelationRepository.save(userAppRelation);</span>
+<span class="nc" id="L216">    }</span>
+
+    public boolean userHasApp(User user, IoTApp app){
+<span class="nc bnc" id="L219" title="All 2 branches missed.">        return userAppRelationRepository.findByUserAndApp(user, app)!=null;</span>
+    }
+
+    public boolean deleteAppFromUser(User user, IoTApp app){
+<span class="nc" id="L223">        UserAppRelation userAppRelation=userAppRelationRepository.findByUserAndApp(user, app);</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">        if(userAppRelation==null){</span>
+<span class="nc" id="L225">            return false;</span>
+        }
+        else{
+<span class="nc" id="L228">            userAppRelationRepository.delete(userAppRelation);</span>
+<span class="nc" id="L229">            return true;</span>
+        }
+    }
+
+    // MESSAGE REPOSITORY
+
+    public Optional&lt;Message&gt; getMessageFromID(UUID id){
+<span class="nc" id="L236">        return messageRepository.findById(id);</span>
+    }
+
+    public List&lt;Message&gt; getConversationFromUsers(User user1, User user2){
+<span class="nc" id="L240">        return messageRepository.getConversationFromUsers(user1, user2);</span>
+    }
+
+    public List&lt;User&gt; getUserConversationFromUser(User user){
+<span class="nc" id="L244">        return messageRepository.getUserConversationFromUser(user);</span>
+    }
+
+    public List&lt;User&gt; getUserConversationFromUserFilterByName(User user, String name){
+<span class="nc" id="L248">        return messageRepository.getUserConversationFromUserFilterByName(user, name);</span>
+    }
+
+    public void addMessage(Message message){
+<span class="nc" id="L252">        messageRepository.save(message);</span>
+<span class="nc" id="L253">        addNotification(message, &quot;Message&quot;, message.getReceiver(), message.getSender(), message.getSender().getName() + &quot; sent you a message&quot;);</span>
+<span class="nc" id="L254">    }</span>
+
+    public void addNowMessage(Message message){
+<span class="nc" id="L257">        message.setTime(LocalDateTime.now());</span>
+<span class="nc" id="L258">        messageRepository.save(message);</span>
+<span class="nc" id="L259">        addNotification(message, &quot;Message&quot;, message.getReceiver(), message.getSender(), message.getSender().getName() + &quot; sent you a message&quot;);</span>
+<span class="nc" id="L260">    }</span>
+
+    // RIGHT REQUEST REPOSITORY
+    public RightRequest getRequestFromId(UUID id){
+<span class="nc bnc" id="L264" title="All 2 branches missed.">        return rightRequestRepository.findById(id).isPresent() ? rightRequestRepository.findById(id).get() : null;</span>
+    }
+
+    public List&lt;RightRequest&gt; getAllRequestsFromReceiver(User user){
+<span class="nc" id="L268">        return rightRequestRepository.findAllByReceiverOrderByTimeDesc(user);</span>
+    }
+
+    public List&lt;RightRequest&gt; getPendingRequestsFromReceiver(User user){
+<span class="nc" id="L272">        return rightRequestRepository.findAllByReceiverAndHandledOrderByTimeDesc(user, false);</span>
+    }
+
+    public List&lt;RightRequest&gt; getHandledRequestsFromReceiver(User user){
+<span class="nc" id="L276">        return rightRequestRepository.findAllByReceiverAndHandledOrderByTimeDesc(user, true);</span>
+    }
+
+    public List&lt;RightRequest&gt; getAllRequestsFromSender(User user){
+<span class="nc" id="L280">        return rightRequestRepository.findAllBySenderOrderByTimeDesc(user);</span>
+    }
+
+    public List&lt;RightRequest&gt; getPendingRequestsFromSender(User user){
+<span class="nc" id="L284">        return rightRequestRepository.findAllBySenderAndHandledOrderByTimeDesc(user, false);</span>
+    }
+
+    public List&lt;RightRequest&gt; getHandledRequestsFromSender(User user){
+<span class="nc" id="L288">        return rightRequestRepository.findAllBySenderAndHandledOrderByTimeDesc(user, true);</span>
+    }
+
+    public void addRequest(RightRequest request){
+<span class="nc" id="L292">        rightRequestRepository.save(request);</span>
+<span class="nc" id="L293">        addNotification(request, &quot;Request&quot;, request.getReceiver(), request.getSender(), request.getSender().getName() + &quot; sent you a right request&quot;);</span>
+<span class="nc" id="L294">    }</span>
+
+    public void addNowRequest(RightRequest request){
+<span class="nc" id="L297">        request.setTime(LocalDateTime.now());</span>
+<span class="nc" id="L298">        addRequest(request);</span>
+<span class="nc" id="L299">    }</span>
+
+    public void changeRightRequest(RightRequest request){
+<span class="nc" id="L302">        rightRequestRepository.changeRequest(request.getId(), request.getHandled(), request.getResponse());</span>
+<span class="nc" id="L303">        addNotification(request, &quot;Request&quot;, request.getSender(), request.getReceiver(), request.getReceiver().getName() + &quot; changed the status of a request&quot;);</span>
+<span class="nc" id="L304">    }</span>
+
+    public void changeValuesOfRightRequest(RightRequest request){
+<span class="nc" id="L307">        rightRequestRepository.changeValuesOfRequest(request.getId(), request.getOther(), request.getDetails());</span>
+<span class="nc" id="L308">        addNotification(request, &quot;Request&quot;, request.getReceiver(), request.getSender(), request.getSender().getName() + &quot; changed the status of a request&quot;);</span>
+<span class="nc" id="L309">    }</span>
+
+    public void deleteRequest(RightRequest request){
+<span class="nc" id="L312">        rightRequestRepository.deleteById(request.getId());</span>
+<span class="nc" id="L313">    }</span>
+
+    // PRIVACYPOLICY REPOSITORY
+
+    public Optional&lt;PrivacyNotice&gt; getPrivacyNoticeFromId(UUID id){
+<span class="nc" id="L318">        return privacyNoticeRepository.findById(id);</span>
+    }
+
+    public PrivacyNotice getPrivacyNoticeFromApp(IoTApp app){
+<span class="nc" id="L322">        return privacyNoticeRepository.findByApp(app);</span>
+    }
+
+    public List&lt;PrivacyNotice&gt; getAllPrivacyNoticeFromUser(User user){
+<span class="nc" id="L326">        return privacyNoticeRepository.getAllPrivacyNoticeFromUser(user);</span>
+    }
+
+    public List&lt;PrivacyNotice&gt; getUserPrivacyNoticeByAppName(User user, String name){
+<span class="nc" id="L330">        return privacyNoticeRepository.getPrivacyNoticeFromUserFilterByAppName(user, name);</span>
+    }
+
+    public boolean addPrivacyNoticeForApp(IoTApp app, String text){
+<span class="nc bnc" id="L334" title="All 2 branches missed.">        if(privacyNoticeRepository.findByApp(app)!=null){</span>
+<span class="nc" id="L335">            return false;</span>
+        }
+<span class="nc" id="L337">        PrivacyNotice privacyNotice=new PrivacyNotice();</span>
+<span class="nc" id="L338">        privacyNotice.setApp(app);</span>
+<span class="nc" id="L339">        privacyNotice.setText(text);</span>
+<span class="nc" id="L340">        privacyNoticeRepository.save(privacyNotice);</span>
+<span class="nc bnc" id="L341" title="All 2 branches missed.">        for(User u: getSubjectsFromApp(app)){</span>
+<span class="nc" id="L342">            addNotification(privacyNotice, &quot;PrivacyNotice&quot;, u, authenticatedUser.getUser(), authenticatedUser.getUser().getName() + &quot; created a new Privacy Notice for the app: &quot; + app.getName());</span>
+<span class="nc" id="L343">        }</span>
+<span class="nc" id="L344">        return true;</span>
+    }
+
+    public void deletePrivacyNotice(PrivacyNotice privacyNotice){
+<span class="nc" id="L348">        privacyNoticeRepository.delete(privacyNotice);</span>
+<span class="nc" id="L349">    }</span>
+
+    public void changePrivacyNoticeForApp(IoTApp app, String text){
+<span class="nc" id="L352">        PrivacyNotice privacyNotice=privacyNoticeRepository.findByApp(app);</span>
+<span class="nc bnc" id="L353" title="All 2 branches missed.">        if(privacyNotice==null){</span>
+<span class="nc" id="L354">            addPrivacyNoticeForApp(app, text);</span>
+        }
+        else{
+<span class="nc" id="L357">            privacyNoticeRepository.changeText(privacyNotice.getId(), text);</span>
+        }
+<span class="nc bnc" id="L359" title="All 2 branches missed.">        for(User u: getSubjectsFromApp(app)){</span>
+<span class="nc" id="L360">            addNotification(privacyNotice, &quot;PrivacyNotice&quot;, u, authenticatedUser.getUser(), authenticatedUser.getUser().getName() + &quot; updated the Privacy Notice for the app: &quot; + app.getName());</span>
+<span class="nc" id="L361">        }</span>
+<span class="nc" id="L362">    }</span>
+
+    // NOTIFICATION REPOSITORY
+
+    public Optional&lt;Notification&gt; getNotificationFromId(UUID id){
+<span class="nc" id="L367">        return notificationRepository.findById(id);</span>
+    }
+
+    public void addNotification(Notification notification){
+<span class="nc" id="L371">        notificationRepository.save(notification);</span>
+<span class="nc" id="L372">    }</span>
+
+    public void addNowNotification(Notification notification){
+<span class="nc" id="L375">        notification.setTime(LocalDateTime.now());</span>
+<span class="nc" id="L376">        notificationRepository.save(notification);</span>
+<span class="nc" id="L377">    }</span>
+
+    public List&lt;Notification&gt; getNotificationsFromUser(User user){
+<span class="nc" id="L380">        return notificationRepository.findAllByReceiver(user);</span>
+    }
+
+    public List&lt;Notification&gt; getNewNotificationsFromUser(User user){
+<span class="nc" id="L384">        return notificationRepository.findAllByReceiverAndIsRead(user, false);</span>
+    }
+
+    public List&lt;Notification&gt; getOldNotificationsFromUser(User user){
+<span class="nc" id="L388">        return notificationRepository.findAllByReceiverAndIsRead(user, true);</span>
+    }
+
+    public void changeIsReadNotification(Notification notification, boolean isRead){
+<span class="nc" id="L392">        notificationRepository.changeIsReadNotificationById(notification.getId(), isRead);</span>
+<span class="nc" id="L393">    }</span>
+
+    public void deleteNotification(Notification notification){
+<span class="nc" id="L396">        notificationRepository.deleteById(notification.getId());</span>
+<span class="nc" id="L397">    }</span>
+
+    private boolean addNotification(Object object, String type, User receiver, User sender, String description){
+<span class="nc" id="L400">        Notification notification= new Notification();</span>
+<span class="nc" id="L401">        notification.setReceiver(receiver);</span>
+<span class="nc" id="L402">        notification.setSender(sender);</span>
+<span class="nc" id="L403">        notification.setDescription(description);</span>
+<span class="nc" id="L404">        notification.setType(type);</span>
+<span class="nc" id="L405">        notification.setRead(false);</span>
+<span class="nc bnc" id="L406" title="All 4 branches missed.">        switch(type) {</span>
+            case &quot;Message&quot;:
+                try {
+<span class="nc" id="L409">                    Message message = (Message) object;</span>
+<span class="nc" id="L410">                    notification.setObjectId(message.getId());</span>
+<span class="nc" id="L411">                } catch (Exception e) {</span>
+<span class="nc" id="L412">                    return false;</span>
+<span class="nc" id="L413">                }</span>
+                break;
+            case &quot;Request&quot;:
+                try {
+<span class="nc" id="L417">                    RightRequest request = (RightRequest) object;</span>
+<span class="nc" id="L418">                    notification.setObjectId(request.getId());</span>
+<span class="nc" id="L419">                } catch (Exception e) {</span>
+<span class="nc" id="L420">                    return false;</span>
+<span class="nc" id="L421">                }</span>
+                break;
+            case &quot;PrivacyNotice&quot;:
+                try {
+<span class="nc" id="L425">                    PrivacyNotice privacyNotice = (PrivacyNotice) object;</span>
+<span class="nc" id="L426">                    notification.setObjectId(privacyNotice.getId());</span>
+<span class="nc" id="L427">                } catch (Exception e) {</span>
+<span class="nc" id="L428">                    return false;</span>
+<span class="nc" id="L429">                }</span>
+                break;
+            default:
+<span class="nc" id="L432">                return false;</span>
+        }
+<span class="nc" id="L434">        addNowNotification(notification);</span>
+<span class="nc" id="L435">        return true;</span>
+    }
+
+    // REMOVE EVERYTHING
+
+    public void removeEverythingFromUser(User user){
+<span class="nc" id="L441">        List&lt;IoTApp&gt; apps=getUserApps(user);</span>
+<span class="nc bnc" id="L442" title="All 2 branches missed.">        for(IoTApp app : apps){</span>
+<span class="nc" id="L443">            RightRequest request=new RightRequest();</span>
+<span class="nc" id="L444">            request.setHandled(false);</span>
+<span class="nc" id="L445">            request.setRightType(RightType.DELTEEVERYTHING);</span>
+<span class="nc" id="L446">            request.setReceiver(getControllersFromApp(app).get(0));</span>
+<span class="nc" id="L447">            request.setSender(user);</span>
+<span class="nc" id="L448">            request.setApp(app);</span>
+<span class="nc" id="L449">            addNowRequest(request);</span>
+<span class="nc" id="L450">        }</span>
+<span class="nc" id="L451">    }</span>
+
+    public void removeEverythingFromUserAndApp(User user, IoTApp app){
+<span class="nc" id="L454">        RightRequest request=new RightRequest();</span>
+<span class="nc" id="L455">        request.setHandled(false);</span>
+<span class="nc" id="L456">        request.setRightType(RightType.DELTEEVERYTHING);</span>
+<span class="nc" id="L457">        request.setReceiver(getControllersFromApp(app).get(0));</span>
+<span class="nc" id="L458">        request.setSender(user);</span>
+<span class="nc" id="L459">        request.setApp(app);</span>
+<span class="nc" id="L460">        addNowRequest(request);</span>
+<span class="nc" id="L461">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ApiUserController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.data.apiController</a> &gt; <span class="el_source">ApiUserController.java</span></div><h1>ApiUserController.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.data.apiController;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.privacydashboard.application.data.GlobalVariables.Role;
+import com.privacydashboard.application.data.entity.IoTApp;
+import com.privacydashboard.application.data.entity.User;
+import com.privacydashboard.application.data.service.DataBaseService;
+import com.privacydashboard.application.security.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
+
+@RestController
+<span class="nc" id="L20">public class ApiUserController {</span>
+    @Autowired
+    private DataBaseService dataBaseService;
+    @Autowired
+    private UserDetailsServiceImpl userDetailsServiceImpl;
+    @Autowired
+    private ApiGeneralController apiGeneralController;
+
+    /**
+     * Get information about a user
+     * RESTRICTIONS: NONE
+     * @param userId Id of the User to get information from
+     * @return Json object representing the User. Bad request if User with that Id does not exist
+     */
+    @GetMapping
+    @RequestMapping(&quot;api/user/get&quot;)
+    public ResponseEntity&lt;?&gt; get(@RequestParam() String userId){
+        try {
+<span class="nc" id="L38">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="nc" id="L39">            ObjectNode userJson = apiGeneralController.createJsonFromUser(user);</span>
+<span class="nc" id="L40">            userJson.remove(&quot;mail&quot;);</span>
+<span class="nc" id="L41">            userJson.remove(&quot;hashedPassword&quot;);</span>
+<span class="nc" id="L42">            return ResponseEntity.ok(userJson);</span>
+        }
+<span class="nc" id="L44">        catch (IllegalArgumentException e){</span>
+<span class="nc" id="L45">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+        }
+    }
+
+    /**
+     * Get information about a user, including the mail
+     * RESTRICTIONS: The one calling the function MUST BE the user identified by the userId, a contact of him or userId is a Controller or DPO
+     * @param userId Id of the User to get information from
+     * @return Json object representing the User. Bad request if User with that Id does not exist or the one calling the function is not allowed to access these informations
+     */
+    @GetMapping
+    @RequestMapping(&quot;api/user/getDetailed&quot;)
+    public ResponseEntity&lt;?&gt; getDetailed(@RequestParam() String userId){
+        try {
+<span class="nc" id="L59">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">            if(!users1CanGetDetailOfUser2(apiGeneralController.getAuthenicatedUser(), user)){</span>
+<span class="nc" id="L61">                return ResponseEntity.badRequest().body(&quot;you must be the user identified by the userId&quot;);</span>
+            }
+<span class="nc" id="L63">            ObjectNode userJson = apiGeneralController.createJsonFromUser(user);</span>
+<span class="nc" id="L64">            userJson.remove(&quot;hashedPassword&quot;);</span>
+<span class="nc" id="L65">            return ResponseEntity.ok(userJson);</span>
+        }
+<span class="nc" id="L67">        catch (IllegalArgumentException e){</span>
+<span class="nc" id="L68">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+        }
+    }
+
+    /**
+     * Get all the contacts of a user, excluding password
+     * RESTRICTIONS: The one calling the function MUST BE the user identified by the userId
+     * @param userId Id of the User to get information from
+     * @return Json object representing all the contacts. Bad request if User with that Id does not exist or the one calling the function is not the user identified by the userId
+     */
+    @GetMapping
+    @RequestMapping(&quot;api/user/getAllContacts&quot;)
+    public ResponseEntity&lt;?&gt; getAllContacts(@RequestParam() String userId){
+        try {
+<span class="nc" id="L82">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
+<span class="nc" id="L84">                return ResponseEntity.badRequest().body(&quot;you must be the user identified by the userId&quot;);</span>
+            }
+<span class="nc" id="L86">            List&lt;User&gt; contacts= dataBaseService.getAllContactsFromUser(user);</span>
+<span class="nc" id="L87">            ObjectMapper mapper = new ObjectMapper();</span>
+            ObjectNode contactJson;
+<span class="nc" id="L89">            ArrayNode contactsArray = mapper.createArrayNode();</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">            for(User contact : contacts){</span>
+<span class="nc" id="L91">                contactJson= apiGeneralController.createJsonFromUser(contact);</span>
+<span class="nc" id="L92">                contactJson.remove(&quot;hashedPassword&quot;);</span>
+<span class="nc" id="L93">                contactsArray.add(contactJson);</span>
+<span class="nc" id="L94">            }</span>
+
+<span class="nc" id="L96">            return ResponseEntity.ok(contactsArray);</span>
+        }
+<span class="nc" id="L98">        catch (IllegalArgumentException e){</span>
+<span class="nc" id="L99">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+        }
+    }
+
+    /**
+     * Get all the apps of a user if user=controller/dpo. Get only the app you have if user=subject
+     * RESTRICTIONS: user MUST be controller/DPO OR You must be controller/dpo of some apps of the user
+     * @param userId ID of the user to get apps from
+     * @return JSON representing all the apps. Bad request if user does not exist or not authorized
+     */
+    @GetMapping
+    @RequestMapping(&quot;api/user/getApps&quot;)
+    public  ResponseEntity&lt;?&gt; getApps(@RequestParam() String userId){
+        try{
+<span class="nc" id="L113">            User user= apiGeneralController.getUserFromId(userId);</span>
+            List&lt;IoTApp&gt; appList;
+<span class="nc" id="L115">            User authenticatedUser= apiGeneralController.getAuthenicatedUser();</span>
+<span class="nc bnc" id="L116" title="All 4 branches missed.">            if(user.getRole().equals(Role.CONTROLLER) || user.getRole().equals(Role.DPO)) {</span>
+<span class="nc" id="L117">                appList = dataBaseService.getUserApps(user);</span>
+            }
+<span class="nc bnc" id="L119" title="All 4 branches missed.">            else if(authenticatedUser.getRole().equals(Role.CONTROLLER) || authenticatedUser.getRole().equals(Role.DPO)){</span>
+<span class="nc" id="L120">                appList= dataBaseService.getAppsFrom2Users(user, authenticatedUser);</span>
+            }
+            else{
+<span class="nc" id="L123">                return ResponseEntity.badRequest().body(&quot;User must be Controller/DPO or you must be associated with that user&quot;);</span>
+            }
+<span class="nc" id="L125">            ArrayNode appsArray= new ObjectMapper().createArrayNode();</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">            for(IoTApp app : appList){</span>
+<span class="nc" id="L127">                appsArray.add(apiGeneralController.createJsonFromApp(app));</span>
+<span class="nc" id="L128">            }</span>
+<span class="nc" id="L129">            return ResponseEntity.ok(appsArray);</span>
+<span class="nc" id="L130">        } catch (IllegalArgumentException e){</span>
+<span class="nc" id="L131">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+        }
+    }
+
+    /**
+     * Create a new user
+     * RESTRICTIONS: NONE
+     * @param body a JSON with the information about the user. It MUST include the NAME, ROLE, PASSWORD
+     * @return OK If user successfully added. Bad Request if Json is invalid, ID is invalid, there is already a user with that ID
+     */
+    @PostMapping
+    @RequestMapping(&quot;api/user/add&quot;)
+    public ResponseEntity&lt;?&gt; add(@RequestBody String body){
+        try {
+<span class="nc" id="L145">            User user=apiGeneralController.getUserFromJsonString(true, body);</span>
+<span class="nc bnc" id="L146" title="All 4 branches missed.">            if(user.getId()!=null &amp;&amp; dataBaseService.getApp(user.getId()).isPresent()){</span>
+<span class="nc" id="L147">                return ResponseEntity.badRequest().body(&quot;cannot create this user&quot;);</span>
+            }
+<span class="nc" id="L149">            dataBaseService.addUser(user);</span>
+<span class="nc" id="L150">            return ResponseEntity.ok(&quot;user created successfully&quot;);</span>
+        }
+<span class="nc" id="L152">        catch (IllegalArgumentException e){</span>
+<span class="nc" id="L153">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="nc" id="L154">        } catch (IOException e){</span>
+<span class="nc" id="L155">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
+        }
+    }
+
+    /**
+     * Delete the user identified by the userId
+     * RESTRICTIONS: The one calling the function MUST BE the user identified by the userId
+     * @param userId Id of the user to be deleted
+     * @return Ok if successfully deleted. BadRequest if ID not valid, or the one calling the function is not the user identified by the userId
+     */
+    @DeleteMapping
+    @RequestMapping(&quot;api/user/delete&quot;)
+    public ResponseEntity&lt;?&gt; delete(@RequestParam() String userId){
+        try {
+<span class="nc" id="L169">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">            if(apiGeneralController.isAuthenticatedUserId(userId)){</span>
+<span class="nc" id="L171">                dataBaseService.deleteUser(user.getId());</span>
+<span class="nc" id="L172">                return ResponseEntity.ok(&quot;app deleted successfully&quot;);</span>
+            }
+            else{
+<span class="nc" id="L175">                return ResponseEntity.badRequest().body(&quot;you must be the user to be deleted&quot;);</span>
+            }
+        }
+<span class="nc" id="L178">        catch (IllegalArgumentException e){</span>
+<span class="nc" id="L179">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+        }
+    }
+
+    /**
+     * Update some values of the user identified by the userID
+     * RESTRICTIONS: The one calling the function MUST BE the user identified by the userId
+     * @param userId Id of the user to be updated
+     * @param body JSON with values to be updated
+     * @return Ok if successfully updated, BadRequest if JSON invalid, ID does not exist, User performing the action is not the one with that ID
+     */
+    @PutMapping
+    @RequestMapping(&quot;api/user/update&quot;)
+    public ResponseEntity&lt;?&gt; update(@RequestParam String userId, @RequestBody String body){
+        try{
+<span class="nc" id="L194">            User user1= apiGeneralController.getUserFromId(userId);</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
+<span class="nc" id="L196">                return ResponseEntity.badRequest().body(&quot;you must be the user to be updated&quot;);</span>
+            }
+<span class="nc" id="L198">            User user2= apiGeneralController.getUserFromJsonString(false, body);</span>
+<span class="nc" id="L199">            dataBaseService.changeValuesForUser(user1, user2.getName(), user2.getHashedPassword(), user2.getMail());</span>
+<span class="nc" id="L200">            return ResponseEntity.ok(&quot;user updated successfully&quot;);</span>
+        }
+<span class="nc" id="L202">        catch (IllegalArgumentException e){</span>
+<span class="nc" id="L203">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="nc" id="L204">        } catch (IOException e){</span>
+<span class="nc" id="L205">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
+        }
+    }
+
+    private boolean users1CanGetDetailOfUser2(User user1, User user2){
+<span class="nc bnc" id="L210" title="All 2 branches missed.">        if(user1.equals(user2)){</span>
+<span class="nc" id="L211">            return true;</span>
+        }
+<span class="nc bnc" id="L213" title="All 2 branches missed.">        if(dataBaseService.getAllContactsFromUser(user1).contains(user2)){</span>
+<span class="nc" id="L214">            return true;</span>
+        }
+<span class="nc bnc" id="L216" title="All 4 branches missed.">        return user2.getRole().equals(Role.CONTROLLER) || user2.getRole().equals(Role.DPO);</span>
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity&lt;?&gt; handleMissingParams(MissingServletRequestParameterException ex) {
+<span class="nc" id="L221">        return ResponseEntity.badRequest().body(ex.getParameterName() + &quot; parameter is missing&quot;);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

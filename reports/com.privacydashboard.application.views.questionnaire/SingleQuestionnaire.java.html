@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SingleQuestionnaire.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.views.questionnaire</a> &gt; <span class="el_source">SingleQuestionnaire.java</span></div><h1>SingleQuestionnaire.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.views.questionnaire;
+
+import com.privacydashboard.application.data.GlobalVariables;
+import com.privacydashboard.application.data.GlobalVariables.QuestionnaireVote;
+import com.privacydashboard.application.data.entity.IoTApp;
+import com.privacydashboard.application.data.service.CommunicationService;
+import com.privacydashboard.application.data.service.DataBaseService;
+import com.privacydashboard.application.views.usefulComponents.MyDialog;
+import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.contextmenu.ContextMenu;
+import com.vaadin.flow.component.dependency.NpmPackage;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.router.*;
+
+import javax.annotation.security.RolesAllowed;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+@PageTitle(&quot;Questionnaire&quot;)
+@Route(value=&quot;single_questionnaire&quot;)
+@RolesAllowed({&quot;CONTROLLER&quot;, &quot;DPO&quot;})
+@NpmPackage(value = &quot;line-awesome&quot;, version = &quot;1.3.0&quot;)
+public class SingleQuestionnaire extends AppLayout implements BeforeEnterObserver, AfterNavigationObserver {
+    private final DataBaseService dataBaseService;
+    private final CommunicationService communicationService;
+    private IoTApp app;
+
+<span class="nc" id="L42">    private final Tabs tabs= new Tabs();</span>
+<span class="nc" id="L43">    private final Span content= new Span();</span>
+
+<span class="nc" id="L45">    private final Integer nSections= 4;</span>
+<span class="nc" id="L46">    private final VerticalLayout[] sections= new VerticalLayout[nSections];</span>
+<span class="nc" id="L47">    private final Button goBackButton = new Button(&quot;Go back&quot;, e-&gt;goBack());</span>
+
+<span class="nc" id="L49">    private final Div[] titles= new Div[GlobalVariables.nQuestions];</span>
+<span class="nc" id="L50">    private final RadioButtonGroup&lt;String&gt;[] radioGroups= new RadioButtonGroup[GlobalVariables.nQuestions];</span>
+<span class="nc" id="L51">    private final Span[] icons= new Span[GlobalVariables.nQuestions];</span>
+<span class="nc" id="L52">    private final ContextMenu[] contextMenus= new ContextMenu[GlobalVariables.nQuestions];</span>
+<span class="nc" id="L53">    private final TextArea[] textAreas= new TextArea[GlobalVariables.nQuestions];</span>
+<span class="nc" id="L54">    private final VerticalLayout[] singleQuestion= new VerticalLayout[GlobalVariables.nQuestions];</span>
+
+    private int redAnswers, orangeAnswers, greenAnswers;
+    private Integer n;    // question number
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+<span class="nc" id="L61">        app=communicationService.getApp();</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if(app==null){</span>
+<span class="nc" id="L63">            UI.getCurrent().navigate(Questionnaire.class);</span>
+        }
+<span class="nc" id="L65">    }</span>
+
+<span class="nc" id="L67">    public SingleQuestionnaire(DataBaseService dataBaseService, CommunicationService communicationService){</span>
+<span class="nc" id="L68">        this.dataBaseService= dataBaseService;</span>
+<span class="nc" id="L69">        this.communicationService= communicationService;</span>
+
+<span class="nc" id="L71">        n=0;</span>
+<span class="nc" id="L72">        initializeLayout();</span>
+<span class="nc" id="L73">        section1(); // dati sensibili</span>
+<span class="nc" id="L74">        section2(); // sicurezza</span>
+<span class="nc" id="L75">        section3(); // test e certificazioni</span>
+
+<span class="nc" id="L77">        content.add(sections[0]);   // first section to be shown</span>
+<span class="nc" id="L78">    }</span>
+
+    private void initializeLayout(){
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        for(int i=0; i&lt;GlobalVariables.nQuestions; i++){</span>
+<span class="nc" id="L82">            icons[i]=new Span();</span>
+<span class="nc" id="L83">            icons[i].addClassNames(&quot;las la-info-circle&quot;);</span>
+<span class="nc" id="L84">            icons[i].addClassName(&quot;pointer&quot;);</span>
+
+<span class="nc" id="L86">            contextMenus[i]= new ContextMenu();</span>
+<span class="nc" id="L87">            contextMenus[i].setTarget(icons[i]);</span>
+<span class="nc" id="L88">            contextMenus[i].setOpenOnClick(true);</span>
+<span class="nc" id="L89">            contextMenus[i].addClassName(&quot;info&quot;);</span>
+
+<span class="nc" id="L91">            radioGroups[i]=new RadioButtonGroup&lt;&gt;();</span>
+<span class="nc" id="L92">            titles[i]= new Div();</span>
+
+<span class="nc" id="L94">            singleQuestion[i]=new VerticalLayout(titles[i], radioGroups[i]);</span>
+<span class="nc" id="L95">            singleQuestion[i].addClassName(&quot;singleQuestion-questionnaire&quot;);</span>
+        }
+
+<span class="nc" id="L98">        Tab[] tab= new Tab[] {new Tab(&quot;Personal Data&quot;), new Tab(&quot;Security&quot;), new Tab(&quot;Tests and certifications&quot;), new Tab(&quot;Summary&quot;)};</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        for(int i=0; i&lt;nSections; i++){</span>
+<span class="nc" id="L100">            sections[i]= new VerticalLayout();</span>
+<span class="nc" id="L101">            sections[i].addClassName(&quot;section-questionnaire&quot;);</span>
+<span class="nc" id="L102">            tab[i].addClassName(&quot;pointer&quot;);</span>
+<span class="nc" id="L103">            tabs.add(tab[i]);</span>
+        }
+
+<span class="nc" id="L106">        tabs.setOrientation(Tabs.Orientation.VERTICAL);</span>
+<span class="nc" id="L107">        tabs.addSelectedChangeListener(this::changeTab);</span>
+<span class="nc" id="L108">        setContent(content);</span>
+<span class="nc" id="L109">        setPrimarySection(Section.DRAWER);</span>
+
+<span class="nc" id="L111">        goBackButton.addClassNames(&quot;goBackButton-questionnaire buuutton&quot;);</span>
+<span class="nc" id="L112">    }</span>
+
+    // SEZIONE 1: DATI SENSIBILI
+    private void section1(){
+<span class="nc" id="L116">        int begin=n;</span>
+        ArrayList&lt;String&gt; answers;
+
+        // Hai individuato i dati che verranno processati e in che modo lo saranno?
+<span class="nc" id="L120">        titles[n].add(new Span(&quot;Have you identified all the personal data that are going to be processed?&quot;), icons[n]);</span>
+<span class="nc" id="L121">        contextMenus[n].addItem(&quot;According to the GDPR, personal data has to be processed in a particular and restricted way, so it it important to identify which are the personal dara that are going to be processed&quot;);</span>
+<span class="nc" id="L122">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L123">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L124">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,1), answers.subList(1,3));</span>
+<span class="nc" id="L125">        n++;</span>
+
+        // Sono soltanto i dati strettamente necessari al funzionamento? (hidden question)
+<span class="nc" id="L128">        titles[n].add(new Span(&quot;Are the personal data processed limited and used only for the purposes for which they are processed?&quot;), icons[n]);</span>
+<span class="nc" id="L129">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 5&quot;, &quot;Personal data shall be: ... collected for specified, explicit and legitimate purposes and not further processed in a manner that is incompatible with those purposes ... adequate, relevant and limited to what is necessary in relation to the purposes for which they are processed&quot;));</span>
+<span class="nc" id="L130">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L131">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L132">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,1), answers.subList(1,3));</span>
+<span class="nc" id="L133">        setHiddenQuestion(n, n-1, &quot;Yes&quot;);</span>
+<span class="nc" id="L134">        n++;</span>
+
+        //Periodo mantenimento dei dati
+<span class="nc" id="L137">        titles[n].add(new Span(&quot;For how long are the data going to be stored?&quot;), icons[n]);</span>
+<span class="nc" id="L138">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 13&quot;, &quot;the controller shall, at the time when personal data are obtained, provide the data subject with the following further information... the period for which the personal data will be stored&quot;));</span>
+<span class="nc" id="L139">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;less than 1 month&quot;, &quot;between 1 month and 6 months&quot;, &quot;between 6 months and 2 years&quot;, &quot;more than 2 years&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L140">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L141">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,3), answers.subList(3,5));</span>
+<span class="nc" id="L142">        n++;</span>
+
+        //Eliminazione dati
+<span class="nc" id="L145">        titles[n].add(new Span(&quot;Do you have an automatic mechanism that deletes the personal data after the chosen period of time?&quot;), icons[n]);</span>
+<span class="nc" id="L146">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 13&quot;, &quot;the controller shall, at the time when personal data are obtained, provide the data subject with the following further information... the period for which the personal data will be stored&quot;));</span>
+<span class="nc" id="L147">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L148">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L149">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,1), answers.subList(1,3));</span>
+<span class="nc" id="L150">        n++;</span>
+
+        //Does the app transfer data to a third party?
+<span class="nc" id="L153">        titles[n].add(new Span(&quot;Does the app transfer data to a third party?&quot;), icons[n]);</span>
+<span class="nc" id="L154">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 13&quot;, &quot;Where personal data relating to a data subject are collected from the data subject, the controller shall, at the time when personal data are obtained, provide the data subject with... the fact that the controller intends to transfer personal data to a third country or international organisation&quot;));</span>
+<span class="nc" id="L155">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;No&quot;, &quot;Yes, only in European Union&quot;, &quot;Yes, also outside of European Union&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L156">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L157">        manageChangeColorQuestion(n, answers.subList(0,2), answers.subList(2,3), answers.subList(3,4));</span>
+<span class="nc" id="L158">        textAreas[n]= new TextArea(&quot;List which third countries, if any&quot;);</span>
+<span class="nc" id="L159">        n++;</span>
+
+        //Outside Europe, international agreements?
+<span class="nc" id="L162">        titles[n].add(new Span(&quot;Does the Commission have decided that these countries have an adequate level of protection?&quot;), icons[n]);</span>
+<span class="nc" id="L163">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 45&quot;, &quot;A transfer of personal data to a third country or an international organisation may take place where the Commission has decided that the third country, a territory or one or more specified sectors within that third country, or the international organisation in question ensures an adequate level of protection&quot;));</span>
+<span class="nc" id="L164">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes, for all of them&quot;, &quot;Not for all of them&quot;, &quot;For none of them&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L165">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L166">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(2,2), answers.subList(1,4));</span>
+<span class="nc" id="L167">        setHiddenQuestion(n, n-1, &quot;Yes, also outside of European Union&quot;);</span>
+<span class="nc" id="L168">        n++;</span>
+
+        //Se usi server esterni, dove sono collocati?
+<span class="nc" id="L171">        titles[n].add(new Span(&quot;If you use external servers, where are they located?&quot;), icons[n]);</span>
+<span class="nc" id="L172">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 13&quot;, &quot;Where personal data relating to a data subject are collected from the data subject, the controller shall, at the time when personal data are obtained, provide the data subject with... the fact that the controller intends to transfer personal data to a third country or international organisation&quot;));</span>
+<span class="nc" id="L173">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;I don't use external servers&quot;, &quot;They're located only in United Europe&quot;, &quot;They're located also outside United Europe&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L174">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L175">        manageChangeColorQuestion(n, answers.subList(0,2), answers.subList(2,2), answers.subList(2,4));</span>
+<span class="nc" id="L176">        n++;</span>
+
+        //Esistenza processo decisionale automatizzato
+<span class="nc" id="L179">        titles[n].add(new Span(&quot;Is there an automated decision-making, including profiling?&quot;), icons[n]);</span>
+<span class="nc" id="L180">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 13&quot;, &quot;the controller shall, at the time when personal data are obtained, provide the data subject with the following further information... the existence of automated decision-making, including profiling&quot;));</span>
+<span class="nc" id="L181">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L182">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L183">        manageChangeColorQuestion(n, answers.subList(1,2), answers.subList(0,1), answers.subList(2,3));</span>
+<span class="nc" id="L184">        n++;</span>
+
+        //Dati facili da fornire a chi lo chiede
+<span class="nc" id="L187">        titles[n].add(new Span(&quot;Are the data stored in a way that they're easily accessible to its legitimate owner when needed?&quot;), icons[n]);</span>
+<span class="nc" id="L188">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 12&quot;, &quot;The controller shall facilitate the exercise of data subject rights&quot;));</span>
+<span class="nc" id="L189">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L190">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L191">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,1), answers.subList(1,3));</span>
+<span class="nc" id="L192">        n++;</span>
+
+<span class="nc" id="L194">        createSectionLayout(begin, n, 0);</span>
+<span class="nc" id="L195">        createButtonsLayout(false, true, false, 0);</span>
+<span class="nc" id="L196">    }</span>
+
+    // SEZIONE 2: SICUREZZA
+    private void section2(){
+<span class="nc" id="L200">        int begin=n;</span>
+        ArrayList&lt;String&gt; answers;
+
+        //Password
+<span class="nc" id="L204">        titles[n].add(new Span(&quot;Do you store passwords in plain text or do you encrypt them?&quot;), icons[n]);</span>
+<span class="nc" id="L205">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 32&quot;, &quot; the controller and the processor shall implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk&quot;));</span>
+<span class="nc" id="L206">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;I don't store passwords&quot;, &quot;I encrypt them&quot;, &quot;Plain text&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L207">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L208">        manageChangeColorQuestion(n, answers.subList(0,2), answers.subList(1,1), answers.subList(2,4));</span>
+<span class="nc" id="L209">        n++;</span>
+
+        //Which password hash (SHA-3, MD5, ...)
+<span class="nc" id="L212">        titles[n].add(new Span(&quot;Which hash algorithm do you use to encrypt the passwords?&quot;), icons[n]);</span>
+<span class="nc" id="L213">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 32&quot;, &quot; the controller and the processor shall implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk&quot;));</span>
+<span class="nc" id="L214">        radioGroups[n].setItems(&quot;SHA-3&quot;, &quot;SHA-2&quot;, &quot;SHA-1&quot;, &quot;MD-5&quot;, &quot;other&quot;);</span>
+<span class="nc" id="L215">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;SHA-3&quot;, &quot;SHA-2&quot;, &quot;SHA-1&quot;, &quot;MD-5&quot;, &quot;other&quot;));</span>
+<span class="nc" id="L216">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L217">        manageChangeColorQuestion(n, answers.subList(0,1), Stream.concat(answers.subList(1,2).stream(), answers.subList(4,5).stream()).collect(Collectors.toList()) , answers.subList(2,4));</span>
+<span class="nc" id="L218">        textAreas[n]= new TextArea(&quot;If other, which one?&quot;);</span>
+<span class="nc" id="L219">        setHiddenQuestion(n, n-1, &quot;I encrypt them&quot;);</span>
+<span class="nc" id="L220">        n++;</span>
+
+        //Which password constraints
+<span class="nc" id="L223">        titles[n].add(new Span(&quot;Do you have any password constraints?&quot;), icons[n]);</span>
+<span class="nc" id="L224">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 32&quot;, &quot; the controller and the processor shall implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk&quot;));</span>
+<span class="nc" id="L225">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L226">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L227">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,1), answers.subList(1,3));</span>
+<span class="nc" id="L228">        textAreas[n]= new TextArea(&quot;List which constraints, if any&quot;);</span>
+<span class="nc" id="L229">        n++;</span>
+
+        // Confidentiality
+<span class="nc" id="L232">        titles[n].add(new Span(&quot;Does your app guarantee confidentiality?&quot;), icons[n]);</span>
+<span class="nc" id="L233">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 32&quot;, &quot; the controller and the processor shall implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk&quot;));</span>
+<span class="nc" id="L234">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L235">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L236">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,1), answers.subList(1,3));</span>
+<span class="nc" id="L237">        textAreas[n]= new TextArea(&quot;How do you guarantee it?&quot;);</span>
+<span class="nc" id="L238">        n++;</span>
+
+        // Integrity
+<span class="nc" id="L241">        titles[n].add(new Span(&quot;Does your app guarantee integrity?&quot;), icons[n]);</span>
+<span class="nc" id="L242">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 32&quot;, &quot; the controller and the processor shall implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk&quot;));</span>
+<span class="nc" id="L243">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L244">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L245">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,1), answers.subList(1,3));</span>
+<span class="nc" id="L246">        textAreas[n]= new TextArea(&quot;How do you guarantee it?&quot;);</span>
+<span class="nc" id="L247">        n++;</span>
+
+        // Usi pseudonomizzazione?
+<span class="nc" id="L250">        titles[n].add(new Span(&quot;Do you pseudonymize the personal data?&quot;));</span>
+<span class="nc" id="L251">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 25&quot;, &quot; the controller shall, both at the time of the determination of the means for processing and at the time of the processing itself, implement appropriate technical and organisational measures, such as pseudonymisation, which are designed to implement data-protection principles&quot;));</span>
+<span class="nc" id="L252">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L253">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L254">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,1), answers.subList(1,3));</span>
+<span class="nc" id="L255">        n++;</span>
+
+        // Usi cifratura?
+<span class="nc" id="L258">        titles[n].add(new Span(&quot;Do you encrypt the personal data?&quot;));</span>
+<span class="nc" id="L259">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 32&quot;, &quot;the controller and the processor shall implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk, including inter alia as appropriate: ... encryption of personal data;&quot;));</span>
+<span class="nc" id="L260">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L261">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L262">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,1), answers.subList(1,3));</span>
+<span class="nc" id="L263">        n++;</span>
+
+        // Protocollo comunicazione
+<span class="nc" id="L266">        titles[n].add(new Span(&quot;Which cryptographic protocol are you using for communication?&quot;), icons[n]);</span>
+<span class="nc" id="L267">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 32&quot;, &quot; the controller and the processor shall implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk&quot;));</span>
+<span class="nc" id="L268">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;My app doesn't need communication&quot;, &quot;TLS 1.2 or 1.3&quot;, &quot;TLS &lt; 1.2&quot;, &quot;SSL&quot;, &quot;I don't use any&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L269">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L270">        manageChangeColorQuestion(n, answers.subList(0,2), answers.subList(2,3), answers.subList(3,6));</span>
+<span class="nc" id="L271">        n++;</span>
+
+        // Porte
+<span class="nc" id="L274">        titles[n].add(new Span(&quot;Do you limit the communication ports to the strictly necessary? (ex: only port 443 and 80 for https)&quot;), icons[n]);</span>
+<span class="nc" id="L275">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 32&quot;, &quot; the controller and the processor shall implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk&quot;));</span>
+<span class="nc" id="L276">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L277">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L278">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,1), answers.subList(1,3));</span>
+<span class="nc" id="L279">        n++;</span>
+
+        //Backup
+<span class="nc" id="L282">        titles[n].add(new Span(&quot;How often do you regularly make backups&quot;), icons[n]);</span>
+<span class="nc" id="L283">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 32&quot;, &quot; the controller and the processor shall implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk&quot;));</span>
+<span class="nc" id="L284">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;every week&quot;, &quot;between a week and a month&quot;, &quot;between a month and a year&quot;, &quot;more than a year&quot;, &quot;never&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L285">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L286">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,3), answers.subList(3,6));</span>
+<span class="nc" id="L287">        n++;</span>
+
+        // Procedure in caso di attacco?
+<span class="nc" id="L290">        titles[n].add(new Span(&quot;Have you identified some procedures the availability and access to personal data in case of an incident?&quot;));</span>
+<span class="nc" id="L291">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 32&quot;, &quot;the controller and the processor shall implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk, including inter alia as appropriate: ... the ability to restore the availability and access to personal data in a timely manner in the event of a physical or technical incident;&quot;));</span>
+<span class="nc" id="L292">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L293">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L294">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,1), answers.subList(1,3));</span>
+<span class="nc" id="L295">        n++;</span>
+
+<span class="nc" id="L297">        createSectionLayout(begin, n, 1);</span>
+<span class="nc" id="L298">        createButtonsLayout(true, true, false, 1);</span>
+<span class="nc" id="L299">    }</span>
+
+    // SEZIONE 3: OPEN SOURCE
+    private void section3(){
+<span class="nc" id="L303">        int begin=n;</span>
+        ArrayList&lt;String&gt; answers;
+
+        // OpenChain
+<span class="nc" id="L307">        titles[n].add(new Span(&quot;Did you follow OpenChain specification or other public specification for licensing compliance?&quot;), icons[n]);</span>
+<span class="nc" id="L308">        contextMenus[n].addItem(&quot;It is easier to find if a software if compliant to the GDPR if it is open source&quot;);</span>
+<span class="nc" id="L309">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes, OpenChain&quot;, &quot;Yes, other&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L310">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L311">        manageChangeColorQuestion(n, answers.subList(0,2), answers.subList(2,4), answers.subList(4,4));</span>
+<span class="nc" id="L312">        textAreas[n]= new TextArea(&quot;If other, which one?&quot;);</span>
+<span class="nc" id="L313">        n++;</span>
+
+        // PIA
+<span class="nc" id="L316">        titles[n].add(new Span(&quot;Did you perform a Privacy Impact Assessment for at least a standard use case?&quot;), icons[n]);</span>
+<span class="nc" id="L317">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 35&quot;, &quot; the controller shall, prior to the processing, carry out an assessment of the impact of the envisaged processing operations on the protection of personal data ... A data protection impact assessment referred to in paragraph 1 shall in particular be required in the case of:\n&quot; +</span>
+                &quot;\n&quot; +
+                &quot;    a systematic and extensive evaluation of personal aspects \n&quot; +
+                &quot;    processing on a large scale of special categories of data \n&quot; +
+                &quot;    a systematic monitoring of a publicly accessible area on a large scale&quot;));
+<span class="nc" id="L322">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No, but it wasn't necessary&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L323">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L324">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,2), answers.subList(2,4));</span>
+<span class="nc" id="L325">        n++;</span>
+
+        // PIA
+<span class="nc" id="L328">        titles[n].add(new Span(&quot;Is the Privacy Impact Assessment easily available at request?&quot;), icons[n]);</span>
+<span class="nc" id="L329">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 35&quot;, &quot; the controller shall, prior to the processing, carry out an assessment of the impact of the envisaged processing operations on the protection of personal data ... A data protection impact assessment referred to in paragraph 1 shall in particular be required in the case of:\n&quot; +</span>
+                &quot;\n&quot; +
+                &quot;    a systematic and extensive evaluation of personal aspects \n&quot; +
+                &quot;    processing on a large scale of special categories of data \n&quot; +
+                &quot;    a systematic monitoring of a publicly accessible area on a large scale&quot;));
+<span class="nc" id="L334">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L335">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L336">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,1), answers.subList(1,3));</span>
+<span class="nc" id="L337">        setHiddenQuestion(n, n-1, &quot;Yes&quot;);</span>
+<span class="nc" id="L338">        n++;</span>
+
+        //Static analysis checks: coding style coding quality
+<span class="nc" id="L341">        titles[n].add(new Span(&quot;Do you use any static analysis tool for code quality?&quot;), icons[n]);</span>
+<span class="nc" id="L342">        contextMenus[n].addItem(&quot;Static analysis tools can help find vulnerabilities and reduce the complexity of the software&quot;);</span>
+<span class="nc" id="L343">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L344">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L345">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,3), answers.subList(3,3));</span>
+<span class="nc" id="L346">        textAreas[n]= new TextArea(&quot;If yes, which tools?&quot;);</span>
+<span class="nc" id="L347">        n++;</span>
+
+        // Certification
+<span class="nc" id="L350">        titles[n].add(new Span(&quot;Do you have any certifications to demonstrate compliance with security requirements?&quot;), icons[n]);</span>
+<span class="nc" id="L351">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 25&quot;, &quot;An approved certification mechanism pursuant to Article 42 may be used as an element to demonstrate compliance with the requirements set out in paragraphs 1 and 2 of this Article&quot;));</span>
+<span class="nc" id="L352">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L353">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L354">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,3), answers.subList(3,3));</span>
+<span class="nc" id="L355">        n++;</span>
+
+        //Librerie terze
+<span class="nc" id="L358">        titles[n].add(new Span(&quot;Do you use third party libraries?&quot;), icons[n]);</span>
+<span class="nc" id="L359">        contextMenus[n].addItem(&quot;Third party libraries may reduce the security of the software, pay attention to what you include in your project&quot;);</span>
+<span class="nc" id="L360">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L361">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L362">        manageChangeColorQuestion(n, answers.subList(0,2), answers.subList(2,2), answers.subList(2,3));</span>
+<span class="nc" id="L363">        n++;</span>
+
+        //SE DOMANDA PRIMA ERA SI Domanda X: Librerie terze parte 2
+<span class="nc" id="L366">        titles[n].add(new Span(&quot;Have you checked if these libraries comply with the current regulation about personal data?&quot;), icons[n]);</span>
+<span class="nc" id="L367">        contextMenus[n].addItem(&quot;Third party libraries may reduce the security of the software, pay attention to what you include in your project&quot;);</span>
+<span class="nc" id="L368">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L369">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L370">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,1), answers.subList(1,3));</span>
+<span class="nc" id="L371">        setHiddenQuestion(n, n-1, &quot;Yes&quot;);</span>
+<span class="nc" id="L372">        n++;</span>
+
+        // Test
+<span class="nc" id="L375">        titles[n].add(new Span(&quot;Did you successfully perform any test on the software functionalities (unit test, integration test...)?&quot;), icons[n]);</span>
+<span class="nc" id="L376">        contextMenus[n].addItem(&quot;It is important to test your app to prevent any unintentional and possibly dangerous behaviour&quot;);</span>
+<span class="nc" id="L377">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L378">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L379">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,1), answers.subList(1,3));</span>
+<span class="nc" id="L380">        textAreas[n]= new TextArea(&quot;If yes, which tests did you perform?&quot;);</span>
+<span class="nc" id="L381">        n++;</span>
+
+        // Code coverage
+<span class="nc" id="L384">        titles[n].add(new Span(&quot;Did you perform a code coverage analysis of your test?&quot;), icons[n]);</span>
+<span class="nc" id="L385">        contextMenus[n].addItem(&quot;It is important to test your app to prevent any unintentional and possibly dangerous behaviour&quot;);</span>
+<span class="nc" id="L386">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes, &gt;=90%&quot;, &quot;Yes, &gt;=75% &lt;90%&quot;, &quot;Yes, &gt;=50% &lt;75%&quot;, &quot;Yes, &lt;50%&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L387">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L388">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,3), answers.subList(3,6));</span>
+<span class="nc" id="L389">        setHiddenQuestion(n, n-1, &quot;Yes&quot;);</span>
+<span class="nc" id="L390">        n++;</span>
+
+        // Test sicurezza?
+<span class="nc" id="L393">        titles[n].add(new Span(&quot;Do you regularly test the effectiveness of your measures for ensuring the security of the process?&quot;));</span>
+<span class="nc" id="L394">        contextMenus[n].addItem(createInfo(&quot;GDPR Article 32&quot;, &quot;the controller and the processor shall implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk, including inter alia as appropriate: ... a process for regularly testing, assessing and evaluating the effectiveness of technical and organisational measures for ensuring the security of the processing.&quot;));</span>
+<span class="nc" id="L395">        answers=new ArrayList&lt;&gt;(Arrays.asList(&quot;Yes&quot;, &quot;No&quot;, &quot;I don't know&quot;));</span>
+<span class="nc" id="L396">        radioGroups[n].setItems(answers);</span>
+<span class="nc" id="L397">        manageChangeColorQuestion(n, answers.subList(0,1), answers.subList(1,1), answers.subList(1,3));</span>
+<span class="nc" id="L398">        n++;</span>
+
+<span class="nc" id="L400">        createSectionLayout(begin, n, 2);</span>
+<span class="nc" id="L401">        createButtonsLayout(true, true, false, 2);</span>
+<span class="nc" id="L402">    }</span>
+
+    private void setHiddenQuestion(int question, int previousQuestion, String value){
+<span class="nc" id="L405">        singleQuestion[question].setVisible(false);</span>
+<span class="nc" id="L406">        singleQuestion[question].addClassName(&quot;singleQuestionHidden-questionnaire&quot;);</span>
+<span class="nc" id="L407">        radioGroups[previousQuestion].addValueChangeListener(e-&gt; singleQuestion[question].setVisible(value.equals(e.getValue())));</span>
+<span class="nc" id="L408">    }</span>
+
+    private void goBack(){
+<span class="nc" id="L411">        MyDialog dialog= new MyDialog();</span>
+<span class="nc" id="L412">        dialog.setTitle(&quot;Confirm&quot;);</span>
+<span class="nc" id="L413">        dialog.setContent(new VerticalLayout(new Span(&quot;Are you sure you want to go back?&quot;), new Span(&quot;All the changes will be lost&quot;)));</span>
+<span class="nc" id="L414">        dialog.setContinueButton(new Button(&quot;Confirm&quot;, e-&gt;{</span>
+<span class="nc" id="L415">            dialog.close();</span>
+<span class="nc" id="L416">            UI.getCurrent().navigate(Questionnaire.class);</span>
+<span class="nc" id="L417">        }));</span>
+<span class="nc" id="L418">        dialog.open();</span>
+<span class="nc" id="L419">    }</span>
+
+    /*
+    Each question has 3 different groups of answers: good answers(green), mediocre answers(orange) and bad answers(red).
+    Based on the given answer, the section will change color accordingly
+    */
+    private void manageChangeColorQuestion(int question, List&lt;String&gt; green, List&lt;String&gt; orange, List&lt;String&gt; red){
+<span class="nc" id="L426">        radioGroups[question].addValueChangeListener(e-&gt; {</span>
+<span class="nc" id="L427">            singleQuestion[question].removeClassNames(&quot;green&quot;, &quot;orange&quot;, &quot;red&quot;);</span>
+<span class="nc bnc" id="L428" title="All 2 branches missed.">            if(green.contains(radioGroups[question].getValue())){</span>
+<span class="nc" id="L429">                singleQuestion[question].addClassName(&quot;green&quot;);</span>
+<span class="nc" id="L430">                return;</span>
+            }
+<span class="nc bnc" id="L432" title="All 2 branches missed.">            if(orange.contains(radioGroups[question].getValue())){</span>
+<span class="nc" id="L433">                singleQuestion[question].addClassName(&quot;orange&quot;);</span>
+<span class="nc" id="L434">                return;</span>
+            }
+<span class="nc bnc" id="L436" title="All 2 branches missed.">            if(red.contains(radioGroups[question].getValue())){</span>
+<span class="nc" id="L437">                singleQuestion[question].addClassName(&quot;red&quot;);</span>
+            }
+<span class="nc" id="L439">        });</span>
+<span class="nc" id="L440">    }</span>
+
+    private void createSectionLayout(int begin, int end, int section){
+<span class="nc bnc" id="L443" title="All 2 branches missed.">        for(int i=begin; i&lt;end; i++){</span>
+<span class="nc bnc" id="L444" title="All 2 branches missed.">            if(textAreas[i]!= null){</span>
+<span class="nc" id="L445">                textAreas[i].addClassName(&quot;textArea-questionnaire&quot;);</span>
+<span class="nc" id="L446">                singleQuestion[i].add(textAreas[i]);</span>
+            }
+<span class="nc" id="L448">            sections[section].add(singleQuestion[i]);</span>
+        }
+<span class="nc" id="L450">    }</span>
+
+    /*
+    Left=true -&gt; there is a previous page therefore there is a button that let you go in that page
+    Right=true -&gt; there is a next page therefore there is a button that let you go in that page
+    End=true -&gt; the last page, there is the 'Save' button
+     */
+    private void createButtonsLayout(boolean left, boolean right, boolean end, int section){
+<span class="nc" id="L458">        HorizontalLayout layout= new HorizontalLayout();</span>
+<span class="nc" id="L459">        layout.addClassName(&quot;buttonLayout-questionnaire&quot;);</span>
+
+<span class="nc" id="L461">        Span leftButton= new Span();</span>
+<span class="nc" id="L462">        leftButton.addClassNames(&quot;las la-2x la-arrow-circle-left button-questionnaire&quot;);</span>
+<span class="nc" id="L463">        layout.add(leftButton);</span>
+<span class="nc bnc" id="L464" title="All 2 branches missed.">        if(left){</span>
+<span class="nc" id="L465">            leftButton.addClassNames(&quot;activeButton-questionnaire pointer&quot;);</span>
+<span class="nc" id="L466">            leftButton.addClickListener(e-&gt; tabs.setSelectedIndex(tabs.getSelectedIndex()-1));</span>
+        }
+
+<span class="nc bnc" id="L469" title="All 2 branches missed.">        if(end){</span>
+<span class="nc" id="L470">            Button saveButton= new Button(&quot;Save&quot;, e-&gt; saveQuestionnaire());</span>
+<span class="nc" id="L471">            saveButton.addClassNames(&quot;saveButton-questionnaire buuutton&quot;);</span>
+<span class="nc" id="L472">            layout.add(saveButton);</span>
+        }
+
+<span class="nc" id="L475">        Span rightButton = new Span();</span>
+<span class="nc" id="L476">        rightButton.addClassNames(&quot;las la-2x la-arrow-circle-right button-questionnaire&quot;);</span>
+<span class="nc bnc" id="L477" title="All 2 branches missed.">        if(right){</span>
+<span class="nc" id="L478">            rightButton.addClassNames(&quot;activeButton-questionnaire pointer&quot;);</span>
+<span class="nc" id="L479">            rightButton.addClickListener(e-&gt; tabs.setSelectedIndex(tabs.getSelectedIndex()+1));</span>
+
+        }
+<span class="nc" id="L482">        layout.add(rightButton);</span>
+
+<span class="nc" id="L484">        sections[section].add(layout);</span>
+<span class="nc" id="L485">    }</span>
+
+    private void changeTab(Tabs.SelectedChangeEvent e){
+<span class="nc bnc" id="L488" title="All 2 branches missed.">        if(e.getSelectedTab().equals(e.getPreviousTab())){</span>
+<span class="nc" id="L489">            return;</span>
+        }
+<span class="nc bnc" id="L491" title="All 2 branches missed.">        if(tabs.getSelectedIndex()==nSections-1){</span>
+<span class="nc" id="L492">            summarySection();</span>
+        }
+<span class="nc" id="L494">        content.removeAll();</span>
+<span class="nc bnc" id="L495" title="All 2 branches missed.">        if(tabs.getSelectedIndex()!=nSections){</span>
+<span class="nc" id="L496">            content.add(sections[tabs.getSelectedIndex()]);</span>
+        }
+<span class="nc" id="L498">    }</span>
+
+    private void summarySection(){
+<span class="nc" id="L501">        sections[nSections-1].removeAll();</span>
+
+<span class="nc" id="L503">        VerticalLayout greenLayout = new VerticalLayout();</span>
+<span class="nc" id="L504">        VerticalLayout orangeLayout = new VerticalLayout();</span>
+<span class="nc" id="L505">        VerticalLayout redLayout = new VerticalLayout();</span>
+<span class="nc" id="L506">        redAnswers=0;</span>
+<span class="nc" id="L507">        orangeAnswers=0;</span>
+<span class="nc" id="L508">        greenAnswers=0;</span>
+
+<span class="nc bnc" id="L510" title="All 2 branches missed.">        for(int i=0; i&lt;GlobalVariables.nQuestions; i++){</span>
+<span class="nc bnc" id="L511" title="All 2 branches missed.">            if(!singleQuestion[i].isVisible()){</span>
+<span class="nc" id="L512">                continue;</span>
+            }
+<span class="nc" id="L514">            Span question= new Span(((Span) titles[i].getComponentAt(0)).getText());</span>
+<span class="nc" id="L515">            question.addClassName(&quot;bold&quot;);</span>
+<span class="nc bnc" id="L516" title="All 2 branches missed.">            VerticalLayout answer=new VerticalLayout(question, new Span(&quot;YOUR ANSWER:  &quot; + (radioGroups[i].getValue()==null ? &quot;NO ANSWER&quot; : radioGroups[i].getValue())));</span>
+<span class="nc bnc" id="L517" title="All 4 branches missed.">            if(textAreas[i]!=null &amp;&amp; !textAreas[i].getValue().equals(&quot;&quot;)){</span>
+<span class="nc" id="L518">                TextArea textArea= new TextArea();</span>
+<span class="nc" id="L519">                textArea.setValue(textAreas[i].getValue());</span>
+<span class="nc" id="L520">                textArea.setReadOnly(true);</span>
+<span class="nc" id="L521">                answer.add(textArea);</span>
+            }
+<span class="nc" id="L523">            answer.addClassName(&quot;singleQuestion-questionnaire&quot;);</span>
+
+<span class="nc bnc" id="L525" title="All 2 branches missed.">            if(singleQuestion[i].hasClassName(&quot;green&quot;)){</span>
+<span class="nc" id="L526">                greenAnswers++;</span>
+<span class="nc" id="L527">                answer.addClassName(&quot;green&quot;);</span>
+<span class="nc" id="L528">                greenLayout.add(answer);</span>
+            }
+<span class="nc bnc" id="L530" title="All 2 branches missed.">            else if(singleQuestion[i].hasClassName(&quot;orange&quot;)){</span>
+<span class="nc" id="L531">                orangeAnswers++;</span>
+<span class="nc" id="L532">                answer.addClassName(&quot;orange&quot;);</span>
+<span class="nc" id="L533">                orangeLayout.add(answer);</span>
+            }
+            else{
+<span class="nc" id="L536">                redAnswers++;</span>
+<span class="nc" id="L537">                answer.addClassName(&quot;red&quot;);</span>
+<span class="nc" id="L538">                redLayout.add(answer);</span>
+            }
+        }
+
+<span class="nc" id="L542">        VerticalLayout summarize= new VerticalLayout(new Span(&quot;Each answer can be a green answer (compliant with the GDPR), an orange answer (not so compliant withe the GDPR) &quot; +</span>
+                &quot;or a red answer (not compliant with the GDPR)&quot;));
+<span class="nc" id="L544">        summarize.addClassName(&quot;bold&quot;);</span>
+<span class="nc" id="L545">        VerticalLayout redTitle= new VerticalLayout(new Span(&quot;YOU HAVE &quot; + redAnswers + &quot; RED ANSWERS&quot;));</span>
+<span class="nc" id="L546">        redTitle.addClassNames(&quot;redName&quot;, &quot;bold&quot;);</span>
+<span class="nc" id="L547">        VerticalLayout orangeTitle= new VerticalLayout(new Span(&quot;YOU HAVE &quot; + orangeAnswers + &quot; ORANGE ANSWERS&quot;));</span>
+<span class="nc" id="L548">        orangeTitle.addClassNames(&quot;orangeName&quot;, &quot;bold&quot;);</span>
+<span class="nc" id="L549">        VerticalLayout greenTitle= new VerticalLayout(new Span(&quot;YOU HAVE &quot; + greenAnswers + &quot; GREEN ANSWERS&quot;));</span>
+<span class="nc" id="L550">        greenTitle.addClassNames(&quot;greenName&quot;, &quot;bold&quot;);</span>
+
+<span class="nc" id="L552">        sections[nSections-1].add(summarize, redTitle);</span>
+<span class="nc bnc" id="L553" title="All 2 branches missed.">        if(redAnswers!=0){</span>
+<span class="nc" id="L554">            sections[nSections-1].add(redLayout);</span>
+        }
+<span class="nc" id="L556">        sections[nSections-1].add(orangeTitle);</span>
+<span class="nc bnc" id="L557" title="All 2 branches missed.">        if(orangeAnswers!=0){</span>
+<span class="nc" id="L558">            sections[nSections-1].add(orangeLayout);</span>
+        }
+<span class="nc" id="L560">        sections[nSections-1].add(greenTitle);</span>
+<span class="nc bnc" id="L561" title="All 2 branches missed.">        if(greenAnswers!=0){</span>
+<span class="nc" id="L562">            sections[nSections-1].add(greenLayout);</span>
+        }
+
+<span class="nc" id="L565">        createButtonsLayout(true, false, true, nSections-1);</span>
+<span class="nc" id="L566">    }</span>
+
+    private Html createInfo(String title, String description){
+<span class="nc" id="L569">        return new Html(&quot;&lt;p class=\&quot;info\&quot;&gt;&lt;b&gt;&quot; + title +&quot;&lt;/b&gt;: &lt;i&gt;&quot; + description + &quot;&lt;/i&gt;&lt;/p&gt;&quot;);</span>
+    }
+
+    private void saveQuestionnaire(){
+<span class="nc" id="L573">        String[] detailVote= new String[GlobalVariables.nQuestions];</span>
+<span class="nc" id="L574">        Hashtable&lt;Integer, String&gt; optionalAnswers= new Hashtable&lt;&gt;();</span>
+<span class="nc bnc" id="L575" title="All 2 branches missed.">        for(int i=0; i&lt;GlobalVariables.nQuestions; i++){</span>
+<span class="nc" id="L576">            detailVote[i]= radioGroups[i].getValue();</span>
+<span class="nc bnc" id="L577" title="All 2 branches missed.">            if(textAreas[i]!= null){</span>
+<span class="nc" id="L578">                optionalAnswers.put(i, textAreas[i].getValue());</span>
+            }
+        }
+        QuestionnaireVote vote;
+        String textEvaluation;
+<span class="nc bnc" id="L583" title="All 2 branches missed.">        if(redAnswers&gt;0){</span>
+<span class="nc" id="L584">            vote=QuestionnaireVote.RED;</span>
+<span class="nc" id="L585">            textEvaluation=&quot;RED (Not compliant with the GDPR)&quot;;</span>
+        }
+<span class="nc bnc" id="L587" title="All 2 branches missed.">        else if(orangeAnswers&gt;0){</span>
+<span class="nc" id="L588">            vote=QuestionnaireVote.ORANGE;</span>
+<span class="nc" id="L589">            textEvaluation=&quot;ORANGE (Not so compliant with the GDPR)&quot;;</span>
+        }
+        else{
+<span class="nc" id="L592">            vote=QuestionnaireVote.GREEN;</span>
+<span class="nc" id="L593">            textEvaluation=&quot;GREEN (Compliant with the GDPR)&quot;;</span>
+        }
+
+<span class="nc" id="L596">        MyDialog dialog= new MyDialog();</span>
+<span class="nc" id="L597">        dialog.setTitle(&quot;Confirm&quot;);</span>
+<span class="nc" id="L598">        dialog.setContent(new VerticalLayout(new Span(&quot;Questionnaire evaluation: &quot; + textEvaluation), new Span(&quot;Are you sure you want to upload the questionnaire? Any previous one will be lost&quot;)));</span>
+<span class="nc" id="L599">        dialog.setContinueButton(new Button(&quot;Confirm&quot;, e-&gt; {</span>
+<span class="nc" id="L600">            dataBaseService.updateQuestionnaireForApp(app, vote, detailVote, optionalAnswers);</span>
+<span class="nc" id="L601">            Notification notification = Notification.show(&quot;Questionnaire uploaded correctly&quot;);</span>
+<span class="nc" id="L602">            notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);</span>
+<span class="nc" id="L603">            dialog.close();</span>
+<span class="nc" id="L604">            UI.getCurrent().navigate(Questionnaire.class);</span>
+<span class="nc" id="L605">        }));</span>
+<span class="nc" id="L606">        dialog.open();</span>
+<span class="nc" id="L607">    }</span>
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent event) {
+<span class="nc bnc" id="L611" title="All 2 branches missed.">        if(app==null){</span>
+<span class="nc" id="L612">            UI.getCurrent().navigate(Questionnaire.class);</span>
+<span class="nc" id="L613">            return;</span>
+        }
+        // Precompile questionnaire if there was a previous one
+<span class="nc bnc" id="L616" title="All 4 branches missed.">        if(app.getQuestionnaireVote()!=null &amp;&amp; app.getDetailVote()!=null){</span>
+<span class="nc bnc" id="L617" title="All 2 branches missed.">            for(int i=0; i&lt;GlobalVariables.nQuestions; i++){</span>
+<span class="nc" id="L618">                radioGroups[i].setValue(app.getDetailVote()[i]);</span>
+<span class="nc bnc" id="L619" title="All 4 branches missed.">                if(textAreas[i]!=null &amp;&amp; app.getOptionalAnswers()!=null){</span>
+<span class="nc" id="L620">                    textAreas[i].setValue(app.getOptionalAnswers().get(i));</span>
+                }
+            }
+        }
+
+<span class="nc" id="L625">        H1 title= new H1(&quot;Questionnaire &quot; + app.getName());</span>
+<span class="nc" id="L626">        title.addClassName(&quot;title-questionnaire&quot;);</span>
+<span class="nc" id="L627">        com.vaadin.flow.component.html.Section sectionDrawer= new com.vaadin.flow.component.html.Section(title, tabs, goBackButton);</span>
+<span class="nc" id="L628">        sectionDrawer.addClassNames(&quot;drawer-questionnaire&quot;);</span>
+<span class="nc" id="L629">        addToDrawer(sectionDrawer);</span>
+<span class="nc" id="L630">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

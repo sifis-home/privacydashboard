@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ApiPrivacyNoticeController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.data.apiController</a> &gt; <span class="el_source">ApiPrivacyNoticeController.java</span></div><h1>ApiPrivacyNoticeController.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.data.apiController;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.privacydashboard.application.data.GlobalVariables.Role;
+import com.privacydashboard.application.data.entity.IoTApp;
+import com.privacydashboard.application.data.entity.PrivacyNotice;
+import com.privacydashboard.application.data.entity.User;
+import com.privacydashboard.application.data.service.DataBaseService;
+import com.privacydashboard.application.security.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.LinkedList;
+import java.util.List;
+
+@RestController
+<span class="nc" id="L23">public class ApiPrivacyNoticeController {</span>
+    @Autowired
+    private DataBaseService dataBaseService;
+    @Autowired
+    private UserDetailsServiceImpl userDetailsServiceImpl;
+    @Autowired
+    private ApiGeneralController apiGeneralController;
+
+    /**
+     * Get information about Privacy Notice
+     * RESTRICTIONS: NONE
+     * @param privacyNoticeId Id of the privacy Notice
+     * @return JSON with information about the Privacy Notice. Bad Request if invalid ID, or Privacy Notice does not exist
+     */
+    @GetMapping
+    @RequestMapping(&quot;api/privacynotice/get&quot;)
+    public ResponseEntity&lt;?&gt; get(@RequestParam() String privacyNoticeId){
+        try{
+<span class="nc" id="L41">            PrivacyNotice privacyNotice=apiGeneralController.getPrivacyNoticeFromId(privacyNoticeId);</span>
+<span class="nc" id="L42">            JsonNode privacyNoticeJson= apiGeneralController.createJsonFromPrivacyNotice(privacyNotice);</span>
+<span class="nc" id="L43">            return ResponseEntity.ok(privacyNoticeJson);</span>
+<span class="nc" id="L44">        } catch (IllegalArgumentException e){</span>
+<span class="nc" id="L45">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+        }
+    }
+
+    /**
+     * Get information about Privacy Notice
+     * RESTRICTIONS: NONE
+     * @param appId Id of the app of the privacy Notice
+     * @return JSON with information about the Privacy Notice. Bad Request if invalid ID, app or Privacy Notice does not exist
+     */
+    @GetMapping
+    @RequestMapping(&quot;api/privacynotice/getFromApp&quot;)
+    public ResponseEntity&lt;?&gt; getFromApp(@RequestParam() String appId){
+        try{
+<span class="nc" id="L59">            PrivacyNotice privacyNotice=apiGeneralController.getPrivacyNoticeFromAppId(appId);</span>
+<span class="nc" id="L60">            JsonNode privacyNoticeJson= apiGeneralController.createJsonFromPrivacyNotice(privacyNotice);</span>
+<span class="nc" id="L61">            return ResponseEntity.ok(privacyNoticeJson);</span>
+<span class="nc" id="L62">        } catch (IllegalArgumentException e){</span>
+<span class="nc" id="L63">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+        }
+    }
+
+    /**
+     * Get all Privacy Notices of a user
+     * RESTRICTIONS: UserId of a CONTROLLER or DPO, or The one calling the function MUST BE the user identified by the userId
+     * @param userId Id of the user to get the Privacy Notices from
+     * @return JSON with information about all the Privacy Notices. Bad Request if invalid ID, app or Privacy Notice does not exist
+     */
+    @GetMapping
+    @RequestMapping(&quot;api/privacynotice/getFromUser&quot;)
+    public ResponseEntity&lt;?&gt; getFromUser(@RequestParam() String userId){
+        try{
+<span class="nc" id="L77">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="nc bnc" id="L78" title="All 4 branches missed.">            if(user.getRole().equals(Role.SUBJECT) &amp;&amp; !apiGeneralController.isAuthenticatedUserId(userId)){</span>
+<span class="nc" id="L79">                return ResponseEntity.badRequest().body(&quot;MUST be ID of controller or DPO, or you must be the user identified by userId&quot;);</span>
+            }
+<span class="nc" id="L81">            List&lt;IoTApp&gt; appList= dataBaseService.getUserApps(user);</span>
+<span class="nc" id="L82">            ObjectMapper mapper = new ObjectMapper();</span>
+<span class="nc" id="L83">            ArrayNode privacyNoticesArray = mapper.createArrayNode();</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">            for(IoTApp app : appList){</span>
+<span class="nc" id="L85">                PrivacyNotice privacyNotice= dataBaseService.getPrivacyNoticeFromApp(app);</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">                if(privacyNotice!=null){</span>
+<span class="nc" id="L87">                    privacyNoticesArray.add(apiGeneralController.createJsonFromPrivacyNotice(privacyNotice));</span>
+                }
+<span class="nc" id="L89">            }</span>
+<span class="nc" id="L90">            return ResponseEntity.ok(privacyNoticesArray);</span>
+<span class="nc" id="L91">        } catch (IllegalArgumentException e){</span>
+<span class="nc" id="L92">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+        }
+    }
+
+    /**
+     * Add Privacy Notice to an app
+     * RESTRICTIONS: The one calling the function MUST BE controller or DPO of the app
+     * @param body JSON representing the privacy notice
+     * @return OK if successfully added. Bad Request if app is invalid or user is not authorized
+     */
+    @PostMapping
+    @RequestMapping(&quot;api/privacynotice/add&quot;)
+    public ResponseEntity&lt;?&gt; add(@RequestBody String body){
+        try{
+<span class="nc" id="L106">            PrivacyNotice privacyNotice= apiGeneralController.getPrivacyNoticeFromJsonString(true, body);</span>
+<span class="nc" id="L107">            IoTApp app= privacyNotice.getApp();</span>
+
+<span class="nc" id="L109">            User user= apiGeneralController.getAuthenicatedUser();</span>
+<span class="nc bnc" id="L110" title="All 4 branches missed.">            if(dataBaseService.userHasApp(user, app) &amp;&amp; apiGeneralController.isControllerOrDpo(true, null)){</span>
+<span class="nc" id="L111">                dataBaseService.addPrivacyNoticeForApp(app, privacyNotice.getText());</span>
+<span class="nc" id="L112">                return ResponseEntity.ok(&quot;Privacy Notice created successfully&quot;);</span>
+            }
+            else{
+<span class="nc" id="L115">                return ResponseEntity.badRequest().body(&quot;you MUST be controller and DPO of the app&quot;);</span>
+            }
+
+<span class="nc" id="L118">        } catch (IllegalArgumentException e){</span>
+<span class="nc" id="L119">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="nc" id="L120">        } catch (IOException e){</span>
+<span class="nc" id="L121">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
+        }
+    }
+
+    /**
+     * Add Privacy Notice to various apps
+     * RESTRICTIONS: The one calling the function MUST BE controller or DPO of the apps
+     * @param body JSON representing the app's IDs and the text of the Privacy Notice
+     * @return OK if successfully added. Bad Request if user is not authorized
+     */
+    @PostMapping
+    @RequestMapping(&quot;api/privacynotice/addVarious&quot;)
+    public ResponseEntity&lt;?&gt; addVarious(@RequestBody String body){
+        try{
+<span class="nc bnc" id="L135" title="All 2 branches missed.">            if(!apiGeneralController.isControllerOrDpo(true, null)){</span>
+<span class="nc" id="L136">                return ResponseEntity.badRequest().body(&quot;you must be a Controller or DPO&quot;);</span>
+            }
+<span class="nc" id="L138">            ObjectMapper mapper = new ObjectMapper();</span>
+<span class="nc" id="L139">            JsonNode rootNode = mapper.readTree(new StringReader(body));</span>
+<span class="nc" id="L140">            List&lt;IoTApp&gt; appList= getAppsFromJson(rootNode);</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">            if(!rootNode.has(&quot;text&quot;)){</span>
+<span class="nc" id="L142">                return ResponseEntity.badRequest().body(&quot;text is missing&quot;);</span>
+            }
+<span class="nc bnc" id="L144" title="All 2 branches missed.">            for(IoTApp app : appList){</span>
+<span class="nc" id="L145">                dataBaseService.addPrivacyNoticeForApp(app, rootNode.get(&quot;text&quot;).asText());</span>
+<span class="nc" id="L146">            }</span>
+<span class="nc" id="L147">            return ResponseEntity.ok(&quot;Privacy Notice added to all the apps&quot;);</span>
+<span class="nc" id="L148">        } catch (IllegalArgumentException e){</span>
+<span class="nc" id="L149">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="nc" id="L150">        } catch (IOException e){</span>
+<span class="nc" id="L151">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
+        }
+    }
+
+    /**
+     * Copy a Privacy Notice to various apps
+     * RESTRICTIONS: The one calling the function MUST BE controller or DPO of the apps
+     * @param privacyNoticeId Id of the Privacy Notice to be copied
+     * @param body JSON representing the app's IDs
+     * @return OK if successfully copied. Bad Request if user is not authorized
+     */
+    @PostMapping
+    @RequestMapping(&quot;api/privacynotice/copy&quot;)
+    public ResponseEntity&lt;?&gt; copy(@RequestParam() String privacyNoticeId, @RequestBody String body){
+        try{
+<span class="nc bnc" id="L166" title="All 2 branches missed.">            if(!apiGeneralController.isControllerOrDpo(true, null)){</span>
+<span class="nc" id="L167">                return ResponseEntity.badRequest().body(&quot;you must be a Controller or DPO&quot;);</span>
+            }
+<span class="nc" id="L169">            PrivacyNotice privacyNotice= apiGeneralController.getPrivacyNoticeFromId(privacyNoticeId);</span>
+<span class="nc" id="L170">            ObjectMapper mapper = new ObjectMapper();</span>
+<span class="nc" id="L171">            JsonNode rootNode = mapper.readTree(new StringReader(body));</span>
+<span class="nc" id="L172">            List&lt;IoTApp&gt; appList= getAppsFromJson(rootNode);</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">            for(IoTApp app : appList){</span>
+<span class="nc" id="L174">                dataBaseService.addPrivacyNoticeForApp(app, privacyNotice.getText());</span>
+<span class="nc" id="L175">            }</span>
+<span class="nc" id="L176">            return ResponseEntity.ok(&quot;Privacy Notice added to all the apps&quot;);</span>
+<span class="nc" id="L177">        } catch (IllegalArgumentException e){</span>
+<span class="nc" id="L178">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="nc" id="L179">        } catch (IOException e){</span>
+<span class="nc" id="L180">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
+        }
+    }
+
+    /**
+     * Copy a Privacy Notice from an app to various apps
+     * RESTRICTIONS: The one calling the function MUST BE controller or DPO of the apps
+     * @param appId Id of the App of the Privacy Notice to be copied
+     * @param body JSON representing the app's IDs
+     * @return OK if successfully copied. Bad Request if user is not authorized
+     */
+    @PostMapping
+    @RequestMapping(&quot;api/privacynotice/copyFromApp&quot;)
+    public ResponseEntity&lt;?&gt; copyFromApp(@RequestParam() String appId, @RequestBody String body){
+        try{
+<span class="nc bnc" id="L195" title="All 2 branches missed.">            if(!apiGeneralController.isControllerOrDpo(true, null)){</span>
+<span class="nc" id="L196">                return ResponseEntity.badRequest().body(&quot;you must be a Controller or DPO&quot;);</span>
+            }
+<span class="nc" id="L198">            PrivacyNotice privacyNotice= apiGeneralController.getPrivacyNoticeFromAppId(appId);</span>
+<span class="nc" id="L199">            ObjectMapper mapper = new ObjectMapper();</span>
+<span class="nc" id="L200">            JsonNode rootNode = mapper.readTree(new StringReader(body));</span>
+<span class="nc" id="L201">            List&lt;IoTApp&gt; appList= getAppsFromJson(rootNode);</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">            for(IoTApp app : appList){</span>
+<span class="nc" id="L203">                dataBaseService.addPrivacyNoticeForApp(app, privacyNotice.getText());</span>
+<span class="nc" id="L204">            }</span>
+<span class="nc" id="L205">            return ResponseEntity.ok(&quot;Privacy Notice added to all the apps&quot;);</span>
+<span class="nc" id="L206">        } catch (IllegalArgumentException e){</span>
+<span class="nc" id="L207">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="nc" id="L208">        } catch (IOException e){</span>
+<span class="nc" id="L209">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
+        }
+    }
+
+    /**
+     * Delete a Privacy Notice
+     * RESTRICTIONS: The one calling the function MUST BE controller or DPO of the app
+     * @param privacyNoticeId ID of the Privacy Notice to be deleted
+     * @return OK if successfully deleted. Bad Request if user is not authorized or privacy notice does not exist
+     */
+    @DeleteMapping
+    @RequestMapping(&quot;api/privacynotice/delete&quot;)
+    public ResponseEntity&lt;?&gt; delete(@RequestParam() String privacyNoticeId){
+        try{
+<span class="nc bnc" id="L223" title="All 2 branches missed.">            if(!apiGeneralController.isControllerOrDpo(true, null)){</span>
+<span class="nc" id="L224">                return ResponseEntity.badRequest().body(&quot;you must be a Controller or DPO&quot;);</span>
+            }
+<span class="nc" id="L226">            PrivacyNotice privacyNotice= apiGeneralController.getPrivacyNoticeFromId(privacyNoticeId);</span>
+<span class="nc" id="L227">            IoTApp app= privacyNotice.getApp();</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">            if(!apiGeneralController.userHasApp(apiGeneralController.getAuthenicatedUser(), app)){</span>
+<span class="nc" id="L229">                return ResponseEntity.badRequest().body(&quot;you must be a Controller or DPO of the APP&quot;);</span>
+            }
+<span class="nc" id="L231">            dataBaseService.deletePrivacyNotice(privacyNotice);</span>
+<span class="nc" id="L232">            return ResponseEntity.ok(&quot;Privacy Notice successfully deleted&quot;);</span>
+<span class="nc" id="L233">        } catch (IllegalArgumentException e){</span>
+<span class="nc" id="L234">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+        }
+    }
+
+    /**
+     * Delete a Privacy Notice from an app
+     * RESTRICTIONS: The one calling the function MUST BE controller or DPO of the app
+     * @param appId ID of the app from which the Privacy Notice must be deleted
+     * @return OK if successfully deleted. Bad Request if user is not authorized or privacy notice does not exist
+     */
+    @DeleteMapping
+    @RequestMapping(&quot;api/privacynotice/deleteFromApp&quot;)
+    public ResponseEntity&lt;?&gt; deleteFromApp(@RequestParam() String appId){
+        try{
+<span class="nc bnc" id="L248" title="All 2 branches missed.">            if(!apiGeneralController.isControllerOrDpo(true, null)){</span>
+<span class="nc" id="L249">                return ResponseEntity.badRequest().body(&quot;you must be a Controller or DPO&quot;);</span>
+            }
+<span class="nc" id="L251">            PrivacyNotice privacyNotice= apiGeneralController.getPrivacyNoticeFromAppId(appId);</span>
+<span class="nc" id="L252">            IoTApp app= privacyNotice.getApp();</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">            if(!apiGeneralController.userHasApp(apiGeneralController.getAuthenicatedUser(), app)){</span>
+<span class="nc" id="L254">                return ResponseEntity.badRequest().body(&quot;you must be a Controller or DPO of the APP&quot;);</span>
+            }
+<span class="nc" id="L256">            dataBaseService.deletePrivacyNotice(privacyNotice);</span>
+<span class="nc" id="L257">            return ResponseEntity.ok(&quot;Privacy Notice successfully deleted&quot;);</span>
+<span class="nc" id="L258">        } catch (IllegalArgumentException e){</span>
+<span class="nc" id="L259">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+        }
+    }
+
+    private List&lt;IoTApp&gt; getAppsFromJson(JsonNode rootNode) throws IllegalArgumentException{
+<span class="nc bnc" id="L264" title="All 2 branches missed.">        if(!rootNode.has(&quot;appsId&quot;) ){</span>
+<span class="nc" id="L265">            throw new IllegalArgumentException(&quot;invalid JSON&quot;);</span>
+        }
+<span class="nc" id="L267">        JsonNode appsIdJson = rootNode.get(&quot;appsId&quot;);</span>
+<span class="nc bnc" id="L268" title="All 2 branches missed.">        if (!appsIdJson.isArray()) {</span>
+<span class="nc" id="L269">            throw new IllegalArgumentException(&quot;invalid JSON&quot;);</span>
+        }
+<span class="nc" id="L271">        List&lt;IoTApp&gt; appList= new LinkedList&lt;&gt;();</span>
+<span class="nc bnc" id="L272" title="All 2 branches missed.">        for (JsonNode appId : appsIdJson) {</span>
+<span class="nc" id="L273">            IoTApp app=apiGeneralController.getAppFromId(appId.asText());</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">            if(apiGeneralController.userHasApp(apiGeneralController.getAuthenicatedUser(), app)){</span>
+<span class="nc" id="L275">                appList.add(app);</span>
+            }
+            else{
+<span class="nc" id="L278">                throw new IllegalArgumentException(&quot;You don't have all the apps&quot;);</span>
+            }
+<span class="nc" id="L280">        }</span>
+<span class="nc" id="L281">        return appList;</span>
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity&lt;?&gt; handleMissingParams(MissingServletRequestParameterException ex) {
+<span class="nc" id="L286">        return ResponseEntity.badRequest().body(ex.getParameterName() + &quot; parameter is missing&quot;);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

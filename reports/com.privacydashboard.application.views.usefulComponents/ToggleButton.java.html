@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ToggleButton.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.views.usefulComponents</a> &gt; <span class="el_source">ToggleButton.java</span></div><h1>ToggleButton.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.views.usefulComponents;
+import com.vaadin.flow.component.AbstractSinglePropertyField;
+import com.vaadin.flow.component.ClickNotifier;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.DomEvent;
+import com.vaadin.flow.component.Focusable;
+import com.vaadin.flow.component.HasSize;
+import com.vaadin.flow.component.HasStyle;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.dependency.NpmPackage;
+import com.vaadin.flow.shared.Registration;
+
+@Tag(&quot;vcf-toggle-button&quot;)
+@NpmPackage(value = &quot;@vaadin-component-factory/vcf-toggle-button&quot;, version = &quot;1.0.3&quot;)
+@JsModule(&quot;@vaadin-component-factory/vcf-toggle-button&quot;)
+@CssImport(value = &quot;./themes/privacydashboard/views/usefulComponents/vaadin-checkbox.css&quot;, themeFor = &quot;vaadin-checkbox&quot;)
+//@SuppressWarnings(&quot;serial&quot;)
+public class ToggleButton extends
+        AbstractSinglePropertyField&lt;ToggleButton, Boolean&gt; implements HasStyle,
+        HasSize, Focusable&lt;ToggleButton&gt;, ClickNotifier&lt;ToggleButton&gt; {
+
+    public ToggleButton() {
+<span class="nc" id="L26">        super(&quot;checked&quot;, false, false);</span>
+<span class="nc" id="L27">    }</span>
+
+    public ToggleButton(String labelText) {
+<span class="nc" id="L30">        this();</span>
+<span class="nc" id="L31">        setLabel(labelText);</span>
+<span class="nc" id="L32">    }</span>
+
+    public ToggleButton(boolean initialValue) {
+<span class="nc" id="L35">        this();</span>
+<span class="nc" id="L36">        setValue(initialValue);</span>
+<span class="nc" id="L37">    }</span>
+
+    public ToggleButton(String labelText, boolean initialValue) {
+<span class="nc" id="L40">        this(labelText);</span>
+<span class="nc" id="L41">        setValue(initialValue);</span>
+<span class="nc" id="L42">    }</span>
+
+    public ToggleButton(String label,
+                        ValueChangeListener&lt;ComponentValueChangeEvent&lt;ToggleButton, Boolean&gt;&gt; listener) {
+<span class="nc" id="L46">        this(label);</span>
+<span class="nc" id="L47">        addValueChangeListener(listener);</span>
+<span class="nc" id="L48">    }</span>
+
+    public String getLabel() {
+<span class="nc" id="L51">        return getElement().getProperty(&quot;label&quot;);</span>
+    }
+
+    public void setLabel(String label) {
+<span class="nc" id="L55">        getElement().setProperty(&quot;label&quot;, label);</span>
+<span class="nc" id="L56">    }</span>
+
+    protected boolean isDisabled() {
+<span class="nc" id="L59">        return getElement().getProperty(&quot;disabled&quot;, false);</span>
+    }
+
+    public void setDisabled(boolean disabled) {
+<span class="nc" id="L63">        getElement().setProperty(&quot;disabled&quot;, disabled);</span>
+<span class="nc" id="L64">    }</span>
+
+    @DomEvent(&quot;change&quot;)
+    public static class ChangeEvent extends ComponentEvent&lt;ToggleButton&gt; {
+        public ChangeEvent(ToggleButton source, boolean fromClient) {
+<span class="nc" id="L69">            super(source, fromClient);</span>
+<span class="nc" id="L70">        }</span>
+    }
+
+    //@SuppressWarnings({ &quot;rawtypes&quot;, &quot;unchecked&quot; })
+    protected Registration addChangeListener(
+            ComponentEventListener&lt;ChangeEvent&gt; listener) {
+<span class="nc" id="L76">        return addListener(ChangeEvent.class, listener);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

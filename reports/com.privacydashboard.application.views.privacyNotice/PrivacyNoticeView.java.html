@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrivacyNoticeView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.views.privacyNotice</a> &gt; <span class="el_source">PrivacyNoticeView.java</span></div><h1>PrivacyNoticeView.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.views.privacyNotice;
+
+import com.privacydashboard.application.data.GlobalVariables.Role;
+import com.privacydashboard.application.data.entity.IoTApp;
+import com.privacydashboard.application.data.entity.PrivacyNotice;
+import com.privacydashboard.application.data.entity.User;
+import com.privacydashboard.application.data.service.CommunicationService;
+import com.privacydashboard.application.data.service.DataBaseService;
+import com.privacydashboard.application.security.AuthenticatedUser;
+import com.privacydashboard.application.views.MainLayout;
+import com.privacydashboard.application.views.apps.AppsView;
+import com.privacydashboard.application.views.contacts.ContactsView;
+import com.privacydashboard.application.views.usefulComponents.MyDialog;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.details.Details;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.*;
+
+import javax.annotation.security.PermitAll;
+import java.util.Collections;
+import java.util.List;
+
+@PageTitle(&quot;PrivacyNotice&quot;)
+@Route(value=&quot;privacyNotice&quot;, layout = MainLayout.class)
+@PermitAll
+public class PrivacyNoticeView extends Div implements AfterNavigationObserver, BeforeEnterObserver {
+    private final DataBaseService dataBaseService;
+    private final AuthenticatedUser authenticatedUser;
+    private final CommunicationService communicationService;
+
+<span class="nc" id="L45">    private final TextField searchText=new TextField();</span>
+<span class="nc" id="L46">    private final Grid&lt;PrivacyNotice&gt; grid=new Grid&lt;&gt;();</span>
+<span class="nc" id="L47">    private final MyDialog newPrivacyNoticeDialog=new MyDialog();</span>
+<span class="nc" id="L48">    private final Button newPrivacyNoticeButton= new Button(&quot;Compile new Privacy Notice&quot;, e-&gt; newPrivacyNoticeDialog.open());</span>
+<span class="nc" id="L49">    private final ComboBox&lt;IoTApp&gt; appComboBox= new ComboBox&lt;&gt;(&quot;Apps&quot;);</span>
+
+    private PrivacyNotice priorityNotice;
+
+    // ONLY FOR SUBJECTS
+    @Override
+    public void beforeEnter(BeforeEnterEvent event){
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if(!(authenticatedUser.getUser().getRole().equals(Role.SUBJECT))){</span>
+<span class="nc" id="L57">            return;</span>
+        }
+        // get from notification
+<span class="nc" id="L60">        priorityNotice= communicationService.getPrivacyNoticeFromNotification();</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if(priorityNotice!=null){</span>
+<span class="nc" id="L62">            showPrivacyNotice(priorityNotice);</span>
+<span class="nc" id="L63">            return;</span>
+        }
+
+        // get from link of another View
+<span class="nc" id="L67">        priorityNotice= communicationService.getPrivacyNotice();</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if(priorityNotice!=null){</span>
+<span class="nc" id="L69">            showPrivacyNotice(priorityNotice);</span>
+        }
+<span class="nc" id="L71">    }</span>
+
+<span class="nc" id="L73">    public PrivacyNoticeView(DataBaseService dataBaseService, AuthenticatedUser authenticatedUser, CommunicationService communicationService){</span>
+<span class="nc" id="L74">        this.dataBaseService= dataBaseService;</span>
+<span class="nc" id="L75">        this.authenticatedUser= authenticatedUser;</span>
+<span class="nc" id="L76">        this.communicationService= communicationService;</span>
+
+<span class="nc" id="L78">        addClassName(&quot;grid-view&quot;);</span>
+<span class="nc" id="L79">        initializeSearchText();</span>
+<span class="nc" id="L80">        initializeGrid();</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if(authenticatedUser.getUser().getRole().equals(Role.SUBJECT)){</span>
+<span class="nc" id="L82">            add(searchText, grid);</span>
+        }
+        else{
+<span class="nc" id="L85">            initializeNewPrivacyNoticeDialog();</span>
+<span class="nc" id="L86">            HorizontalLayout headerLayout= new HorizontalLayout(searchText, newPrivacyNoticeButton);</span>
+<span class="nc" id="L87">            headerLayout.setAlignItems(FlexComponent.Alignment.CENTER);</span>
+<span class="nc" id="L88">            add(headerLayout, grid);</span>
+        }
+<span class="nc" id="L90">    }</span>
+
+    private void initializeSearchText(){
+<span class="nc" id="L93">        searchText.setPlaceholder(&quot;Search...&quot;);</span>
+<span class="nc" id="L94">        searchText.setValueChangeMode(ValueChangeMode.LAZY);</span>
+<span class="nc" id="L95">        searchText.addValueChangeListener(e-&gt; updateGrid());</span>
+<span class="nc" id="L96">        searchText.addClassName(&quot;search&quot;);</span>
+<span class="nc" id="L97">    }</span>
+
+    private void initializeGrid(){
+<span class="nc" id="L100">        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);</span>
+<span class="nc" id="L101">        grid.addComponentColumn(this::createPrivacyNoticeCard);</span>
+<span class="nc" id="L102">    }</span>
+
+    private VerticalLayout createPrivacyNoticeCard(PrivacyNotice privacyNotice){
+<span class="nc" id="L105">        Avatar avatar = new Avatar(privacyNotice.getApp().getName());</span>
+<span class="nc" id="L106">        avatar.addClassName(&quot;avatar&quot;);</span>
+<span class="nc" id="L107">        Span name= new Span(privacyNotice.getApp().getName());</span>
+<span class="nc" id="L108">        name.addClassNames(&quot;name link pointer&quot;);</span>
+<span class="nc" id="L109">        Details details = new Details(new Span(&quot;More&quot;), detailsLayout(privacyNotice));</span>
+<span class="nc" id="L110">        HorizontalLayout avatarLayout= new HorizontalLayout(avatar, name);</span>
+<span class="nc" id="L111">        avatarLayout.addClassName(&quot;pointer&quot;);</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        if(authenticatedUser.getUser().getRole().equals(Role.SUBJECT)){</span>
+<span class="nc" id="L113">            avatarLayout.addClickListener(e-&gt; showPrivacyNotice(privacyNotice));</span>
+        }
+        else{
+<span class="nc" id="L116">            avatarLayout.addClickListener(e-&gt; goToSinglePrivacyNoticeView(privacyNotice));</span>
+        }
+
+<span class="nc" id="L119">        VerticalLayout card = new VerticalLayout(avatarLayout , details);</span>
+<span class="nc" id="L120">        card.addClassName(&quot;card&quot;);</span>
+<span class="nc" id="L121">        card.addClassName(&quot;canOpen&quot;);</span>
+<span class="nc" id="L122">        card.addClickListener(e-&gt; {</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">            if(card.hasClassName(&quot;canOpen&quot;)){</span>
+<span class="nc" id="L124">                details.setOpened(true);</span>
+<span class="nc" id="L125">                card.removeClassNames(&quot;canOpen&quot;);</span>
+            }
+<span class="nc bnc" id="L127" title="All 2 branches missed.">            else if(!details.isOpened()){</span>
+<span class="nc" id="L128">                card.addClassName(&quot;canOpen&quot;);</span>
+            }
+<span class="nc" id="L130">        });</span>
+        //card.add(new Span(&quot;ID: &quot; + privacyNotice.getId().toString()));
+<span class="nc" id="L132">        return card;</span>
+    }
+
+    private VerticalLayout detailsLayout(PrivacyNotice privacyNotice){
+<span class="nc" id="L136">        Span goToApp=new Span(&quot;Go to the app&quot;);</span>
+<span class="nc" id="L137">        goToApp.addClassName(&quot;link&quot;);</span>
+<span class="nc" id="L138">        goToApp.addClickListener(e-&gt; communicationService.setApp(privacyNotice.getApp()));</span>
+<span class="nc" id="L139">        goToApp.addClickListener(e-&gt; UI.getCurrent().navigate(AppsView.class));</span>
+
+<span class="nc" id="L141">        List&lt;User&gt; controllers= dataBaseService.getControllersFromApp(privacyNotice.getApp());</span>
+<span class="nc" id="L142">        VerticalLayout controllersLayout= new VerticalLayout();</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        for(User u : controllers){</span>
+<span class="nc" id="L144">            Span contactLink=new Span(u.getName());</span>
+<span class="nc" id="L145">            contactLink.addClassName(&quot;link&quot;);</span>
+<span class="nc" id="L146">            contactLink.addClickListener(e-&gt;communicationService.setContact(u));</span>
+<span class="nc" id="L147">            contactLink.addClickListener(e-&gt; UI.getCurrent().navigate(ContactsView.class));</span>
+<span class="nc" id="L148">            controllersLayout.add(contactLink);</span>
+<span class="nc" id="L149">        }</span>
+<span class="nc" id="L150">        Details controllersDetails= new Details(new Span(&quot;Data Controllers:&quot;), controllersLayout);</span>
+
+<span class="nc" id="L152">        List&lt;User&gt; dpos= dataBaseService.getDPOsFromApp(privacyNotice.getApp());</span>
+<span class="nc" id="L153">        VerticalLayout dposLayout= new VerticalLayout();</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        for(User u : dpos){</span>
+<span class="nc" id="L155">            Span contactLink=new Span(u.getName());</span>
+<span class="nc" id="L156">            contactLink.addClassName(&quot;link&quot;);</span>
+<span class="nc" id="L157">            contactLink.addClickListener(e-&gt;communicationService.setContact(u));</span>
+<span class="nc" id="L158">            contactLink.addClickListener(e-&gt; UI.getCurrent().navigate(ContactsView.class));</span>
+<span class="nc" id="L159">            dposLayout.add(contactLink);</span>
+<span class="nc" id="L160">        }</span>
+<span class="nc" id="L161">        Details dposDetails= new Details(new Span(&quot;Data Protection Officers:&quot;), dposLayout);</span>
+
+<span class="nc bnc" id="L163" title="All 2 branches missed.">        if(!authenticatedUser.getUser().getRole().equals(Role.SUBJECT)){</span>
+<span class="nc" id="L164">            List&lt;User&gt; subjects= dataBaseService.getSubjectsFromApp(privacyNotice.getApp());</span>
+<span class="nc" id="L165">            VerticalLayout subjectsLayout= new VerticalLayout();</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">            for(User u : subjects){</span>
+<span class="nc" id="L167">                Span contactLink=new Span(u.getName());</span>
+<span class="nc" id="L168">                contactLink.addClassName(&quot;link&quot;);</span>
+<span class="nc" id="L169">                contactLink.addClickListener(e-&gt;communicationService.setContact(u));</span>
+<span class="nc" id="L170">                contactLink.addClickListener(e-&gt; UI.getCurrent().navigate(ContactsView.class));</span>
+<span class="nc" id="L171">                subjectsLayout.add(contactLink);</span>
+<span class="nc" id="L172">            }</span>
+<span class="nc" id="L173">            Details subjectsDetails= new Details(new Span(&quot;Data Subjects:&quot;), subjectsLayout);</span>
+
+<span class="nc" id="L175">            return new VerticalLayout(goToApp, controllersDetails, dposDetails, subjectsDetails);</span>
+        }
+        else{
+<span class="nc" id="L178">            return new VerticalLayout(goToApp, controllersDetails, dposDetails);</span>
+        }
+    }
+
+    // ONLY FOR SUBJECTS
+    private void showPrivacyNotice(PrivacyNotice privacyNotice){
+<span class="nc" id="L184">        MyDialog privacyNoticeDialog= new MyDialog();</span>
+<span class="nc" id="L185">        privacyNoticeDialog.setTitle(&quot;Privacy Notice &quot; + privacyNotice.getApp().getName());</span>
+<span class="nc" id="L186">        privacyNoticeDialog.setContent(new VerticalLayout(convertText(privacyNotice.getText())));</span>
+<span class="nc" id="L187">        privacyNoticeDialog.setWidth(&quot;100%&quot;);</span>
+<span class="nc" id="L188">        privacyNoticeDialog.open();</span>
+<span class="nc" id="L189">    }</span>
+
+    // ONLY FOR CONTROLLERS/DPO
+    private void initializeNewPrivacyNoticeDialog(){
+<span class="nc" id="L193">        appComboBox.setItems(dataBaseService.getUserApps(authenticatedUser.getUser()));</span>
+<span class="nc" id="L194">        appComboBox.setItemLabelGenerator(IoTApp::getName);</span>
+<span class="nc" id="L195">        Button continueButton= new Button(&quot;Continue&quot;, e-&gt; confirmNewPrivacyNotice());</span>
+
+<span class="nc" id="L197">        newPrivacyNoticeDialog.setTitle(&quot;Select app&quot;);</span>
+<span class="nc" id="L198">        newPrivacyNoticeDialog.setContent(new VerticalLayout(appComboBox));</span>
+<span class="nc" id="L199">        newPrivacyNoticeDialog.setContinueButton(continueButton);</span>
+<span class="nc" id="L200">    }</span>
+
+    // ONLY FOR CONTROLLERS/DPO
+    private void confirmNewPrivacyNotice(){
+<span class="nc bnc" id="L204" title="All 2 branches missed.">        if(appComboBox.getValue()==null){</span>
+<span class="nc" id="L205">            return;</span>
+        }
+<span class="nc" id="L207">        IoTApp app=appComboBox.getValue();</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">        if(dataBaseService.getPrivacyNoticeFromApp(app)!=null){</span>
+<span class="nc" id="L209">            MyDialog dialog=new MyDialog();</span>
+<span class="nc" id="L210">            Button confirmButton=new Button(&quot;Confirm&quot;,</span>
+                    e-&gt;{
+<span class="nc" id="L212">                        createNewPrivacyNotice(app);</span>
+<span class="nc" id="L213">                        newPrivacyNoticeDialog.close();</span>
+<span class="nc" id="L214">                        dialog.close();</span>
+<span class="nc" id="L215">                    });</span>
+
+<span class="nc" id="L217">            dialog.setTitle(&quot;Confirm&quot;);</span>
+<span class="nc" id="L218">            dialog.setContent(new HorizontalLayout(new Span(&quot;There is already a Privacy Notice for this app, do you want to create a new one?&quot; +</span>
+                    &quot; The current one will be lost&quot;)));
+<span class="nc" id="L220">            dialog.setContinueButton(confirmButton);</span>
+<span class="nc" id="L221">            dialog.open();</span>
+<span class="nc" id="L222">        }</span>
+        else{
+<span class="nc" id="L224">            createNewPrivacyNotice(app);</span>
+<span class="nc" id="L225">            newPrivacyNoticeDialog.close();</span>
+        }
+<span class="nc" id="L227">    }</span>
+
+    // ONLY FOR CONTROLLERS/DPO
+    private void createNewPrivacyNotice(IoTApp app){
+<span class="nc" id="L231">        PrivacyNotice privacyNotice= new PrivacyNotice();</span>
+<span class="nc" id="L232">        privacyNotice.setText(null);</span>
+<span class="nc" id="L233">        privacyNotice.setApp(app);</span>
+<span class="nc" id="L234">        goToSinglePrivacyNoticeView(privacyNotice);</span>
+<span class="nc" id="L235">    }</span>
+
+    // ONLY FOR CONTROLLERS/DPO
+    private void goToSinglePrivacyNoticeView(PrivacyNotice privacyNotice){
+<span class="nc" id="L239">        communicationService.setPrivacyNotice(privacyNotice);</span>
+<span class="nc" id="L240">        UI.getCurrent().navigate(SinglePrivacyNoticeView.class);</span>
+<span class="nc" id="L241">    }</span>
+
+    private void updateGrid(){
+        List&lt;PrivacyNotice&gt; privacyNoticeList;
+<span class="nc bnc" id="L245" title="All 4 branches missed.">        if(searchText.getValue()==null || searchText.getValue().length()==0){</span>
+<span class="nc" id="L246">            privacyNoticeList=dataBaseService.getAllPrivacyNoticeFromUser(authenticatedUser.getUser());</span>
+        }
+        else{
+<span class="nc" id="L249">            privacyNoticeList=dataBaseService.getUserPrivacyNoticeByAppName(authenticatedUser.getUser(), searchText.getValue());</span>
+        }
+
+<span class="nc bnc" id="L252" title="All 2 branches missed.">        if(priorityNotice!=null){</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">            if(privacyNoticeList.contains(priorityNotice)){</span>
+<span class="nc" id="L254">                Collections.swap(privacyNoticeList, 0, privacyNoticeList.indexOf(priorityNotice));</span>
+            }
+        }
+<span class="nc" id="L257">        grid.setItems(privacyNoticeList);</span>
+<span class="nc" id="L258">    }</span>
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent event){
+<span class="nc" id="L262">        updateGrid();</span>
+<span class="nc" id="L263">    }</span>
+
+    /*
+   DA CAPIRE COME VISUALIZZARE IL TESTO.
+   PER ORA LO SALVO COME HTML IN CASO NON DIA ERRORI ALTRIMENTI COME TEXTAREA
+   MA IN CASO SI VOGLIA CARICARE DIRETTAMENTE IL FILE BISOGNA CAPIRE COME FARE
+    */
+    // ONLY FOR SUBJECTS
+    private Component convertText(String text){
+        try{
+<span class="nc" id="L273">            return new Html(text);</span>
+<span class="nc" id="L274">        } catch (Exception e){</span>
+            //e.printStackTrace();
+<span class="nc" id="L276">            TextArea textArea= new TextArea();</span>
+<span class="nc" id="L277">            textArea.setValue(text);</span>
+<span class="nc" id="L278">            textArea.setWidthFull();</span>
+<span class="nc" id="L279">            textArea.setReadOnly(true);</span>
+<span class="nc" id="L280">            return textArea;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

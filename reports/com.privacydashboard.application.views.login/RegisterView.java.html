@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegisterView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.views.login</a> &gt; <span class="el_source">RegisterView.java</span></div><h1>RegisterView.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.views.login;
+
+import com.privacydashboard.application.data.GlobalVariables.Role;
+import com.privacydashboard.application.data.entity.User;
+import com.privacydashboard.application.security.UserDetailsServiceImpl;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+
+@Route(&quot;registration&quot;)
+@PageTitle(&quot;Registration&quot;)
+@AnonymousAllowed
+public class RegisterView extends VerticalLayout {
+<span class="nc" id="L27">    private final TextField username=new TextField(&quot;USERNAME&quot;);</span>
+<span class="nc" id="L28">    private final PasswordField password=new PasswordField(&quot;PASSWORD&quot;);</span>
+<span class="nc" id="L29">    private final PasswordField confirmPassword=new PasswordField(&quot;CONFIRM PASSWORD&quot;);</span>
+<span class="nc" id="L30">    private final ComboBox&lt;Role&gt; role= new ComboBox&lt;&gt;(&quot;ROLE&quot;);</span>
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
+<span class="nc" id="L32">    private final Binder&lt;User&gt; binder= new Binder&lt;&gt;(User.class);</span>
+
+<span class="nc" id="L34">    public RegisterView(UserDetailsServiceImpl userDetailsServiceImpl){</span>
+<span class="nc" id="L35">        this.userDetailsServiceImpl=userDetailsServiceImpl;</span>
+<span class="nc" id="L36">        addClassName(&quot;registration&quot;);</span>
+<span class="nc" id="L37">        setAlignItems(Alignment.CENTER);</span>
+<span class="nc" id="L38">        implementBinder();</span>
+<span class="nc" id="L39">        Button registerButton= new Button(&quot;Register&quot;, e-&gt; confirm());</span>
+<span class="nc" id="L40">        add(new H1(&quot;Registration&quot;), username, password, confirmPassword, role, registerButton);</span>
+<span class="nc" id="L41">    }</span>
+
+    private void implementBinder(){
+        // implements dataRole ComboBox
+<span class="nc" id="L45">        List&lt;Role&gt; roleList=new LinkedList&lt;&gt;();</span>
+<span class="nc" id="L46">        roleList.add(Role.CONTROLLER);</span>
+<span class="nc" id="L47">        roleList.add(Role.SUBJECT);</span>
+<span class="nc" id="L48">        roleList.add(Role.DPO);</span>
+<span class="nc" id="L49">        role.setItems(roleList);</span>
+
+        // bind User and form
+<span class="nc" id="L52">        password.setMinLength(8);</span>
+<span class="nc" id="L53">        password.setErrorMessage(&quot;the password must be at least 8 characters&quot;);</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        binder.forField(username).withValidator(name -&gt; name.length()&gt;=5, &quot;name must be at least 5 characters&quot;)</span>
+<span class="nc" id="L55">                .withValidator(this::isUniqueName, &quot;username already in use, please use another one&quot;)</span>
+<span class="nc" id="L56">                .bind(User::getName, User::setName);</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        binder.forField(confirmPassword).withValidator(pass-&gt; pass.length()&gt;=8, &quot;the password must be at least 8 characters&quot;)</span>
+<span class="nc" id="L58">                .withValidator(pass -&gt; pass.equals(password.getValue()), &quot;the two passwords must be equals&quot;)</span>
+<span class="nc" id="L59">                .bind(User::getHashedPassword, User::setHashedPassword);</span>
+<span class="nc" id="L60">        binder.forField(role).withValidator(Objects::nonNull, &quot;please select a role&quot;).bind(User::getRole, User::setRole);</span>
+<span class="nc" id="L61">    }</span>
+
+    private boolean isUniqueName(String name){
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        return !userDetailsServiceImpl.isAlreadyPresent(name);</span>
+    }
+
+    private void confirm(){
+<span class="nc" id="L68">        User user=new User();</span>
+        try{
+<span class="nc" id="L70">            binder.writeBean(user);</span>
+<span class="nc" id="L71">        } catch (ValidationException e) {</span>
+<span class="nc" id="L72">            e.printStackTrace();</span>
+<span class="nc" id="L73">        }</span>
+<span class="nc" id="L74">        userDetailsServiceImpl.hashPassAndAddUser(user);   // create user and hash the password (better do the hash in a different layer(not the one visible to the user)??)</span>
+<span class="nc" id="L75">        UI.getCurrent().getPage().setLocation(&quot;/&quot;); // reinderizza alla pagina login</span>
+<span class="nc" id="L76">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

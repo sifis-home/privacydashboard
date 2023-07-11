@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ControllerDPORightsView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.views.rights</a> &gt; <span class="el_source">ControllerDPORightsView.java</span></div><h1>ControllerDPORightsView.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.views.rights;
+
+import com.privacydashboard.application.data.entity.RightRequest;
+import com.privacydashboard.application.data.service.CommunicationService;
+import com.privacydashboard.application.data.service.DataBaseService;
+import com.privacydashboard.application.security.AuthenticatedUser;
+import com.privacydashboard.application.views.MainLayout;
+import com.privacydashboard.application.views.apps.AppsView;
+import com.privacydashboard.application.views.contacts.ContactsView;
+import com.privacydashboard.application.views.usefulComponents.MyDialog;
+import com.privacydashboard.application.views.usefulComponents.ToggleButton;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.router.*;
+
+import javax.annotation.security.RolesAllowed;
+import java.util.Collections;
+import java.util.List;
+
+@PageTitle(&quot;Rights&quot;)
+@Route(value=&quot;rights_controller&quot;, layout = MainLayout.class)
+@RolesAllowed({&quot;CONTROLLER&quot;, &quot;DPO&quot;})
+public class ControllerDPORightsView extends VerticalLayout implements BeforeEnterObserver, AfterNavigationObserver {
+    private final DataBaseService dataBaseService;
+    private final AuthenticatedUser authenticatedUser;
+    private final CommunicationService communicationService;
+
+<span class="nc" id="L34">    private final Grid&lt;RightRequest&gt; grid= new Grid&lt;&gt;();</span>
+<span class="nc" id="L35">    private final ToggleButton toggleButton=new ToggleButton(&quot;HANDLED&quot;, false);</span>
+<span class="nc" id="L36">    private MyDialog requestDialog= new MyDialog();</span>
+    private final GridComponentRightsView gridComponentRightsView;
+<span class="nc" id="L38">    private RightRequest priorityRight=null;</span>
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event){
+<span class="nc" id="L42">        RightRequest request=communicationService.getRightFromNotification();</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        if(request!=null){</span>
+<span class="nc" id="L44">            priorityRight=request;</span>
+        }
+<span class="nc" id="L46">    }</span>
+
+<span class="nc" id="L48">    public ControllerDPORightsView(DataBaseService dataBaseService, AuthenticatedUser authenticatedUser, CommunicationService communicationService) {</span>
+<span class="nc" id="L49">        this.dataBaseService = dataBaseService;</span>
+<span class="nc" id="L50">        this.authenticatedUser = authenticatedUser;</span>
+<span class="nc" id="L51">        this.communicationService= communicationService;</span>
+
+<span class="nc" id="L53">        addClassName(&quot;rights-view&quot;);</span>
+<span class="nc" id="L54">        gridComponentRightsView= new GridComponentRightsView(authenticatedUser.getUser().getRole());</span>
+<span class="nc" id="L55">        initializeGridComponentRightsView();</span>
+<span class="nc" id="L56">        initializeGrid();</span>
+<span class="nc" id="L57">    }</span>
+
+    private void initializeGridComponentRightsView(){
+<span class="nc" id="L60">        gridComponentRightsView.addListener(GridComponentRightsView.ContactEvent.class, this::goToUser);</span>
+<span class="nc" id="L61">        gridComponentRightsView.addListener(GridComponentRightsView.AppEvent.class, this::goToApp);</span>
+<span class="nc" id="L62">    }</span>
+
+    private void initializeGrid(){
+<span class="nc" id="L65">        HorizontalLayout headerGrid=gridComponentRightsView.getHeaderLayout(toggleButton);</span>
+<span class="nc" id="L66">        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);</span>
+<span class="nc" id="L67">        grid.addComponentColumn(this::showRequestCard);</span>
+<span class="nc" id="L68">        grid.getColumns().get(0).setHeader(headerGrid);</span>
+<span class="nc" id="L69">        toggleButton.addClickListener(e-&gt; updateGrid(toggleButton.getValue()));</span>
+<span class="nc" id="L70">        add(grid);</span>
+<span class="nc" id="L71">    }</span>
+
+    private HorizontalLayout showRequestCard(RightRequest request){
+<span class="nc" id="L74">        HorizontalLayout card=gridComponentRightsView.getCard(request);</span>
+<span class="nc" id="L75">        card.addClickListener(e -&gt; showRequest(request));</span>
+<span class="nc" id="L76">        return card;</span>
+    }
+
+    private void showRequest(RightRequest request){
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if(request==null){</span>
+<span class="nc" id="L81">            return;</span>
+        }
+<span class="nc" id="L83">        VerticalLayout contentLayout= gridComponentRightsView.getContent(request);</span>
+<span class="nc" id="L84">        Checkbox checkbox= (Checkbox) contentLayout.getComponentAt(8);</span>
+<span class="nc" id="L85">        TextArea textArea= (TextArea) contentLayout.getComponentAt(7);</span>
+
+<span class="nc" id="L87">        Button save=new Button(&quot;Save&quot; , e-&gt;changeRequest(request, checkbox.getValue(), textArea.getValue()));</span>
+<span class="nc" id="L88">        requestDialog= new MyDialog();</span>
+<span class="nc" id="L89">        requestDialog.setTitle(&quot;Right Request&quot;);</span>
+<span class="nc" id="L90">        requestDialog.setContinueButton(save);</span>
+<span class="nc" id="L91">        requestDialog.setContent(contentLayout);</span>
+<span class="nc" id="L92">        requestDialog.open();</span>
+<span class="nc" id="L93">    }</span>
+
+    private void changeRequest(RightRequest request, Boolean handled, String response){
+<span class="nc bnc" id="L96" title="All 6 branches missed.">        if((response.equals(request.getResponse()) || response.equals(&quot;&quot;))  &amp;&amp; handled==request.getHandled()){</span>
+<span class="nc" id="L97">            requestDialog.close();</span>
+<span class="nc" id="L98">            return;</span>
+        }
+<span class="nc" id="L100">        request.setResponse(response);</span>
+<span class="nc" id="L101">        request.setHandled(handled);</span>
+<span class="nc" id="L102">        dataBaseService.changeRightRequest(request);</span>
+<span class="nc" id="L103">        updateGrid(toggleButton.getValue());</span>
+<span class="nc" id="L104">        requestDialog.close();</span>
+<span class="nc" id="L105">    }</span>
+
+    private void updateGrid(boolean handled){
+        List&lt;RightRequest&gt; rightRequests;
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if(handled){</span>
+<span class="nc" id="L110">            rightRequests=dataBaseService.getHandledRequestsFromReceiver(authenticatedUser.getUser());</span>
+        }
+        else{
+<span class="nc" id="L113">            rightRequests=dataBaseService.getPendingRequestsFromReceiver(authenticatedUser.getUser());</span>
+        }
+
+<span class="nc bnc" id="L116" title="All 4 branches missed.">        if(priorityRight!=null &amp;&amp; rightRequests.contains(priorityRight)){</span>
+<span class="nc" id="L117">            Collections.swap(rightRequests, 0 , rightRequests.indexOf(priorityRight));</span>
+<span class="nc" id="L118">            showRequest(priorityRight);</span>
+        }
+<span class="nc" id="L120">        grid.setItems(rightRequests);</span>
+<span class="nc" id="L121">        priorityRight=null;</span>
+<span class="nc" id="L122">    }</span>
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent event){
+<span class="nc" id="L126">        updateGrid(false);</span>
+<span class="nc" id="L127">    }</span>
+
+    private void goToUser(GridComponentRightsView.ContactEvent event){
+<span class="nc" id="L130">        requestDialog.close();</span>
+<span class="nc" id="L131">        communicationService.setContact(event.getContact());</span>
+<span class="nc" id="L132">        UI.getCurrent().navigate(ContactsView.class);</span>
+<span class="nc" id="L133">    }</span>
+
+    private void goToApp(GridComponentRightsView.AppEvent event){
+<span class="nc" id="L136">        requestDialog.close();</span>
+<span class="nc" id="L137">        communicationService.setApp(event.getApp());</span>
+<span class="nc" id="L138">        UI.getCurrent().navigate(AppsView.class);</span>
+<span class="nc" id="L139">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

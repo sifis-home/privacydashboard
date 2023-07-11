@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SinglePrivacyNoticeView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.views.privacyNotice</a> &gt; <span class="el_source">SinglePrivacyNoticeView.java</span></div><h1>SinglePrivacyNoticeView.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.views.privacyNotice;
+
+import com.privacydashboard.application.data.entity.PrivacyNotice;
+import com.privacydashboard.application.data.service.CommunicationService;
+import com.privacydashboard.application.data.service.DataBaseService;
+import com.privacydashboard.application.security.AuthenticatedUser;
+import com.privacydashboard.application.views.MainLayout;
+import com.privacydashboard.application.views.usefulComponents.MyDialog;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.richtexteditor.RichTextEditor;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.upload.SucceededEvent;
+import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
+import com.vaadin.flow.router.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.security.RolesAllowed;
+import java.awt.*;
+import java.io.InputStream;
+
+@PageTitle(&quot;Compile privacy notice&quot;)
+@Route(value=&quot;single_privacy_notice&quot;, layout = MainLayout.class)
+@RolesAllowed({&quot;CONTROLLER&quot;, &quot;DPO&quot;})
+public class SinglePrivacyNoticeView extends VerticalLayout implements BeforeEnterObserver, AfterNavigationObserver{
+    private final DataBaseService dataBaseService;
+    private final AuthenticatedUser authenticatedUser;
+    private final CommunicationService communicationService;
+
+<span class="nc" id="L42">    private final Tabs tabs=new Tabs();</span>
+<span class="nc" id="L43">    private final Tab customizedTab= new Tab(&quot;Create from empty&quot;);</span>
+<span class="nc" id="L44">    private final Tab standardTab= new Tab(&quot;Use template&quot;);</span>
+<span class="nc" id="L45">    private final Tab uploadTab= new Tab(new Icon(&quot;lumo&quot;, &quot;upload&quot;));</span>
+<span class="nc" id="L46">    private final Div content= new Div();</span>
+
+<span class="nc" id="L48">    private final VerticalLayout customizedLayout= new VerticalLayout();</span>
+    private FormPrivacyNotice standardLayout;
+<span class="nc" id="L50">    private final VerticalLayout uploadLayout= new VerticalLayout();</span>
+
+    private PrivacyNotice privacyNotice;
+
+<span class="nc" id="L54">    Logger logger = LoggerFactory.getLogger(getClass());</span>
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+<span class="nc" id="L58">        privacyNotice=communicationService.getPrivacyNotice();</span>
+<span class="nc bnc" id="L59" title="All 6 branches missed.">        if(privacyNotice==null || privacyNotice.getApp()==null || !dataBaseService.getUserApps(authenticatedUser.getUser()).contains(privacyNotice.getApp())){</span>
+<span class="nc" id="L60">            event.rerouteTo(PrivacyNoticeView.class);</span>
+<span class="nc" id="L61">            return;</span>
+        }
+
+<span class="nc" id="L64">        initializeCustomizedLayout();</span>
+<span class="nc" id="L65">        initializeStandardLayout();</span>
+<span class="nc" id="L66">        initializeUploadLayout();</span>
+<span class="nc" id="L67">        initializeTabs();</span>
+<span class="nc" id="L68">    }</span>
+
+    /*
+    This view is formed of three different views which are gonna be visible on content element and are navigable from the tabs at the top of the page.
+    These views are called customizedLayout, standardLayout and uploadLayout
+     */
+<span class="nc" id="L74">    public SinglePrivacyNoticeView(DataBaseService dataBaseService, AuthenticatedUser authenticatedUser, CommunicationService communicationService){</span>
+<span class="nc" id="L75">        this.dataBaseService= dataBaseService;</span>
+<span class="nc" id="L76">        this.authenticatedUser= authenticatedUser;</span>
+<span class="nc" id="L77">        this.communicationService= communicationService;</span>
+
+<span class="nc" id="L79">        add(tabs, content);</span>
+<span class="nc" id="L80">    }</span>
+
+    private void initializeCustomizedLayout(){
+<span class="nc" id="L83">        customizedTab.addClassName(&quot;pointer&quot;);</span>
+<span class="nc" id="L84">        TextArea textEditor=new TextArea();</span>
+<span class="nc" id="L85">        textEditor.setWidthFull();</span>
+<span class="nc" id="L86">        Button saveButton= new Button(&quot;Save&quot;, e-&gt;{</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">            if(textEditor.getValue()!=null){</span>
+<span class="nc" id="L88">                savePrivacyNotice(&quot;&lt;span&gt;&quot; + textEditor.getValue() + &quot;&lt;/span&gt;&quot;);</span>
+            }
+<span class="nc" id="L90">        });</span>
+<span class="nc" id="L91">        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);</span>
+
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if(privacyNotice.getText()!=null) {</span>
+<span class="nc" id="L94">            textEditor.setValue(privacyNotice.getText());</span>
+        }
+
+<span class="nc" id="L97">        customizedLayout.add(textEditor, saveButton);</span>
+<span class="nc" id="L98">    }</span>
+
+    private void initializeStandardLayout(){
+<span class="nc" id="L101">        standardTab.addClassName(&quot;pointer&quot;);</span>
+<span class="nc" id="L102">        standardLayout=new FormPrivacyNotice(privacyNotice, dataBaseService);</span>
+<span class="nc" id="L103">    }</span>
+
+    private void initializeUploadLayout(){
+<span class="nc" id="L106">        uploadTab.addClassName(&quot;pointer&quot;);</span>
+<span class="nc" id="L107">        MemoryBuffer buffer = new MemoryBuffer();</span>
+<span class="nc" id="L108">        Upload upload = new Upload(buffer);</span>
+<span class="nc" id="L109">        upload.addSucceededListener(e-&gt; processFile(buffer, e));</span>
+
+<span class="nc" id="L111">        Button saveButton= new Button(&quot;Save&quot;, e-&gt; logger.info(buffer.getFileName()));</span>
+<span class="nc" id="L112">        uploadLayout.add(upload, saveButton);</span>
+<span class="nc" id="L113">    }</span>
+
+    private void initializeTabs(){
+<span class="nc" id="L116">        content.setSizeFull();</span>
+<span class="nc" id="L117">        tabs.setWidthFull();</span>
+<span class="nc" id="L118">        tabs.add(customizedTab, standardTab, uploadTab);</span>
+<span class="nc" id="L119">        tabs.addSelectedChangeListener(</span>
+            e-&gt;{
+<span class="nc bnc" id="L121" title="All 2 branches missed.">                if(e.getSelectedTab().equals(e.getPreviousTab())){</span>
+<span class="nc" id="L122">                    return;</span>
+                }
+<span class="nc" id="L124">                content.removeAll();</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">                if(customizedTab.equals(e.getSelectedTab())){</span>
+<span class="nc" id="L126">                    content.add(customizedLayout);</span>
+                }
+<span class="nc bnc" id="L128" title="All 2 branches missed.">                else if(standardTab.equals(e.getSelectedTab())){</span>
+<span class="nc" id="L129">                    content.add(standardLayout);</span>
+                }
+<span class="nc bnc" id="L131" title="All 2 branches missed.">                else if(uploadTab.equals(e.getSelectedTab())){</span>
+<span class="nc" id="L132">                    content.add(uploadLayout);</span>
+                }
+<span class="nc" id="L134">            });</span>
+<span class="nc" id="L135">    }</span>
+
+    private void processFile(MemoryBuffer buffer, SucceededEvent event){
+<span class="nc" id="L138">        String fileName=event.getFileName();</span>
+<span class="nc" id="L139">        logger.info(event + &quot;\nAAAA\n&quot;);</span>
+<span class="nc" id="L140">        logger.info(fileName + &quot;\nAAAA\n&quot;);</span>
+<span class="nc" id="L141">        InputStream inputStream = buffer.getInputStream();</span>
+        try{
+<span class="nc" id="L143">            logger.info(inputStream.readAllBytes().toString());</span>
+<span class="nc" id="L144">        } catch (Exception e){</span>
+
+<span class="nc" id="L146">        }</span>
+<span class="nc" id="L147">    }</span>
+
+    private void savePrivacyNotice(String text){
+<span class="nc" id="L150">        MyDialog dialog= new MyDialog();</span>
+        String textContent;
+<span class="nc" id="L152">        Button saveButton= new Button(&quot;Confirm&quot;);</span>
+
+        // if first PrivacyNotice for the app
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        if(dataBaseService.getPrivacyNoticeFromApp(privacyNotice.getApp())==null){</span>
+<span class="nc" id="L156">            textContent= &quot;Do you want to upload this Privacy Notice for the app: &quot; + privacyNotice.getApp().getName() + &quot;?&quot;;</span>
+<span class="nc" id="L157">            saveButton.addClickListener(e-&gt; {</span>
+<span class="nc" id="L158">                dataBaseService.addPrivacyNoticeForApp(privacyNotice.getApp(), text);</span>
+<span class="nc" id="L159">                Notification notification = Notification.show(&quot;Privacy Notice uploaded correctly&quot;);</span>
+<span class="nc" id="L160">                notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);</span>
+<span class="nc" id="L161">                UI.getCurrent().navigate(PrivacyNoticeView.class);</span>
+<span class="nc" id="L162">                dialog.close();</span>
+<span class="nc" id="L163">            });</span>
+        }
+        // if updating an older PrivacyNotice for the app
+        else{
+<span class="nc" id="L167">            textContent= &quot;There is already a Privacy Notice for the app &quot; + privacyNotice.getApp().getName() + &quot;, do you want to overwrite it with this one?&quot;;</span>
+<span class="nc" id="L168">            saveButton.addClickListener(e-&gt; {</span>
+<span class="nc" id="L169">                dataBaseService.changePrivacyNoticeForApp(privacyNotice.getApp(), text);</span>
+<span class="nc" id="L170">                Notification notification = Notification.show(&quot;Privacy Notice overwritten correctly&quot;);</span>
+<span class="nc" id="L171">                notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);</span>
+<span class="nc" id="L172">                UI.getCurrent().navigate(PrivacyNoticeView.class);</span>
+<span class="nc" id="L173">                dialog.close();</span>
+<span class="nc" id="L174">            });</span>
+        }
+
+<span class="nc" id="L177">        dialog.setTitle(&quot;Confirm&quot;);</span>
+<span class="nc" id="L178">        dialog.setContent(new HorizontalLayout(new Span(textContent)));</span>
+<span class="nc" id="L179">        dialog.setContinueButton(saveButton);</span>
+<span class="nc" id="L180">        dialog.open();</span>
+<span class="nc" id="L181">    }</span>
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent event){
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        if(privacyNotice.getText()!=null){</span>
+<span class="nc" id="L186">            tabs.setSelectedTab(customizedTab);</span>
+<span class="nc" id="L187">            content.add(customizedLayout);</span>
+        }
+        else{
+<span class="nc" id="L190">            tabs.setSelectedTab(standardTab);</span>
+<span class="nc" id="L191">            content.add(standardLayout);</span>
+        }
+<span class="nc" id="L193">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

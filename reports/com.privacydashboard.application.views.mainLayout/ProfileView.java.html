@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProfileView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.views.mainLayout</a> &gt; <span class="el_source">ProfileView.java</span></div><h1>ProfileView.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.views.mainLayout;
+
+import com.privacydashboard.application.data.GlobalVariables.Role;
+import com.privacydashboard.application.data.entity.User;
+import com.privacydashboard.application.data.service.DataBaseService;
+import com.privacydashboard.application.security.AuthenticatedUser;
+import com.privacydashboard.application.security.UserDetailsServiceImpl;
+import com.privacydashboard.application.views.usefulComponents.MyDialog;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.details.Details;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextField;
+
+public class ProfileView extends VerticalLayout {
+    private User user;
+    private final AuthenticatedUser authenticatedUser;
+    private final DataBaseService dataBaseService;
+    private final UserDetailsServiceImpl userDetailsService;
+
+    private Span image;
+    private Span name;
+    private Span role;
+    private Details changeMailDetails;
+    private TextField newMail;
+    private Details changePasswordDetails;
+    private PasswordField actualPassword;
+    private PasswordField newPassword;
+    private PasswordField confirmPassword;
+<span class="nc" id="L36">    private final MyDialog removeEverythingDialog= new MyDialog();</span>
+<span class="nc" id="L37">    private final Button logOutButton= new Button(&quot;LogOut&quot;, e-&gt; logout());</span>
+
+<span class="nc" id="L39">    public ProfileView(User user, AuthenticatedUser authenticatedUser, DataBaseService dataBaseService, UserDetailsServiceImpl userDetailsService){</span>
+<span class="nc" id="L40">        this.user=user;</span>
+<span class="nc" id="L41">        this.authenticatedUser=authenticatedUser;</span>
+<span class="nc" id="L42">        this.dataBaseService=dataBaseService;</span>
+<span class="nc" id="L43">        this.userDetailsService=userDetailsService;</span>
+
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        if(!authenticatedUser.getUser().equals(user)){</span>
+<span class="nc" id="L46">            return;</span>
+        }
+
+<span class="nc" id="L49">        addClassName(&quot;profile-view&quot;);</span>
+<span class="nc" id="L50">        initializeInformation();</span>
+<span class="nc" id="L51">        add(image, name, role, changeMailDetails, changePasswordDetails);</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if(user.getRole().equals(Role.SUBJECT)){</span>
+<span class="nc" id="L53">            initializeRemoveEverything();</span>
+<span class="nc" id="L54">            Button removeEverythingButton= new Button(&quot;Remove everything&quot;, e-&gt; removeEverythingDialog.setOpened(true));</span>
+<span class="nc" id="L55">            removeEverythingButton.addClassName(&quot;buuutton&quot;);</span>
+<span class="nc" id="L56">            add(removeEverythingButton);</span>
+        }
+<span class="nc" id="L58">        logOutButton.addClassName(&quot;cancelButton&quot;);</span>
+<span class="nc" id="L59">        add(logOutButton);</span>
+<span class="nc" id="L60">        setAlignItems(Alignment.CENTER);</span>
+<span class="nc" id="L61">    }</span>
+
+    private void initializeInformation(){
+<span class="nc" id="L64">        Avatar avatar=new Avatar(user.getName(), user.getProfilePictureUrl());</span>
+<span class="nc" id="L65">        image=new Span(avatar);</span>
+<span class="nc" id="L66">        image.addClassName(&quot;pointer&quot;);</span>
+<span class="nc" id="L67">        image.addClickListener(e-&gt; changeImage());</span>
+
+<span class="nc" id="L69">        name=new Span(&quot;Name: &quot; + user.getName());</span>
+<span class="nc" id="L70">        role=new Span(&quot;Role: &quot; + user.getRole());</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        changeMailDetails= new Details(&quot;Mail: &quot; + (user.getMail()==null ? &quot;There's no mail yet&quot; : user.getMail()), changeMailLayout());</span>
+<span class="nc" id="L72">        changePasswordDetails= new Details(&quot;Change password&quot;, changePasswordLayout());</span>
+<span class="nc" id="L73">    }</span>
+
+    private void initializeRemoveEverything(){
+<span class="nc" id="L76">        Button confirm=new Button(&quot;Confirm&quot;, e-&gt; {dataBaseService.removeEverythingFromUser(user);</span>
+<span class="nc" id="L77">            Notification notification = Notification.show(&quot;The request has been sent to the Data Controllers!&quot;);</span>
+<span class="nc" id="L78">            notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);</span>
+<span class="nc" id="L79">            removeEverythingDialog.close();});</span>
+
+<span class="nc" id="L81">        removeEverythingDialog.setContinueButton(confirm);</span>
+<span class="nc" id="L82">        removeEverythingDialog.setTitle(&quot;Confirm to remove everything&quot;);</span>
+<span class="nc" id="L83">        removeEverythingDialog.setContent(</span>
+                new VerticalLayout(new Span(&quot;Are you sure you want to remove all your personal information from every app you have?&quot;)));
+<span class="nc" id="L85">    }</span>
+
+
+    private void changeImage(){
+
+<span class="nc" id="L90">    }</span>
+
+    private VerticalLayout changeMailLayout(){
+<span class="nc" id="L93">        newMail= new TextField(&quot;New Mail: &quot;);</span>
+<span class="nc" id="L94">        Button save= new Button(&quot;Save&quot;);</span>
+<span class="nc" id="L95">        save.addClassName(&quot;buuutton&quot;);</span>
+<span class="nc" id="L96">        MyDialog dialog= new MyDialog();</span>
+<span class="nc" id="L97">        dialog.setTitle(&quot;Confirm new mail&quot;);</span>
+<span class="nc" id="L98">        dialog.setContent(new HorizontalLayout(new Span(&quot;Are you sure you want to change the mail?&quot;)));</span>
+<span class="nc" id="L99">        dialog.setContinueButton(new Button(&quot;Confirm&quot;, e-&gt;{saveMail();</span>
+<span class="nc" id="L100">                                                                dialog.close();}));</span>
+<span class="nc" id="L101">        save.addClickListener(e-&gt;dialog.open());</span>
+<span class="nc" id="L102">        newMail.addKeyDownListener(Key.ENTER, e-&gt;dialog.open());</span>
+<span class="nc" id="L103">        VerticalLayout layout=new VerticalLayout(newMail, save);</span>
+<span class="nc" id="L104">        layout.setAlignItems(Alignment.CENTER);</span>
+<span class="nc" id="L105">        return layout;</span>
+    }
+
+    private void saveMail(){
+<span class="nc" id="L109">        userDetailsService.changeUserMail(user, newMail.getValue());</span>
+<span class="nc" id="L110">        closeMailDetail();</span>
+<span class="nc" id="L111">        Notification notification=Notification.show(&quot;Mail changed correctly!&quot;);</span>
+<span class="nc" id="L112">        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);</span>
+        // update user information and corresponding components
+<span class="nc" id="L114">        user=authenticatedUser.updateUser();</span>
+<span class="nc" id="L115">        newMail.setValue(&quot;&quot;);</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        changeMailDetails.setSummaryText(&quot;Actual Mail: &quot; + (user.getMail()==null ? &quot;There's no mail yet&quot; : user.getMail()));</span>
+<span class="nc" id="L117">    }</span>
+
+    private VerticalLayout changePasswordLayout(){
+<span class="nc" id="L120">        actualPassword= new PasswordField(&quot;Actual Password&quot;);</span>
+<span class="nc" id="L121">        actualPassword.setErrorMessage(&quot;password must be the same as old one&quot;);</span>
+<span class="nc" id="L122">        actualPassword.setMinLength(8);</span>
+<span class="nc" id="L123">        actualPassword.addValueChangeListener(e-&gt; checkActualPassword());</span>
+
+<span class="nc" id="L125">        newPassword= new PasswordField(&quot;New Password&quot;);</span>
+<span class="nc" id="L126">        newPassword.setMinLength(8);</span>
+<span class="nc" id="L127">        newPassword.setErrorMessage(&quot;the password must be at least 8 characters&quot;);</span>
+<span class="nc" id="L128">        newPassword.addValueChangeListener(e-&gt; checkConfirmPassword());</span>
+
+<span class="nc" id="L130">        confirmPassword= new PasswordField(&quot;Confirm Password&quot;);</span>
+<span class="nc" id="L131">        confirmPassword.setErrorMessage(&quot;the two passwords must be equal&quot;);</span>
+<span class="nc" id="L132">        confirmPassword.addValueChangeListener(e-&gt; checkConfirmPassword());</span>
+
+<span class="nc" id="L134">        Button save= new Button(&quot;Save&quot;, e-&gt;savePassword());</span>
+<span class="nc" id="L135">        save.addClassName(&quot;buuutton&quot;);</span>
+<span class="nc" id="L136">        VerticalLayout layout=new VerticalLayout(actualPassword, newPassword, confirmPassword, save);</span>
+<span class="nc" id="L137">        layout.setAlignItems(Alignment.CENTER);</span>
+<span class="nc" id="L138">        return layout;</span>
+    }
+
+    private void checkActualPassword() {
+<span class="nc" id="L142">        boolean valid=userDetailsService.isSamePassword(actualPassword.getValue(), user.getHashedPassword());</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        actualPassword.setInvalid(!valid);</span>
+<span class="nc" id="L144">    }</span>
+
+    private void checkConfirmPassword(){
+<span class="nc" id="L147">        boolean valid=confirmPassword.getValue().equals(newPassword.getValue());</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        confirmPassword.setInvalid(!valid);</span>
+<span class="nc" id="L149">    }</span>
+
+    private void savePassword(){
+<span class="nc" id="L152">        checkActualPassword();</span>
+<span class="nc" id="L153">        checkConfirmPassword();</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        if(newPassword.getValue().length()&lt;8){</span>
+<span class="nc" id="L155">            newPassword.setInvalid(true);</span>
+        }
+<span class="nc bnc" id="L157" title="All 6 branches missed.">        if(actualPassword.isInvalid() || newPassword.isInvalid() || confirmPassword.isInvalid()) {</span>
+<span class="nc" id="L158">            return;</span>
+        }
+
+<span class="nc" id="L161">        MyDialog dialog= new MyDialog();</span>
+<span class="nc" id="L162">        dialog.setTitle(&quot;Confirm new password&quot;);</span>
+<span class="nc" id="L163">        dialog.setContent(new HorizontalLayout(new Span(&quot;Are you sure you want to change the password?&quot;)));</span>
+<span class="nc" id="L164">        dialog.setContinueButton(new Button(&quot;Confirm&quot;, e-&gt;{userDetailsService.changeUserPassword(user, newPassword.getValue());</span>
+<span class="nc" id="L165">            actualPassword.setValue(&quot;&quot;);</span>
+<span class="nc" id="L166">            newPassword.setValue(&quot;&quot;);</span>
+<span class="nc" id="L167">            confirmPassword.setValue(&quot;&quot;);</span>
+<span class="nc" id="L168">            closePasswordDetail();</span>
+<span class="nc" id="L169">            Notification notification = Notification.show(&quot;Password correctly changed!&quot;);</span>
+<span class="nc" id="L170">            notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);</span>
+<span class="nc" id="L171">            user=authenticatedUser.updateUser();</span>
+<span class="nc" id="L172">            dialog.close();}));</span>
+<span class="nc" id="L173">        dialog.open();</span>
+<span class="nc" id="L174">    }</span>
+
+    private void logout(){
+<span class="nc" id="L177">        authenticatedUser.logout();</span>
+<span class="nc" id="L178">    }</span>
+
+    public void closePasswordDetail(){
+<span class="nc" id="L181">        changePasswordDetails.setOpened(false);</span>
+<span class="nc" id="L182">    }</span>
+
+    public void closeMailDetail(){
+<span class="nc" id="L185">        changeMailDetails.setOpened(false);</span>
+<span class="nc" id="L186">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

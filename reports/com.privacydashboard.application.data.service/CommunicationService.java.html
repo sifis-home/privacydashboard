@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommunicationService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.data.service</a> &gt; <span class="el_source">CommunicationService.java</span></div><h1>CommunicationService.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.data.service;
+
+import com.privacydashboard.application.data.entity.*;
+import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.UI;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+// classe usata per passare vari oggetti tra le Views senza dover usare parametri nell'URL
+// quando si usa il metodo get&lt;Something&gt; il valore si resetta per evitare azioni non volute in caso si visiti una pagina
+@Service
+public class CommunicationService {
+    private final DataBaseService dataBaseService;
+<span class="nc" id="L15">    public CommunicationService(DataBaseService dataBaseService){</span>
+<span class="nc" id="L16">        this.dataBaseService= dataBaseService;</span>
+<span class="nc" id="L17">    }</span>
+
+    // NON PIU IN USO MA POTREBBE TORNARE UTILE
+    public Notification getRightNotification() {
+<span class="nc" id="L21">        Notification notification = null;</span>
+<span class="nc" id="L22">        Object object = ComponentUtil.getData(UI.getCurrent(), &quot;RightNotification&quot;);</span>
+        try {
+<span class="nc bnc" id="L24" title="All 2 branches missed.">            if (object != null) {</span>
+<span class="nc" id="L25">                notification = (Notification) object;</span>
+            }
+<span class="nc" id="L27">        } catch (Exception e) {</span>
+<span class="nc" id="L28">            e.printStackTrace();</span>
+        } finally {
+<span class="nc" id="L30">            ComponentUtil.setData(UI.getCurrent(), &quot;RightNotification&quot;, null);</span>
+        }
+<span class="nc" id="L32">        return notification;</span>
+    }
+
+    public RightRequest getRightFromNotification() {
+<span class="nc" id="L36">        RightRequest request= null;</span>
+<span class="nc" id="L37">        Object object = ComponentUtil.getData(UI.getCurrent(), &quot;RightNotification&quot;);</span>
+        try {
+<span class="nc bnc" id="L39" title="All 2 branches missed.">            if (object != null) {</span>
+<span class="nc" id="L40">                Notification notification = (Notification) object;</span>
+<span class="nc" id="L41">                request= dataBaseService.getRequestFromId(notification.getObjectId());</span>
+            }
+<span class="nc" id="L43">        } catch (Exception e) {</span>
+<span class="nc" id="L44">            e.printStackTrace();</span>
+        } finally {
+<span class="nc" id="L46">            ComponentUtil.setData(UI.getCurrent(), &quot;RightNotification&quot;, null);</span>
+        }
+<span class="nc" id="L48">        return request;</span>
+    }
+
+    public void setRightNotification(Notification notification){
+<span class="nc" id="L52">        ComponentUtil.setData(UI.getCurrent(), &quot;RightNotification&quot;, notification);</span>
+<span class="nc" id="L53">    }</span>
+
+    public RightRequest getRightRequest(){
+<span class="nc" id="L56">        RightRequest request=null;</span>
+<span class="nc" id="L57">        Object object=ComponentUtil.getData(UI.getCurrent(), &quot;RightRequest&quot;);</span>
+        try {
+<span class="nc bnc" id="L59" title="All 2 branches missed.">            if (object != null) {</span>
+<span class="nc" id="L60">                request = (RightRequest) object;</span>
+            }
+<span class="nc" id="L62">        } catch (Exception e) {</span>
+<span class="nc" id="L63">            e.printStackTrace();</span>
+        } finally {
+<span class="nc" id="L65">            ComponentUtil.setData(UI.getCurrent(), &quot;RightRequest&quot;, null);</span>
+        }
+<span class="nc" id="L67">        return request;</span>
+    }
+
+    public void setRightRequest(RightRequest request){
+<span class="nc" id="L71">        ComponentUtil.setData(UI.getCurrent(), &quot;RightRequest&quot;, request);</span>
+<span class="nc" id="L72">    }</span>
+
+    public IoTApp getApp(){
+<span class="nc" id="L75">        IoTApp app=null;</span>
+<span class="nc" id="L76">        Object object=ComponentUtil.getData(UI.getCurrent(), &quot;App&quot;);</span>
+        try {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">            if (object != null) {</span>
+<span class="nc" id="L79">                app = (IoTApp) object;</span>
+            }
+<span class="nc" id="L81">        } catch (Exception e) {</span>
+<span class="nc" id="L82">            e.printStackTrace();</span>
+        } finally {
+<span class="nc" id="L84">            ComponentUtil.setData(UI.getCurrent(), &quot;App&quot;, null);</span>
+        }
+<span class="nc" id="L86">        return app;</span>
+    }
+
+    public void setApp(IoTApp app){
+<span class="nc" id="L90">        ComponentUtil.setData(UI.getCurrent(), &quot;App&quot;, app);</span>
+<span class="nc" id="L91">    }</span>
+
+    public User getContact(){
+<span class="nc" id="L94">        User contact=null;</span>
+<span class="nc" id="L95">        Object object=ComponentUtil.getData(UI.getCurrent(), &quot;Contact&quot;);</span>
+        try {
+<span class="nc bnc" id="L97" title="All 2 branches missed.">            if (object != null) {</span>
+<span class="nc" id="L98">                contact = (User) object;</span>
+            }
+<span class="nc" id="L100">        } catch (Exception e) {</span>
+<span class="nc" id="L101">            e.printStackTrace();</span>
+        } finally {
+<span class="nc" id="L103">            ComponentUtil.setData(UI.getCurrent(), &quot;Contact&quot;, null);</span>
+        }
+<span class="nc" id="L105">        return contact;</span>
+    }
+
+    public void setContact(User contact){
+<span class="nc" id="L109">        ComponentUtil.setData(UI.getCurrent(), &quot;Contact&quot;, contact);</span>
+<span class="nc" id="L110">    }</span>
+
+    public PrivacyNotice getPrivacyNotice(){
+<span class="nc" id="L113">        PrivacyNotice privacyNotice=null;</span>
+<span class="nc" id="L114">        Object object=ComponentUtil.getData(UI.getCurrent(), &quot;PrivacyNotice&quot;);</span>
+        try{
+<span class="nc bnc" id="L116" title="All 2 branches missed.">            if(object!=null){</span>
+<span class="nc" id="L117">                privacyNotice= (PrivacyNotice) object;</span>
+            }
+<span class="nc" id="L119">        } catch (Exception e){</span>
+<span class="nc" id="L120">            e.printStackTrace();</span>
+        } finally {
+<span class="nc" id="L122">            ComponentUtil.setData(UI.getCurrent(), &quot;PrivacyNotice&quot;, null);</span>
+        }
+<span class="nc" id="L124">        return privacyNotice;</span>
+    }
+
+    public void setPrivacyNotice(PrivacyNotice privacyNotice){
+<span class="nc" id="L128">        ComponentUtil.setData(UI.getCurrent(), &quot;PrivacyNotice&quot;, privacyNotice);</span>
+<span class="nc" id="L129">    }</span>
+
+    public PrivacyNotice getPrivacyNoticeFromNotification(){
+<span class="nc" id="L132">        PrivacyNotice privacyNotice=null;</span>
+<span class="nc" id="L133">        Object object= ComponentUtil.getData(UI.getCurrent(), &quot;PrivacyNoticeNotification&quot;);</span>
+        try{
+<span class="nc bnc" id="L135" title="All 2 branches missed.">            if(object!=null){</span>
+<span class="nc" id="L136">                Notification notification= (Notification) object;</span>
+<span class="nc" id="L137">                Optional&lt;PrivacyNotice&gt; maybePrivacyNotice= dataBaseService.getPrivacyNoticeFromId(notification.getObjectId());</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">                if(maybePrivacyNotice.isPresent()){</span>
+<span class="nc" id="L139">                    privacyNotice=maybePrivacyNotice.get();</span>
+                }
+            }
+<span class="nc" id="L142">        } catch (Exception e){</span>
+<span class="nc" id="L143">            e.printStackTrace();</span>
+        } finally {
+<span class="nc" id="L145">            ComponentUtil.setData(UI.getCurrent(), &quot;PrivacyNoticeNotification&quot;, null);</span>
+        }
+<span class="nc" id="L147">        return privacyNotice;</span>
+    }
+
+    public void setPrivacyNoticeNotification(Notification notification){
+<span class="nc" id="L151">        ComponentUtil.setData(UI.getCurrent(), &quot;PrivacyNoticeNotification&quot;, notification);</span>
+<span class="nc" id="L152">    }</span>
+
+    public void setOpenPendingRequests(Boolean open){
+<span class="nc" id="L155">        ComponentUtil.setData(UI.getCurrent(), &quot;openPendingRequest&quot;, open);</span>
+<span class="nc" id="L156">    }</span>
+
+    public Boolean getOpenPendingRequests(){
+<span class="nc" id="L159">        Boolean open= (Boolean) ComponentUtil.getData(UI.getCurrent(), &quot;openPendingRequest&quot;);</span>
+<span class="nc" id="L160">        ComponentUtil.setData(UI.getCurrent(), &quot;openPendingRequest&quot;, null);</span>
+<span class="nc" id="L161">        return open;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

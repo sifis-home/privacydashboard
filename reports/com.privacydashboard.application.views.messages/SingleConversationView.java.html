@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SingleConversationView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.views.messages</a> &gt; <span class="el_source">SingleConversationView.java</span></div><h1>SingleConversationView.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.views.messages;
+
+import com.privacydashboard.application.data.GlobalVariables;
+import com.privacydashboard.application.data.entity.Message;
+import com.privacydashboard.application.data.entity.User;
+import com.privacydashboard.application.data.service.CommunicationService;
+import com.privacydashboard.application.data.service.DataBaseService;
+import com.privacydashboard.application.security.AuthenticatedUser;
+import com.privacydashboard.application.views.MainLayout;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.messages.MessageList;
+import com.vaadin.flow.component.messages.MessageListItem;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.router.*;
+
+import javax.annotation.security.PermitAll;
+import java.time.ZoneOffset;
+import java.util.*;
+
+@Route(value=&quot;conversation&quot;, layout = MainLayout.class)
+@PermitAll
+public class SingleConversationView extends Span implements BeforeEnterObserver, AfterNavigationObserver,HasDynamicTitle{
+    private final DataBaseService dataBaseService;
+    private final AuthenticatedUser authenticatedUser;
+    private final CommunicationService communicationService;
+    private User contact;
+
+<span class="nc" id="L34">    private String title=&quot;&quot;;</span>
+<span class="nc" id="L35">    private final Grid&lt;Message&gt; grid=new Grid&lt;&gt;();</span>
+<span class="nc" id="L36">    private final TextArea messageText=new TextArea();</span>
+<span class="nc" id="L37">    private final Button sendMessageButton= new Button(&quot;Send Message&quot;);</span>
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+<span class="nc" id="L41">        contact=communicationService.getContact();</span>
+<span class="nc bnc" id="L42" title="All 4 branches missed.">        if(contact==null || !dataBaseService.getAllContactsFromUser(authenticatedUser.getUser()).contains(contact)){</span>
+<span class="nc" id="L43">            UI.getCurrent().navigate(MessagesView.class);</span>
+<span class="nc" id="L44">            event.rerouteTo(MessagesView.class);</span>
+        }
+        else{
+<span class="nc" id="L47">            title= contact.getName();</span>
+<span class="nc" id="L48">            GlobalVariables.pageTitle= contact.getName();</span>
+        }
+<span class="nc" id="L50">    }</span>
+
+    @Override
+    public String getPageTitle() {
+<span class="nc" id="L54">        return title;</span>
+    }
+
+<span class="nc" id="L57">    public SingleConversationView(DataBaseService dataBaseService, AuthenticatedUser authenticatedUser, CommunicationService communicationService) {</span>
+<span class="nc" id="L58">        this.dataBaseService = dataBaseService;</span>
+<span class="nc" id="L59">        this.authenticatedUser = authenticatedUser;</span>
+<span class="nc" id="L60">        this.communicationService=communicationService;</span>
+
+<span class="nc" id="L62">        addClassName(&quot;messages-view&quot;);</span>
+<span class="nc" id="L63">        initializeGrid();</span>
+<span class="nc" id="L64">        add(grid, initializeTextAndButton());</span>
+<span class="nc" id="L65">    }</span>
+
+    private HorizontalLayout initializeTextAndButton(){
+<span class="nc" id="L68">        messageText.setPlaceholder(&quot;Text...&quot;);</span>
+<span class="nc" id="L69">        messageText.addClassName(&quot;messageText&quot;);</span>
+<span class="nc" id="L70">        sendMessageButton.addClickListener(e-&gt; sendMessage());</span>
+<span class="nc" id="L71">        sendMessageButton.addClassName(&quot;buuutton&quot;);</span>
+<span class="nc" id="L72">        HorizontalLayout layout=new HorizontalLayout(messageText , sendMessageButton);</span>
+<span class="nc" id="L73">        layout.setAlignItems(FlexComponent.Alignment.CENTER);</span>
+<span class="nc" id="L74">        layout.setVerticalComponentAlignment(FlexComponent.Alignment.CENTER);</span>
+<span class="nc" id="L75">        layout.addClassName(&quot;textAndButton&quot;);</span>
+<span class="nc" id="L76">        return layout;</span>
+    }
+
+    private void initializeGrid(){
+<span class="nc" id="L80">        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);</span>
+<span class="nc" id="L81">        grid.addComponentColumn(this::showMessage);</span>
+<span class="nc" id="L82">    }</span>
+
+    //DA SISTEMARE LA TIME ZONE
+    private HorizontalLayout showMessage(Message message){
+<span class="nc" id="L86">        HorizontalLayout card= new HorizontalLayout();</span>
+<span class="nc" id="L87">        card.addClassName(&quot;card&quot;);</span>
+<span class="nc" id="L88">        MessageListItem messageItem=new MessageListItem(message.getMessage(),message.getTime().toInstant(ZoneOffset.UTC), message.getSender().getName());</span>
+<span class="nc" id="L89">        MessageList messageList= new MessageList(messageItem);</span>
+<span class="nc" id="L90">        card.add(messageList);</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if(message.getSender().equals(authenticatedUser.getUser())){</span>
+<span class="nc" id="L92">            card.addClassName(&quot;isUser&quot;);</span>
+        }
+        else{
+<span class="nc" id="L95">            card.addClassName(&quot;isContact&quot;);</span>
+        }
+<span class="nc" id="L97">        return card;</span>
+    }
+
+    private void sendMessage(){
+<span class="nc bnc" id="L101" title="All 4 branches missed.">        if(messageText.getValue()==null || messageText.getValue().length()==0){</span>
+<span class="nc" id="L102">            return;</span>
+        }
+<span class="nc" id="L104">        Message message=new Message();</span>
+<span class="nc" id="L105">        message.setMessage(messageText.getValue());</span>
+<span class="nc" id="L106">        message.setReceiver(contact);</span>
+<span class="nc" id="L107">        message.setSender(authenticatedUser.getUser());</span>
+<span class="nc" id="L108">        dataBaseService.addNowMessage(message);</span>
+<span class="nc" id="L109">        messageText.setValue(&quot;&quot;);</span>
+<span class="nc" id="L110">        updateConversation();</span>
+<span class="nc" id="L111">    }</span>
+
+    private void updateConversation(){
+<span class="nc" id="L114">        List&lt;Message&gt; messageList= dataBaseService.getConversationFromUsers(authenticatedUser.getUser(), contact);</span>
+<span class="nc" id="L115">        grid.setItems(messageList);</span>
+<span class="nc" id="L116">        grid.scrollToIndex(messageList.size());</span>
+<span class="nc" id="L117">    }</span>
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent event){
+<span class="nc" id="L121">        updateConversation();</span>
+<span class="nc" id="L122">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

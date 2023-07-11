@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContactsView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.views.contacts</a> &gt; <span class="el_source">ContactsView.java</span></div><h1>ContactsView.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.views.contacts;
+import com.privacydashboard.application.data.entity.IoTApp;
+import com.privacydashboard.application.data.entity.User;
+import com.privacydashboard.application.data.service.CommunicationService;
+import com.privacydashboard.application.data.service.DataBaseService;
+import com.privacydashboard.application.security.AuthenticatedUser;
+import com.privacydashboard.application.views.MainLayout;
+import com.privacydashboard.application.views.apps.AppsView;
+import com.privacydashboard.application.views.messages.SingleConversationView;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.details.Details;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.*;
+
+import java.util.*;
+import javax.annotation.security.PermitAll;
+
+@PageTitle(&quot;Contacts&quot;)
+@Route(value = &quot;contacts&quot;, layout = MainLayout.class)
+@PermitAll
+public class ContactsView extends Div implements AfterNavigationObserver, BeforeEnterObserver {
+    private final DataBaseService dataBaseService;
+    private final AuthenticatedUser authenticatedUser;
+    private final CommunicationService communicationService;
+
+<span class="nc" id="L35">    private final TextField searchText=new TextField();</span>
+<span class="nc" id="L36">    private final Grid&lt;User&gt; grid = new Grid&lt;&gt;();</span>
+
+    private User priorityUser;
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event){
+<span class="nc" id="L42">        priorityUser=communicationService.getContact();</span>
+<span class="nc" id="L43">    }</span>
+
+<span class="nc" id="L45">    public ContactsView(AuthenticatedUser authenticatedUser, DataBaseService dataBaseService, CommunicationService communicationService) {</span>
+<span class="nc" id="L46">        this.authenticatedUser=authenticatedUser;</span>
+<span class="nc" id="L47">        this.dataBaseService=dataBaseService;</span>
+<span class="nc" id="L48">        this.communicationService=communicationService;</span>
+<span class="nc" id="L49">        addClassName(&quot;grid-view&quot;);</span>
+<span class="nc" id="L50">        initializeSearchText();</span>
+<span class="nc" id="L51">        initializeGrid();</span>
+<span class="nc" id="L52">        add(searchText, grid);</span>
+<span class="nc" id="L53">    }</span>
+
+    private void initializeSearchText(){
+<span class="nc" id="L56">        searchText.setPlaceholder(&quot;Search...&quot;);</span>
+<span class="nc" id="L57">        searchText.setValueChangeMode(ValueChangeMode.LAZY);</span>
+<span class="nc" id="L58">        searchText.addValueChangeListener(e-&gt; updateContacts());</span>
+<span class="nc" id="L59">        searchText.addClassName(&quot;search&quot;);</span>
+<span class="nc" id="L60">    }</span>
+
+    private void initializeGrid(){
+<span class="nc" id="L63">        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);</span>
+<span class="nc" id="L64">        grid.addComponentColumn(this::createContact);</span>
+<span class="nc" id="L65">    }</span>
+
+    private VerticalLayout createContact(User contact){
+<span class="nc" id="L68">        Avatar avatar = new Avatar(contact.getName(), contact.getProfilePictureUrl());</span>
+<span class="nc" id="L69">        Span name = new Span(contact.getName());</span>
+<span class="nc" id="L70">        name.addClassName(&quot;name&quot;);</span>
+<span class="nc" id="L71">        Details details = new Details(new Span(&quot;More&quot;), generateContactInformations(contact));</span>
+<span class="nc" id="L72">        VerticalLayout card = new VerticalLayout();</span>
+<span class="nc" id="L73">        card.addClassName(&quot;card&quot;);</span>
+<span class="nc" id="L74">        card.addClassName(&quot;canOpen&quot;);</span>
+<span class="nc" id="L75">        card.setSpacing(false);</span>
+<span class="nc" id="L76">        card.add(new HorizontalLayout(avatar , name) , details);</span>
+
+<span class="nc" id="L78">        card.addClickListener(e-&gt; {</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            if(card.hasClassName(&quot;canOpen&quot;)){</span>
+<span class="nc" id="L80">                details.setOpened(true);</span>
+<span class="nc" id="L81">                card.removeClassNames(&quot;canOpen&quot;);</span>
+            }
+<span class="nc bnc" id="L83" title="All 2 branches missed.">            else if(!details.isOpened()){</span>
+<span class="nc" id="L84">                card.addClassName(&quot;canOpen&quot;);</span>
+            }
+<span class="nc" id="L86">        });</span>
+
+        // se c'è un priorityUser apri details
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        if(contact.equals(priorityUser)){</span>
+<span class="nc" id="L90">            details.setOpened(true);</span>
+        }
+        //card.add(new Span(&quot;ID: &quot; + contact.getId().toString()));
+<span class="nc" id="L93">        return card;</span>
+    }
+
+    private VerticalLayout generateContactInformations(User contact){
+<span class="nc" id="L97">        HorizontalLayout messageLink=new HorizontalLayout(new Span(&quot;send message&quot;), VaadinIcon.COMMENT.create());</span>
+<span class="nc" id="L98">        messageLink.addClassName(&quot;link&quot;);</span>
+<span class="nc" id="L99">        messageLink.addClickListener(e-&gt;communicationService.setContact(contact));</span>
+<span class="nc" id="L100">        messageLink.addClickListener(e-&gt;UI.getCurrent().navigate(SingleConversationView.class));</span>
+<span class="nc" id="L101">        return new VerticalLayout(new Span(&quot;NAME: &quot; + contact.getName()),</span>
+<span class="nc" id="L102">                                  new Span(&quot;ROLE: Data &quot; +contact.getRole()),</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">                                  new Span(&quot;MAIL: &quot;+ (contact.getMail()==null ? &quot;There's no mail yet&quot; : contact.getMail())),</span>
+                                  messageLink,
+<span class="nc" id="L105">                                  new Details(new Span(&quot;Apps:&quot;) , getApps(contact)));</span>
+    }
+
+    private VerticalLayout getApps(User contact){
+<span class="nc" id="L109">        VerticalLayout layout=new VerticalLayout();</span>
+<span class="nc" id="L110">        List&lt;IoTApp&gt; appList=dataBaseService.getAppsFrom2Users(authenticatedUser.getUser(), contact);</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        for(IoTApp i : appList) {</span>
+<span class="nc" id="L112">            Span appSpan= new Span(i.getName());</span>
+<span class="nc" id="L113">            appSpan.addClassName(&quot;link&quot;);</span>
+<span class="nc" id="L114">            appSpan.addClickListener(e-&gt; communicationService.setApp(i));</span>
+<span class="nc" id="L115">            appSpan.addClickListener(e-&gt; UI.getCurrent().navigate(AppsView.class));</span>
+<span class="nc" id="L116">            layout.add(appSpan);</span>
+<span class="nc" id="L117">        }</span>
+<span class="nc" id="L118">        return layout;</span>
+    }
+
+    private void updateContacts(){
+        List&lt;User&gt; contacts;
+<span class="nc bnc" id="L123" title="All 4 branches missed.">        if(searchText.getValue()==null || searchText.getValue().length()==0){</span>
+<span class="nc" id="L124">            contacts=dataBaseService.getAllContactsFromUser(authenticatedUser.getUser());</span>
+        }
+        else{
+<span class="nc" id="L127">            contacts=dataBaseService.getAllContactsFromUserFilterByName(authenticatedUser.getUser(), searchText.getValue());</span>
+        }
+
+<span class="nc bnc" id="L130" title="All 2 branches missed.">        if(priorityUser!=null){</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">            if(contacts.contains(priorityUser)){</span>
+<span class="nc" id="L132">                Collections.swap(contacts, 0 , contacts.indexOf(priorityUser));</span>
+            }
+        }
+<span class="nc" id="L135">        grid.setItems(contacts);</span>
+<span class="nc" id="L136">    }</span>
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent event) {
+<span class="nc" id="L140">        updateContacts();</span>
+<span class="nc" id="L141">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

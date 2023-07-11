@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HomeView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.views.home</a> &gt; <span class="el_source">HomeView.java</span></div><h1>HomeView.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.views.home;
+
+import com.privacydashboard.application.data.GlobalVariables.Role;
+import com.privacydashboard.application.data.service.CommunicationService;
+import com.privacydashboard.application.security.AuthenticatedUser;
+import com.privacydashboard.application.views.MainLayout;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.dependency.NpmPackage;
+import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+
+import javax.annotation.security.PermitAll;
+import java.util.Arrays;
+
+@PageTitle(&quot;Home&quot;)
+@Route(value = &quot;&quot;, layout = MainLayout.class)
+@PermitAll
+@NpmPackage(value = &quot;line-awesome&quot;, version = &quot;1.3.0&quot;)
+public class HomeView extends VerticalLayout {
+    private final AuthenticatedUser authenticatedUser;
+    private final CommunicationService communicationService;
+
+<span class="nc" id="L26">    private final int nSection=6;</span>
+<span class="nc" id="L27">    private final int nRows=2;</span>
+<span class="nc" id="L28">    private final VerticalLayout[] layouts= new VerticalLayout[nSection];</span>
+<span class="nc" id="L29">    private final Span[] titles= new Span[nSection];</span>
+<span class="nc" id="L30">    private final Div[] icons= new Div[nSection];</span>
+
+<span class="nc" id="L32">    public HomeView(AuthenticatedUser authenticatedUser, CommunicationService communicationService) {</span>
+<span class="nc" id="L33">        this.authenticatedUser= authenticatedUser;</span>
+<span class="nc" id="L34">        this.communicationService= communicationService;</span>
+
+<span class="nc" id="L36">        addClassName(&quot;home-view&quot;);</span>
+
+<span class="nc" id="L38">        initializeLayout();</span>
+<span class="nc" id="L39">        createSections();</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        for(int i=0;i&lt;nRows;i++){</span>
+<span class="nc" id="L41">            add(new HorizontalLayout(Arrays.copyOfRange(layouts, i*nSection/nRows, (i+1)*nSection/nRows)));</span>
+        }
+        //add(new Span(&quot;ID: &quot; + authenticatedUser.getUser().getId().toString()));
+<span class="nc" id="L44">    }</span>
+
+    private void initializeLayout(){
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        for(int i=0; i&lt;nSection; i++){</span>
+<span class="nc" id="L48">            layouts[i]= new VerticalLayout();</span>
+<span class="nc" id="L49">            layouts[i].addClassNames(&quot;section&quot;, &quot;pointer&quot;);</span>
+<span class="nc" id="L50">            titles[i]= new Span();</span>
+<span class="nc" id="L51">            titles[i].addClassName(&quot;title&quot;);</span>
+<span class="nc" id="L52">            icons[i]= new Div();</span>
+<span class="nc" id="L53">            icons[i].addClassNames(&quot;las la-10x icons&quot;);</span>
+<span class="nc" id="L54">            layouts[i].add(titles[i], icons[i]);</span>
+<span class="nc" id="L55">            layouts[i].setAlignItems(Alignment.CENTER);</span>
+        }
+<span class="nc" id="L57">    }</span>
+
+    private void createSections(){
+<span class="nc" id="L60">        createSingleSection(0, &quot;Contacts&quot;, &quot;contacts&quot;, &quot;la-address-book&quot;);</span>
+<span class="nc" id="L61">        createSingleSection(1, &quot;Messages&quot;, &quot;messages&quot;, &quot;la-comments&quot;);</span>
+<span class="nc" id="L62">        createSingleSection(3, &quot;Apps&quot;, &quot;apps-view&quot;, &quot;la-list&quot;);</span>
+<span class="nc" id="L63">        createSingleSection(4, &quot;Privacy Notice&quot;, &quot;privacyNotice&quot;, &quot;la-file&quot;);</span>
+<span class="nc bnc" id="L64" title="All 4 branches missed.">        if(authenticatedUser.getUser().getRole().equals(Role.CONTROLLER) || authenticatedUser.getUser().getRole().equals(Role.DPO)){</span>
+<span class="nc" id="L65">            createSingleSection(2, &quot;Rights&quot;, &quot;rights_controller&quot;, &quot;la-school&quot;);</span>
+<span class="nc" id="L66">            createSingleSection(5, &quot;Questionnaire&quot;, &quot;questionnaire&quot;,&quot;la-archive&quot;);</span>
+        }
+        else{
+<span class="nc" id="L69">            createSingleSection(2, &quot;Rights&quot;, &quot;rights&quot;, &quot;la-school&quot;);</span>
+<span class="nc" id="L70">            titles[5].setText(&quot;Pending Requests&quot;);</span>
+<span class="nc" id="L71">            layouts[5].addClickListener((e-&gt;{</span>
+<span class="nc" id="L72">                communicationService.setOpenPendingRequests(true);</span>
+<span class="nc" id="L73">                UI.getCurrent().navigate(&quot;rights&quot;);</span>
+<span class="nc" id="L74">            }));</span>
+<span class="nc" id="L75">            icons[5].addClassName(&quot;la-archive&quot;);</span>
+        }
+
+<span class="nc" id="L78">    }</span>
+
+    private void createSingleSection(int sectionNumber, String title, String navigationPage, String className){
+<span class="nc" id="L81">        titles[sectionNumber].setText(title);</span>
+<span class="nc" id="L82">        layouts[sectionNumber].addClickListener(e-&gt; UI.getCurrent().navigate(navigationPage));</span>
+<span class="nc" id="L83">        icons[sectionNumber].addClassName(className);</span>
+<span class="nc" id="L84">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

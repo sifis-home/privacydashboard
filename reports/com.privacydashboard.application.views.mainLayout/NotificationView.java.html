@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NotificationView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.views.mainLayout</a> &gt; <span class="el_source">NotificationView.java</span></div><h1>NotificationView.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.views.mainLayout;
+
+import com.privacydashboard.application.data.GlobalVariables.Role;
+import com.privacydashboard.application.data.entity.Notification;
+import com.privacydashboard.application.data.entity.User;
+import com.privacydashboard.application.data.service.CommunicationService;
+import com.privacydashboard.application.data.service.DataBaseService;
+import com.privacydashboard.application.views.messages.SingleConversationView;
+import com.privacydashboard.application.views.privacyNotice.PrivacyNoticeView;
+import com.privacydashboard.application.views.rights.ControllerDPORightsView;
+import com.privacydashboard.application.views.rights.SubjectRightsView;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.contextmenu.ContextMenu;
+import com.vaadin.flow.component.dependency.NpmPackage;
+import com.vaadin.flow.component.html.Span;
+
+import java.util.List;
+
+@NpmPackage(value = &quot;line-awesome&quot;, version = &quot;1.3.0&quot;)
+public class NotificationView extends Span{
+    private final User user;
+    private final DataBaseService dataBaseService;
+    private final CommunicationService communicationService;
+
+<span class="nc" id="L25">    private final ContextMenu menuNotifications=new ContextMenu();</span>
+<span class="nc" id="L26">    private final Span badge=new Span();</span>
+
+<span class="nc" id="L28">    public NotificationView(User user, DataBaseService dataBaseService, CommunicationService communicationService){</span>
+<span class="nc" id="L29">        this.dataBaseService=dataBaseService;</span>
+<span class="nc" id="L30">        this.user=user;</span>
+<span class="nc" id="L31">        this.communicationService=communicationService;</span>
+<span class="nc" id="L32">        initializeIcons();</span>
+<span class="nc" id="L33">        initializeMenuNotifications();</span>
+<span class="nc" id="L34">    }</span>
+
+    private void initializeIcons(){
+<span class="nc" id="L37">        this.addClassNames(&quot;la la-bell la-2x bell-icon&quot;);</span>
+<span class="nc" id="L38">        badge.addClassNames(&quot;badge&quot;);</span>
+<span class="nc" id="L39">        add(badge);</span>
+<span class="nc" id="L40">    }</span>
+
+    private void initializeMenuNotifications(){
+<span class="nc" id="L43">        menuNotifications.setOpenOnClick(true);</span>
+<span class="nc" id="L44">        menuNotifications.setTarget(this);</span>
+<span class="nc" id="L45">        updateNotifications();</span>
+<span class="nc" id="L46">    }</span>
+
+    private void updateNotifications(){
+<span class="nc" id="L49">        menuNotifications.removeAll();</span>
+<span class="nc" id="L50">        List&lt;Notification&gt; notifications=dataBaseService.getNewNotificationsFromUser(user);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        for(Notification notification  : notifications){</span>
+<span class="nc" id="L52">            menuNotifications.addItem(notification.getDescription(), e-&gt; goToNotification(notification));</span>
+<span class="nc" id="L53">        }</span>
+
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        if(notifications.size()==0){</span>
+<span class="nc" id="L56">            badge.setVisible(false);</span>
+        }
+        else{
+<span class="nc" id="L59">            badge.setText(String.valueOf(notifications.size()));</span>
+        }
+<span class="nc" id="L61">    }</span>
+
+    private void goToNotification(Notification notification){
+<span class="nc bnc" id="L64" title="All 4 branches missed.">        if(notification==null || notification.getType()==null){</span>
+<span class="nc" id="L65">            return;</span>
+        }
+<span class="nc bnc" id="L67" title="All 4 branches missed.">        switch(notification.getType()){</span>
+            case &quot;Message&quot;:
+<span class="nc" id="L69">                dataBaseService.changeIsReadNotification(notification, true);</span>
+<span class="nc" id="L70">                communicationService.setContact(notification.getSender());</span>
+<span class="nc" id="L71">                UI.getCurrent().navigate(SingleConversationView.class);</span>
+<span class="nc" id="L72">                break;</span>
+            case &quot;Request&quot;:
+<span class="nc" id="L74">                dataBaseService.changeIsReadNotification(notification, true);</span>
+<span class="nc" id="L75">                communicationService.setRightNotification(notification);</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">                if(user.getRole().equals(Role.SUBJECT)){</span>
+<span class="nc" id="L77">                    UI.getCurrent().navigate(SubjectRightsView.class);</span>
+                }
+                else{
+<span class="nc" id="L80">                    UI.getCurrent().navigate(ControllerDPORightsView.class);</span>
+                }
+<span class="nc" id="L82">                break;</span>
+            case &quot;PrivacyNotice&quot;:
+<span class="nc" id="L84">                dataBaseService.changeIsReadNotification(notification, true);</span>
+<span class="nc" id="L85">                communicationService.setPrivacyNoticeNotification(notification);</span>
+<span class="nc" id="L86">                UI.getCurrent().navigate(PrivacyNoticeView.class);</span>
+                break;
+        }
+<span class="nc" id="L89">        updateNotifications();</span>
+<span class="nc" id="L90">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

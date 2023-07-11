@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FormPrivacyNotice.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.views.privacyNotice</a> &gt; <span class="el_source">FormPrivacyNotice.java</span></div><h1>FormPrivacyNotice.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.views.privacyNotice;
+
+import com.privacydashboard.application.data.entity.PrivacyNotice;
+import com.privacydashboard.application.data.service.DataBaseService;
+import com.privacydashboard.application.views.usefulComponents.MyDialog;
+import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
+
+public class FormPrivacyNotice extends VerticalLayout {
+    private final PrivacyNotice privacyNotice;
+    private  final DataBaseService dataBaseService;
+<span class="nc" id="L20">    private final String ws= &quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&quot;;  // three white spaces to use while doing a list</span>
+<span class="nc" id="L21">    private final Integer nQuestions= 14;</span>
+<span class="nc" id="L22">    private final Span[] mainText= new Span[nQuestions];</span>
+<span class="nc" id="L23">    private final Html[] example= new Html[nQuestions];</span>
+<span class="nc" id="L24">    private final TextArea[] textAreas= new TextArea[nQuestions];</span>
+<span class="nc" id="L25">    private final Button saveButton= new Button(&quot;Save&quot;, e-&gt; savePrivacyNotice());</span>
+
+<span class="nc" id="L27">    public FormPrivacyNotice(PrivacyNotice privacyNotice, DataBaseService dataBaseService){</span>
+<span class="nc" id="L28">        this.privacyNotice= privacyNotice;</span>
+<span class="nc" id="L29">        this.dataBaseService= dataBaseService;</span>
+<span class="nc" id="L30">        addClassName(&quot;privacy_notice-view&quot;);</span>
+
+<span class="nc" id="L32">        mainText[0]= new Span(&quot;What data do we collect?&quot;);</span>
+<span class="nc" id="L33">        example[0]= new Html(&quot;&lt;p&gt;Example:&lt;i&gt; We collect personal identification information such as name, phone number, mail...&lt;i/&gt;&lt;/p&gt;&quot;);</span>
+
+<span class="nc" id="L35">        mainText[1]= new Span(&quot;How do we collect the data?&quot;);</span>
+<span class="nc" id="L36">        example[1]= new Html(&quot;&lt;p&gt;Example: &lt;i&gt;We collect and process the data when you &lt;br/&gt;&quot; +</span>
+                ws + &quot;• register online or place an order for any of our products or services &lt;br/&gt;&quot; +
+                ws + &quot;• use or view our website via your browser's cookies &lt;br/&gt;&quot; +
+                ws + &quot;• ...&lt;/i&gt;&quot; +
+                &quot;&lt;/p&gt;&quot;);
+
+<span class="nc" id="L42">        mainText[2]= new Span(&quot;How will we use the data?&quot;);</span>
+<span class="nc" id="L43">        example[2]= new Html(&quot;&lt;p&gt;Example: &lt;i&gt;We collect your data so that we can &lt;br/&gt;&quot; +</span>
+                ws + &quot;• process your order, manage your account &lt;br/&gt;&quot; +
+                ws + &quot;• email you with special offers on other products or services you might like &lt;br/&gt;&quot; +
+                ws + &quot;• ... &lt;br/&gt;&quot; +
+                &quot;If you agree we will share your data with our partner companies companies so that they may offer you their products and services &lt;br/&gt;&quot; +
+                ws + &quot;• list of all the companies &lt;br/&gt;&quot; +
+                &quot;When we process your order, we may send your data to, and also use the resulting information from, credit reference agencies to prevent fraudulent purchases.&lt;/i&gt;&quot; +
+                &quot;&lt;/p&gt;&quot;);
+
+<span class="nc" id="L52">        mainText[3]= new Span(&quot;How do we store your data?&quot;);</span>
+<span class="nc" id="L53">        example[3]= new Html(&quot;&lt;p&gt;Example:&lt;i&gt; We securely stores your data at [enter the location and describe security precautions taken]. &lt;br/&gt;&quot; +</span>
+                &quot;We will keep your [enter type of data] for [enter time period]. Once this time period has expired, we will delete your data by [enter how you delete users’ data].&lt;/i&gt;&quot; +
+                &quot;&lt;/p&gt;&quot;);
+
+<span class="nc" id="L57">        mainText[4]= new Span(&quot;Marketing&quot;);</span>
+<span class="nc" id="L58">        example[4]= new Html(&quot;&lt;p&gt;Example:&lt;i&gt; Company would like to send you information about products and services of ours that we think you might like, as well as those of our partner companies.&lt;br/&gt;&quot; +</span>
+                ws + &quot;• list of partner companies &lt;br/&gt;&quot; +
+                &quot;If you have agreed to receive marketing, you may always opt out at a later date.&lt;br/&gt;&quot; +
+                &quot;You have the right at any time to stop us from contacting you for marketing purposes or giving your data to other members of our partner companies.&lt;/i&gt;&quot; +
+                &quot;&lt;/p&gt;&quot;);
+
+<span class="nc" id="L64">        mainText[5]= new Span(&quot;What are the user data protection rights?&quot;);</span>
+<span class="nc" id="L65">        example[5]= new Html(&quot;&lt;p&gt;Example:&lt;i&gt; We would like to make sure you are fully aware of all of your data protection rights. Every user is entitled to the following: &lt;br/&gt;&quot; +</span>
+                ws + &quot;• The right to access - You have the right to request for copies of your personal data. We may charge you a small fee for this service.&lt;br/&gt;&quot; +
+                ws + &quot;• The right to rectification - You have the right to request that we correct any information you believe is inaccurate. You also have the right to request us to complete information you believe is incomplete.&lt;br/&gt;&quot; +
+                ws + &quot;• The right to erasure — You have the right to request that Our Company erase your personal data, under certain conditions.&lt;br/&gt;&quot; +
+                ws + &quot;• The right to restrict processing - You have the right to request that Our Company restrict the processing of your personal data, under certain conditions.&lt;br/&gt;&quot; +
+                ws + &quot;• The right to object to processing - You have the right to object to Our Company’s processing of your personal data, under certain conditions.&lt;br/&gt;&quot; +
+                ws + &quot;• The right to data portability - You have the right to request that Our Company transfer the data that we have collected to another organization, or directly to you, under certain conditions.&lt;br/&gt;&quot; +
+                &quot;If you make a request, we have one month to respond to you. If you would like to exercise any of these rights, please contact us at our email:&lt;br/&gt;&quot; +
+                &quot;Call us at: &lt;br/&gt;&quot; +
+                &quot;Or write to us: &lt;/i&gt;&quot; +
+                &quot;&lt;/p&gt;&quot;);
+
+<span class="nc" id="L77">        mainText[6]= new Span(&quot;What are cookies?&quot;);</span>
+<span class="nc" id="L78">        example[6]= new Html(&quot;&lt;p&gt;Example:&lt;i&gt; Cookies are text files placed on your computer to collect standard Internet log information and visitor behavior information. When you visit our websites, we may collect information from you automatically through cookies or similar technology.&lt;/i&gt; &quot; +</span>
+                &quot;&lt;/p&gt;&quot;);
+
+<span class="nc" id="L81">        mainText[7]= new Span(&quot;How do we use cookies?&quot;);</span>
+<span class="nc" id="L82">        example[7]= new Html(&quot;&lt;p&gt;Example:&lt;i&gt; We use cookies in a range of ways to improve your experience on our website, including: &lt;br/&gt;&quot; +</span>
+                ws + &quot;• Keeping you signed in &lt;br/&gt;&quot; +
+                ws + &quot;• Understanding how you use our website &lt;br/&gt;&quot; +
+                ws + &quot;• ...&lt;/i&gt;&quot; +
+                &quot;&lt;/p&gt;&quot;);
+
+<span class="nc" id="L88">        mainText[8]= new Span(&quot;What types of cookies do we use?&quot;);</span>
+<span class="nc" id="L89">        example[8]= new Html(&quot;&lt;p&gt;Example: &lt;i&gt;There are a number of different types of cookies, however, we use: &lt;br/&gt;&quot; +</span>
+                ws + &quot;• Functionality — We use these cookies so that we recognize you on our website and remember your previously selected preferences. These could include what language you prefer and location you are in. A mix of first-party and third-party cookies are used. &lt;br/&gt;&quot; +
+                ws + &quot;• Advertising — We use these cookies to collect information about your visit to our website, the content you viewed, the links you followed and information about your browser, device, and your IP address. We sometimes share some limited aspects of this data with third parties for advertising purposes. We may also share online data collected through cookies with our advertising partners. This means that when you visit another website, you may be shown advertising based on your browsing patterns on our website.&lt;br/&gt;&quot; +
+                ws + &quot;• ...&lt;/i&gt;&quot; +
+                &quot;&lt;/p&gt;&quot;);
+
+<span class="nc" id="L95">        mainText[9]= new Span(&quot;How to manage cookies&quot;);</span>
+<span class="nc" id="L96">        example[9]= new Html(&quot;&lt;p&gt;Example:&lt;i&gt; You can set your browser not to accept cookies, and the above website tells you how to remove cookies from your browser. However, in a few cases, some of our website features may not function as a result.&lt;/i&gt; &quot; +</span>
+                &quot;&lt;/p&gt;&quot;);
+
+<span class="nc" id="L99">        mainText[10]= new Span(&quot;Privacy policies of other websites&quot;);</span>
+<span class="nc" id="L100">        example[10]= new Html(&quot;&lt;p&gt;Example:&lt;i&gt; Our website contains links to other websites. Our privacy policy applies only to our website, so if you click on a link to another website, you should read their privacy policy. &lt;/i&gt;&quot; +</span>
+                &quot;&lt;/p&gt;&quot;);
+
+<span class="nc" id="L103">        mainText[11]= new Span(&quot;Changes to our privacy policy&quot;);</span>
+<span class="nc" id="L104">        example[11]= new Html(&quot;&lt;p&gt;Example:&lt;i&gt;We keep our privacy policy under regular review and places any updates on this web page. This privacy policy was last updated on [insert date] &lt;/i&gt;&quot; +</span>
+                &quot;&lt;/p&gt;&quot;);
+
+<span class="nc" id="L107">        mainText[12]= new Span(&quot;How to contact us&quot;);</span>
+<span class="nc" id="L108">        example[12]= new Html(&quot;&lt;p&gt;Example:&lt;i&gt; If you have any questions about our privacy policy, the data we hold on you, or you would like to exercise one of your data protection rights, please do not hesitate to contact us. &lt;br&gt;&quot; +</span>
+                ws + &quot;Email us at: &lt;br&gt;&quot; +
+                ws + &quot;Call us: &lt;br&gt;&quot; +
+                ws + &quot;Or write us at: &lt;/i&gt;&quot; +
+                &quot;&lt;/p&gt;&quot;);
+
+<span class="nc" id="L114">        mainText[13]= new Span(&quot;How to contact the appropriate authority&quot;);</span>
+<span class="nc" id="L115">        example[13]= new Html(&quot;&lt;p&gt;Example:&lt;i&gt; Should you wish to report a complaint or if you feel that we have not addressed your concern in a satisfactory manner, you may contact the Information Commissioner’s Office.&lt;br/&gt;&quot; +</span>
+                ws + &quot;Email: &lt;br/&gt;&quot; +
+                ws + &quot;Address: &lt;/i&gt;&quot; +
+                &quot;&lt;/p&gt;&quot;);
+
+<span class="nc bnc" id="L120" title="All 2 branches missed.">        for(int i=0; i&lt;nQuestions; i++){</span>
+<span class="nc" id="L121">            mainText[i].addClassName(&quot;mainText&quot;);</span>
+<span class="nc" id="L122">            textAreas[i]= new TextArea();</span>
+<span class="nc" id="L123">            textAreas[i].addClassName(&quot;textArea&quot;);</span>
+<span class="nc" id="L124">            add(mainText[i], example[i], textAreas[i]);</span>
+        }
+<span class="nc" id="L126">        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);</span>
+<span class="nc" id="L127">        add(saveButton);</span>
+<span class="nc" id="L128">    }</span>
+
+    private void savePrivacyNotice() {
+<span class="nc" id="L131">        MyDialog dialog=new MyDialog();</span>
+        String titleText;
+<span class="nc" id="L133">        String text=convertText();</span>
+<span class="nc" id="L134">        Button saveButton= new Button(&quot;Confirm&quot;);</span>
+
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        if (privacyNotice.getText()==null) {</span>
+<span class="nc" id="L137">            titleText= &quot;Do you want to upload this Privacy Notice for the app: &quot; + privacyNotice.getApp().getName() + &quot;?&quot;;</span>
+<span class="nc" id="L138">            saveButton.addClickListener(e-&gt;{</span>
+<span class="nc" id="L139">                dataBaseService.addPrivacyNoticeForApp(privacyNotice.getApp(), text);</span>
+<span class="nc" id="L140">                Notification notification = Notification.show(&quot;Privacy Notice uploaded correctly&quot;);</span>
+<span class="nc" id="L141">                notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);</span>
+<span class="nc" id="L142">                UI.getCurrent().navigate(PrivacyNoticeView.class);</span>
+<span class="nc" id="L143">                dialog.close();</span>
+<span class="nc" id="L144">            });</span>
+        }
+        else {
+<span class="nc" id="L147">            titleText= &quot;Do you want to overwrite this Privacy Notice for the app: &quot; + privacyNotice.getApp().getName() + &quot;?&quot;;</span>
+<span class="nc" id="L148">            saveButton.addClickListener(e-&gt;{</span>
+<span class="nc" id="L149">                dataBaseService.changePrivacyNoticeForApp(privacyNotice.getApp(), text);</span>
+<span class="nc" id="L150">                Notification notification = Notification.show(&quot;Privacy Notice overwritten correctly&quot;);</span>
+<span class="nc" id="L151">                notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);</span>
+<span class="nc" id="L152">                UI.getCurrent().navigate(PrivacyNoticeView.class);</span>
+<span class="nc" id="L153">                dialog.close();</span>
+<span class="nc" id="L154">            });</span>
+        }
+
+<span class="nc" id="L157">        dialog.setTitle(titleText);</span>
+<span class="nc" id="L158">        TextArea textArea= new TextArea();</span>
+<span class="nc" id="L159">        textArea.setValue(text);</span>
+<span class="nc" id="L160">        textArea.setWidthFull();</span>
+<span class="nc" id="L161">        textArea.setReadOnly(true);</span>
+<span class="nc" id="L162">        dialog.setContent(new HorizontalLayout(textArea));</span>
+<span class="nc" id="L163">        dialog.setContinueButton(saveButton);</span>
+<span class="nc" id="L164">        dialog.open();</span>
+<span class="nc" id="L165">    }</span>
+
+    /*
+    DA CAPIRE COME VISUALIZZARE IL TESTO.
+    PER ORA LO SALVO COME HTML MA IN CASO SI VOGLIA CARICARE DIRETTAMENTE IL FILE BISOGNA CAPIRE COME FARE
+     */
+    private String convertText(){
+        /*String privacyNoticeText = &quot;&lt;p&gt;&quot;;
+        for (int i = 0; i &lt; nQuestions; i++) {
+            privacyNoticeText += &quot;&lt;b&gt;&quot; + mainText[i].getText() + &quot;&lt;/b&gt;&lt;br/&gt;&quot; + textAreas[i].getValue() + &quot;&lt;br/&gt;&lt;br/&gt;&quot;;
+        }
+        return privacyNoticeText + &quot;&lt;/p&gt;&quot;;*/
+
+<span class="nc" id="L178">        String privacyNoticeText = &quot;&quot;;</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        for (int i = 0; i &lt; nQuestions; i++) {</span>
+<span class="nc" id="L180">            privacyNoticeText += mainText[i].getText() + &quot;\n&quot; + textAreas[i].getValue() + &quot;\n&quot;;</span>
+        }
+<span class="nc" id="L182">        return privacyNoticeText;</span>
+    }
+
+    /*
+    DA CAPIRE COME VISUALIZZARE IL TESTO.
+    PER ORA LO SALVO COME HTML MA IN CASO SI VOGLIA CARICARE DIRETTAMENTE IL FILE BISOGNA CAPIRE COME FARE
+     */
+    private Html visualizeText(String text){
+<span class="nc" id="L190">        return new Html(text);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

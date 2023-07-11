@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainLayout.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.views</a> &gt; <span class="el_source">MainLayout.java</span></div><h1>MainLayout.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.views;
+
+import com.privacydashboard.application.data.GlobalVariables;
+import com.privacydashboard.application.data.entity.User;
+import com.privacydashboard.application.data.service.CommunicationService;
+import com.privacydashboard.application.data.service.DataBaseService;
+import com.privacydashboard.application.security.AuthenticatedUser;
+import com.privacydashboard.application.security.UserDetailsServiceImpl;
+import com.privacydashboard.application.views.apps.AppsView;
+import com.privacydashboard.application.views.home.HomeView;
+import com.privacydashboard.application.views.contacts.ContactsView;
+import com.privacydashboard.application.views.messages.MessagesView;
+import com.privacydashboard.application.views.mainLayout.NotificationView;
+import com.privacydashboard.application.views.mainLayout.ProfileView;
+import com.privacydashboard.application.views.privacyNotice.PrivacyNoticeView;
+import com.privacydashboard.application.views.questionnaire.Questionnaire;
+import com.privacydashboard.application.views.rights.ControllerDPORightsView;
+import com.privacydashboard.application.views.rights.SubjectRightsView;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.contextmenu.ContextMenu;
+import com.vaadin.flow.component.dependency.NpmPackage;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Footer;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Header;
+import com.vaadin.flow.component.html.ListItem;
+import com.vaadin.flow.component.html.Nav;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.UnorderedList;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.auth.AccessAnnotationChecker;
+
+public class MainLayout extends AppLayout {
+
+    public static class MenuItemInfo extends ListItem {
+
+        private final Class&lt;? extends Component&gt; view;
+
+<span class="nc" id="L45">        public MenuItemInfo(String menuTitle, String iconClass, Class&lt;? extends Component&gt; view) {</span>
+<span class="nc" id="L46">            this.view = view;</span>
+<span class="nc" id="L47">            RouterLink link = new RouterLink();</span>
+<span class="nc" id="L48">            link.addClassNames(&quot;menu-item-link&quot;);</span>
+<span class="nc" id="L49">            link.setRoute(view);</span>
+
+<span class="nc" id="L51">            Span text = new Span(menuTitle);</span>
+<span class="nc" id="L52">            text.addClassNames(&quot;menu-item-text&quot;);</span>
+
+<span class="nc" id="L54">            link.add(new LineAwesomeIcon(iconClass), text);</span>
+<span class="nc" id="L55">            add(link);</span>
+<span class="nc" id="L56">        }</span>
+
+        public Class&lt;?&gt; getView() {
+<span class="nc" id="L59">            return view;</span>
+        }
+
+        /**
+         * Simple wrapper to create icons using LineAwesome iconset. See
+         * https://icons8.com/line-awesome
+         */
+        @NpmPackage(value = &quot;line-awesome&quot;, version = &quot;1.3.0&quot;)
+        public static class LineAwesomeIcon extends Span {
+<span class="nc" id="L68">            public LineAwesomeIcon(String lineawesomeClassnames) {</span>
+<span class="nc" id="L69">                addClassNames(&quot;menu-item-icon&quot;);</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                if (!lineawesomeClassnames.isEmpty()) {</span>
+<span class="nc" id="L71">                    addClassNames(lineawesomeClassnames);</span>
+                }
+<span class="nc" id="L73">            }</span>
+        }
+    }
+
+    // the text will change based on the current page(afterNavigation())
+    private H1 viewTitle;
+
+    private final AuthenticatedUser authenticatedUser;
+    private final AccessAnnotationChecker accessChecker;
+    private final DataBaseService dataBaseService;
+    private final CommunicationService communicationService;
+    private final UserDetailsServiceImpl userDetailsService;
+
+<span class="nc" id="L86">    public MainLayout(AuthenticatedUser authenticatedUser, AccessAnnotationChecker accessChecker, DataBaseService dataBaseService, CommunicationService communicationService, UserDetailsServiceImpl userDetailsService) {</span>
+<span class="nc" id="L87">        this.authenticatedUser = authenticatedUser;</span>
+<span class="nc" id="L88">        this.accessChecker = accessChecker;</span>
+<span class="nc" id="L89">        this.dataBaseService= dataBaseService;</span>
+<span class="nc" id="L90">        this.communicationService=communicationService;</span>
+<span class="nc" id="L91">        this.userDetailsService=userDetailsService;</span>
+
+<span class="nc" id="L93">        setPrimarySection(Section.DRAWER);</span>
+<span class="nc" id="L94">        addToNavbar(true, createHeaderContent());</span>
+<span class="nc" id="L95">        addToDrawer(createDrawerContent());</span>
+<span class="nc" id="L96">    }</span>
+
+    private Component createHeaderContent() {
+<span class="nc" id="L99">        DrawerToggle toggle = new DrawerToggle();</span>
+<span class="nc" id="L100">        toggle.addClassNames(&quot;view-toggle&quot;);</span>
+<span class="nc" id="L101">        toggle.addThemeVariants(ButtonVariant.LUMO_CONTRAST);</span>
+<span class="nc" id="L102">        toggle.getElement().setAttribute(&quot;aria-label&quot;, &quot;Menu toggle&quot;);</span>
+
+<span class="nc" id="L104">        viewTitle = new H1();</span>
+<span class="nc" id="L105">        viewTitle.addClassNames(&quot;view-title&quot;);</span>
+
+<span class="nc" id="L107">        NotificationView notificationView=new NotificationView(authenticatedUser.getUser(), dataBaseService, communicationService);</span>
+
+<span class="nc" id="L109">        Header header = new Header(toggle, viewTitle, notificationView);</span>
+<span class="nc" id="L110">        header.addClassNames(&quot;view-header&quot;);</span>
+<span class="nc" id="L111">        return header;</span>
+    }
+
+    private Component createDrawerContent() {
+<span class="nc" id="L115">        H2 appName = new H2(&quot;Privacy Dashboard&quot;);</span>
+<span class="nc" id="L116">        appName.addClassNames(&quot;app-name&quot;);</span>
+
+<span class="nc" id="L118">        com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(appName,</span>
+<span class="nc" id="L119">                createNavigation(), createFooter());</span>
+<span class="nc" id="L120">        section.addClassNames(&quot;drawer-section&quot;);</span>
+<span class="nc" id="L121">        return section;</span>
+    }
+
+    private Nav createNavigation() {
+<span class="nc" id="L125">        Nav nav = new Nav();</span>
+<span class="nc" id="L126">        nav.addClassNames(&quot;menu-item-container&quot;);</span>
+<span class="nc" id="L127">        nav.getElement().setAttribute(&quot;aria-labelledby&quot;, &quot;views&quot;);</span>
+
+        // Wrap the links in a list; improves accessibility
+<span class="nc" id="L130">        UnorderedList list = new UnorderedList();</span>
+<span class="nc" id="L131">        list.addClassNames(&quot;navigation-list&quot;);</span>
+<span class="nc" id="L132">        nav.add(list);</span>
+
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        for (MenuItemInfo menuItem : createMenuItems()) {</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">            if (accessChecker.hasAccess(menuItem.getView())) {</span>
+<span class="nc" id="L136">                list.add(menuItem);</span>
+            }
+
+        }
+<span class="nc" id="L140">        return nav;</span>
+    }
+
+    private MenuItemInfo[] createMenuItems() {
+<span class="nc" id="L144">        return new MenuItemInfo[]{ //</span>
+                new MenuItemInfo(&quot;Home&quot;, &quot;las la-home&quot;, HomeView.class), //
+
+                new MenuItemInfo(&quot;Contacts&quot;, &quot;las la-address-book&quot;, ContactsView.class), //
+
+                new MenuItemInfo(&quot;Messages&quot;, &quot;las la-comments&quot;, MessagesView.class), //
+
+                new MenuItemInfo(&quot;Rights&quot;, &quot;las la-school&quot;, SubjectRightsView.class),  //ONLY FOR SUBJECTS
+
+                new MenuItemInfo(&quot;Rights&quot;, &quot;las la-school&quot;, ControllerDPORightsView.class),  //ONLY FOR CONTROLLERS AND DPOS
+
+                new MenuItemInfo(&quot;Apps&quot;, &quot;la la-list&quot;, AppsView.class), //
+
+                new MenuItemInfo(&quot;PrivacyNotice&quot;, &quot;la la-file&quot;, PrivacyNoticeView.class), //
+
+                new MenuItemInfo(&quot;Questionnaire&quot;, &quot;las la-archive&quot;, Questionnaire.class)
+
+        };
+    }
+
+    private Footer createFooter() {
+<span class="nc" id="L165">        Footer layout = new Footer();</span>
+<span class="nc" id="L166">        layout.addClassNames(&quot;footer&quot;);</span>
+
+<span class="nc" id="L168">        User user=authenticatedUser.getUser();</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">        if (user!=null) {</span>
+<span class="nc" id="L170">            Avatar avatar = new Avatar(user.getName(), user.getProfilePictureUrl());</span>
+<span class="nc" id="L171">            avatar.addClassNames(&quot;me-xs&quot;);</span>
+
+<span class="nc" id="L173">            ContextMenu userMenu = new ContextMenu(layout);</span>
+<span class="nc" id="L174">            userMenu.setOpenOnClick(true);</span>
+<span class="nc" id="L175">            avatar.addClassNames(&quot;avatar&quot;);</span>
+<span class="nc" id="L176">            ProfileView profileView=new ProfileView(user, authenticatedUser, dataBaseService, userDetailsService);</span>
+<span class="nc" id="L177">            userMenu.addOpenedChangeListener(e-&gt;profileView.closePasswordDetail());</span>
+<span class="nc" id="L178">            userMenu.addOpenedChangeListener(e-&gt;profileView.closeMailDetail());</span>
+<span class="nc" id="L179">            userMenu.add(profileView);</span>
+
+<span class="nc" id="L181">            Span name = new Span(user.getName());</span>
+<span class="nc" id="L182">            name.addClassNames(&quot;font-medium&quot;, &quot;text-s&quot;, &quot;text-secondary&quot;, &quot;footerName&quot;);</span>
+<span class="nc" id="L183">            layout.add(avatar, name);</span>
+<span class="nc" id="L184">        } else {</span>
+<span class="nc" id="L185">            Anchor loginLink = new Anchor(&quot;login&quot;, &quot;Sign in&quot;);</span>
+<span class="nc" id="L186">            layout.add(loginLink);</span>
+        }
+
+<span class="nc" id="L189">        return layout;</span>
+    }
+
+    @Override
+    protected void afterNavigation() {
+<span class="nc" id="L194">        super.afterNavigation();</span>
+<span class="nc" id="L195">        viewTitle.setText(getCurrentPageTitle());</span>
+<span class="nc" id="L196">    }</span>
+
+    private String getCurrentPageTitle() {
+<span class="nc" id="L199">        PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">        return title == null ? GlobalVariables.pageTitle : title.value();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

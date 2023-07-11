@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Notification.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.data.entity</a> &gt; <span class="el_source">Notification.java</span></div><h1>Notification.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.data.entity;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Entity
+@Table(name = &quot;notification&quot;)
+<span class="fc" id="L9">public class Notification extends AbstractEntity{</span>
+    @ManyToOne
+    @JoinColumn(name = &quot;receiverId&quot;)
+    private User receiver;
+    @ManyToOne
+    @JoinColumn(name = &quot;senderId&quot;)
+    private User sender;
+    private String description;
+    private UUID objectId;
+    private String type;
+    private LocalDateTime time;
+    private Boolean isRead;
+
+    public User getReceiver() {
+<span class="fc" id="L23">        return receiver;</span>
+    }
+    public void setReceiver(User receiver) {
+<span class="fc" id="L26">        this.receiver = receiver;</span>
+<span class="fc" id="L27">    }</span>
+    public User getSender() {
+<span class="fc" id="L29">        return sender;</span>
+    }
+    public void setSender(User sender) {
+<span class="fc" id="L32">        this.sender = sender;</span>
+<span class="fc" id="L33">    }</span>
+    public String getDescription() {
+<span class="fc" id="L35">        return description;</span>
+    }
+    public void setDescription(String description) {
+<span class="fc" id="L38">        this.description = description;</span>
+<span class="fc" id="L39">    }</span>
+    public UUID getObjectId() {
+<span class="fc" id="L41">        return objectId;</span>
+    }
+    public void setObjectId(UUID objectId) {
+<span class="fc" id="L44">        this.objectId = objectId;</span>
+<span class="fc" id="L45">    }</span>
+    public String getType() {
+<span class="fc" id="L47">        return type;</span>
+    }
+    public void setType(String type) {
+<span class="fc" id="L50">        this.type = type;</span>
+<span class="fc" id="L51">    }</span>
+    public LocalDateTime getTime() {
+<span class="fc" id="L53">        return time;</span>
+    }
+    public void setTime(LocalDateTime time) {
+<span class="fc" id="L56">        this.time = time;</span>
+<span class="fc" id="L57">    }</span>
+    public Boolean getRead() {
+<span class="fc" id="L59">        return isRead;</span>
+    }
+    public void setRead(Boolean read) {
+<span class="fc" id="L62">        isRead = read;</span>
+<span class="fc" id="L63">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
