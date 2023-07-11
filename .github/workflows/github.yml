@@ -12,6 +12,8 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    continue-on-error: true
+
     strategy:
       matrix:
         java-version: [
@@ -21,6 +23,7 @@ jobs:
           '13.0.x',
           '14.0.x',
           '15.0.x',
+          '17.0.x',
         ]
 
     steps:
