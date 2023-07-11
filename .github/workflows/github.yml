@@ -36,14 +36,10 @@ jobs:
           distribution: 'zulu'
           cache: 'maven'
 
-      - name: Preliminary checks
-        run: |
-          ./scripts/config.sh
+      - name: Preliminary checks (empty)
 
-      - name: Package ACE entities
-        run: |
-          ./scripts/build-ace-entities.sh --with-mysql
-          ./scripts/code-coverage.sh
+      - name: Package privacydashboard
+        run: mvn clean package -Pproduction
 
       - name: Coverage Report
         run: mvn jacoco:report
