@@ -36,8 +36,6 @@ jobs:
           distribution: 'zulu'
           cache: 'maven'
 
-      - name: Preliminary checks (empty)
-
       - name: Package privacydashboard
         run: mvn clean package -Pproduction
 
