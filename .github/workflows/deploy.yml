@@ -41,7 +41,7 @@ jobs:
         run: |
           ARCHIVE_NAME="privacydashboard-${{ steps.tagName.outputs.tag }}"
           ARCHIVE_FILE="${ARCHIVE_NAME}.zip"
-          zip -r ${ARCHIVE_FILE} . -i privacydashboard/*
+          zip -r ${ARCHIVE_FILE} . -i ./*
 
 
       - name: Create a release
@@ -50,6 +50,7 @@ jobs:
           name: v${{ steps.tagName.outputs.tag }}
           files: |
             ./*.zip
+          tag_name: "alpha"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
