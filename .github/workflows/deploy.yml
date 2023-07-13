@@ -41,7 +41,8 @@ jobs:
         run: |
           ARCHIVE_NAME="privacydashboard-${{ steps.tagName.outputs.tag }}"
           ARCHIVE_FILE="${ARCHIVE_NAME}.zip"
-          zip -r ${ARCHIVE_FILE} . -i ./*
+          zip -r ${ARCHIVE_FILE} . -i ./target/classes/*
+          zip -r ${ARCHIVE_FILE} . -i ./target/flow-frontend/*
 
 
       - name: Create a release
