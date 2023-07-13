@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - '*'
-    branches:
-      - master
 
 jobs:
 
@@ -29,12 +27,12 @@ jobs:
           cache: 'maven'
 
       - name: Create the (jar) packages and libraries
-        run: mvn clean package -DskipTests -Pproduction
+        run: mvn install -DskipTests -Pproduction
 
       - name: Get version
         id: tagName
         run: |
-          VERSION="alpha"
+          VERSION="${{github.ref_name}}"
           echo "tag=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build Zip file
