@@ -1,4 +1,4 @@
-name: ace-entities
+name: test and docker
 
 on:
   push:
