@@ -29,7 +29,7 @@ jobs:
           cache: 'maven'
 
       - name: Create the (jar) packages and libraries
-        run: mvn clean package -Dskiptest -Pproduction
+        run: mvn clean package -DskipTests -Pproduction
 
       - name: Get version
         id: tagName
