@@ -27,7 +27,7 @@ jobs:
           cache: 'maven'
 
       - name: Create the (jar) packages and libraries
-        run: mvn --batch-mode clean -Dskiptest -Pproduction
+        run: mvn --batch-mode clean package -Dskiptest -Pproduction
 
       - name: Get version
         id: tagName
