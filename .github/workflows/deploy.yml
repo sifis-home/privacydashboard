@@ -34,7 +34,7 @@ jobs:
       - name: Get version
         id: tagName
         run: |
-          echo "alpha" >> $GITHUB_OUTPUT
+          echo "1" >> $GITHUB_OUTPUT
 
       - name: Build Zip file
         run: |
