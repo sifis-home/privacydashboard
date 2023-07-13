@@ -65,14 +65,13 @@ jobs:
 
       - uses: actions/setup-java@v3
         with:
-          java-version: 8.0.x
+          java-version: "18"
           architecture: x64
           distribution: 'zulu'
           cache: 'maven'
           
       - name: Prepare Dockerfiles and files for Contexts
-        run: |
-          ./scripts/build-for-docker.sh
+        run: docker build . --file Dockerfile --tag privacydashboard:latest
              
       - name: Upload artifacts for Docker Image building
         uses: actions/upload-artifact@v3
