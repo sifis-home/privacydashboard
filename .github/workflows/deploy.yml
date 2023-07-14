@@ -21,7 +21,7 @@ jobs:
      
       - uses: actions/setup-java@v3
         with:
-          java-version: "18"
+          java-version: "18.0.x"
           architecture: x64
           distribution: 'temurin'
           cache: 'maven'
@@ -39,9 +39,7 @@ jobs:
         run: |
           ARCHIVE_NAME="privacydashboard-${{ steps.tagName.outputs.tag }}"
           ARCHIVE_FILE="${ARCHIVE_NAME}.zip"
-          zip -r ${ARCHIVE_FILE} . -i ./target/classes/*
-          zip -r ${ARCHIVE_FILE} . -i ./target/flow-frontend/*
-
+          zip -r ${ARCHIVE_FILE} . -i ./target/*.jar
 
       - name: Create a release
         uses: softprops/action-gh-release@v1
