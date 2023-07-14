@@ -1,5 +1,7 @@
 # Privacy Dashboard
 
+![](.github\badges\jacoco.svg)
+
 ## Log in the app
 
 To enter the application as a Data Subject: user=subject<number_between_0-49> password=subject<same_number> (e.g. user=subject25 password=subject25)
