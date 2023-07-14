@@ -16,8 +16,8 @@ jobs:
         distribution: 'temurin'
 
     - name: Build with Maven
-        run: mvn -B test
-        continue-on-error: true
+      run: mvn -B test
+      continue-on-error: true
 
     - name: Coverage Report
       run: mvn jacoco:report
