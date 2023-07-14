@@ -1,6 +1,6 @@
 # Privacy Dashboard
 
-![](.github\badges\jacoco.svg)
+![](https://raw.githubusercontent.com/sifis-home/privacydashboard/master/.github/badges/jacoco.svg)
 
 ## Log in the app
 
