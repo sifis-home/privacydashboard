@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.privacydashboard.application.data.GlobalVariables;
 import com.privacydashboard.application.data.GlobalVariables.QuestionnaireVote;
+import com.privacydashboard.application.data.GlobalVariables.RightType;
 import com.privacydashboard.application.data.GlobalVariables.Role;
 import com.privacydashboard.application.data.entity.IoTApp;
 import com.privacydashboard.application.data.entity.User;
@@ -15,6 +16,7 @@ import com.privacydashboard.application.data.service.DataBaseService;
 import com.privacydashboard.application.data.entity.Message;
 import com.privacydashboard.application.data.entity.Notification;
 import com.privacydashboard.application.data.entity.PrivacyNotice;
+import com.privacydashboard.application.data.entity.RightRequest;
 
 import java.util.List;
 import java.io.IOException;
@@ -85,6 +87,64 @@ public class ApiGeneralControllerTest {
 			nullFields++;
 
 		return nullFields == 5;
+	}
+
+	private static List<RightRequest> createRequestList(){
+		User sender1 = new User();
+		sender1.setId(new UUID(1, 1));
+		sender1.setName("Sender1");
+
+		User sender2 = new User();
+		sender2.setId(new UUID(1, 2));
+		sender2.setName("Sender2");
+
+		User receiver1 = new User();
+		receiver1.setId(new UUID(2, 1));
+		receiver1.setName("Receiver1");
+
+		User receiver2 = new User();
+		receiver2.setId(new UUID(2, 2));
+		receiver2.setName("Receiver2");
+
+		IoTApp app1 = new IoTApp();
+		app1.setId(new UUID(3, 1));
+		app1.setName("App1");
+
+		IoTApp app2 = new IoTApp();
+		app2.setId(new UUID(3, 2));
+		app2.setName("App2");
+
+		RightRequest req1 = new RightRequest();
+		req1.setSender(sender1);
+		req1.setReceiver(receiver1);
+		req1.setApp(app1);
+		req1.setId(new UUID(0, 1));
+		req1.setRightType(RightType.COMPLAIN);
+
+		RightRequest req2 = new RightRequest();
+		req2.setSender(sender1);
+		req2.setReceiver(receiver2);
+		req2.setApp(app2);
+		req2.setId(new UUID(0, 2));
+		req2.setRightType(RightType.ERASURE);
+
+		RightRequest req3 = new RightRequest();
+		req3.setSender(sender2);
+		req3.setReceiver(receiver1);
+		req3.setApp(app1);
+		req3.setId(new UUID(0, 3));
+		req3.setRightType(RightType.INFO);
+
+		RightRequest req4 = new RightRequest();
+		req4.setSender(sender2);
+		req4.setReceiver(receiver2);
+		req4.setApp(app2);
+		req4.setId(new UUID(0, 4));
+		req4.setRightType(RightType.INFO);
+
+		List<RightRequest> list = List.of(req1, req2, req3, req4);
+
+		return list;
 	}
 
 	@Test
@@ -1005,5 +1065,323 @@ public class ApiGeneralControllerTest {
 		assertThrows(IllegalArgumentException.class, () -> {
 			api.createJsonFromNotification(note);
 		});
+	}
+
+	@Test
+	public void createJsonFromNotificationTypeNullTest(){
+		Notification note = new Notification();		
+		note.setId(new UUID(0, 1));
+		note.setReceiver(new User());
+		note.setSender(new User());
+		note.setObjectId(new UUID(0, 0));
+		assertThrows(IllegalArgumentException.class, () -> {
+			api.createJsonFromNotification(note);
+		});
+	}
+
+	@Test
+	public void createJsonFromNotificationObjectIDNullTest(){
+		Notification note = new Notification();		
+		note.setId(new UUID(0, 1));
+		note.setReceiver(new User());
+		note.setSender(new User());
+		note.setType("TestType");
+		assertThrows(IllegalArgumentException.class, () -> {
+			api.createJsonFromNotification(note);
+		});
+	}
+
+	@Test
+	public void createJsonFromNotificationMinimalParametersTest(){
+		Notification note = new Notification();		
+		note.setId(new UUID(0, 1));
+
+		User sender = new User();
+		sender.setId(new UUID(0, 2));
+		sender.setName("SenderName");
+
+		User receiver = new User();
+		receiver.setId(new UUID(0, 3));
+		receiver.setName("ReceiverName");
+
+		note.setReceiver(receiver);
+		note.setSender(sender);
+		note.setType("TestType");
+		note.setDescription("DescriptionTest");
+		note.setObjectId(new UUID(0, 0));
+
+		ObjectNode node = mapper.createObjectNode();
+		node.put("id", new UUID(0, 1).toString());
+		node.put("senderId", new UUID(0, 2).toString());
+		node.put("senderName", "SenderName");
+		node.put("receiverId", new UUID(0, 3).toString());
+		node.put("receiverName", "ReceiverName");
+		node.put("description", "DescriptionTest");
+		node.put("type", "TestType");
+		node.put("objectId", new UUID(0, 0).toString());
+
+		assertEquals(node, api.createJsonFromNotification(note));
+	}
+
+	@Test
+	public void createJsonFromNotificationAllParametersTest(){
+		Notification note = new Notification();	
+		LocalDateTime time = LocalDateTime.now();
+		
+		note.setId(new UUID(0, 1));
+
+		User sender = new User();
+		sender.setId(new UUID(0, 2));
+		sender.setName("SenderName");
+
+		User receiver = new User();
+		receiver.setId(new UUID(0, 3));
+		receiver.setName("ReceiverName");
+
+		note.setReceiver(receiver);
+		note.setSender(sender);
+		note.setType("TestType");
+		note.setDescription("DescriptionTest");
+		note.setObjectId(new UUID(0, 0));
+		note.setTime(time);
+		note.setRead(true);
+
+		ObjectNode node = mapper.createObjectNode();
+		node.put("id", new UUID(0, 1).toString());
+		node.put("senderId", new UUID(0, 2).toString());
+		node.put("senderName", "SenderName");
+		node.put("receiverId", new UUID(0, 3).toString());
+		node.put("receiverName", "ReceiverName");
+		node.put("description", "DescriptionTest");
+		node.put("type", "TestType");
+		node.put("objectId", new UUID(0, 0).toString());
+		node.put("time", time.toString());
+		node.put("isRead", true);
+
+		assertEquals(node, api.createJsonFromNotification(note));
+	}
+
+	@Test
+	public void createJsonFromRequestNullTest(){
+		assertThrows(NullPointerException.class, () -> {
+			api.createJsonFromRequest(null);
+		});
+	}
+
+	@Test
+	public void createJsonFromRequestIdNullTest(){
+		RightRequest req = new RightRequest();
+		req.setSender(new User());
+		req.setReceiver(new User());
+		req.setRightType(RightType.COMPLAIN);
+		assertThrows(IllegalArgumentException.class, () -> {
+			api.createJsonFromRequest(req);
+		});
+	}
+
+	@Test
+	public void createJsonFromRequestSenderNullTest(){
+		RightRequest req = new RightRequest();
+		req.setId(new UUID(0, 0));
+		req.setReceiver(new User());
+		req.setRightType(RightType.COMPLAIN);
+		assertThrows(IllegalArgumentException.class, () -> {
+			api.createJsonFromRequest(req);
+		});
+	}
+
+	@Test
+	public void createJsonFromRequestReceiverNullTest(){
+		RightRequest req = new RightRequest();
+		req.setId(new UUID(0, 0));
+		req.setSender(new User());
+		req.setRightType(RightType.COMPLAIN);
+		assertThrows(IllegalArgumentException.class, () -> {
+			api.createJsonFromRequest(req);
+		});
+	}
+
+	@Test
+	public void createJsonFromRequestRightTypeNullTest(){
+		RightRequest req = new RightRequest();
+		req.setId(new UUID(0, 0));
+		req.setSender(new User());
+		req.setReceiver(new User());
+		assertThrows(IllegalArgumentException.class, () -> {
+			api.createJsonFromRequest(req);
+		});
+	}
+
+	@Test
+	public void createJsonFromRequestMinimalParametersTest(){
+		RightRequest req = new RightRequest();
+		req.setId(new UUID(0, 0));
+
+		User sender = new User();
+		sender.setId(new UUID(0, 1));
+		sender.setName("SenderName");
+
+		User receiver = new User();
+		receiver.setId(new UUID(0, 2));
+		receiver.setName("ReceiverName");
+
+		req.setSender(sender);
+		req.setReceiver(receiver);
+		
+		req.setRightType(RightType.COMPLAIN);
+
+		ObjectNode node = mapper.createObjectNode();
+		node.put("id", new UUID(0, 0).toString());
+		node.put("senderName", "SenderName");
+		node.put("senderId", new UUID(0, 1).toString());
+		node.put("receiverName", "ReceiverName");
+		node.put("receiverId", new UUID(0, 2).toString());
+		node.put("rightType", RightType.COMPLAIN.toString());
+
+		assertEquals(node, api.createJsonFromRequest(req));
+	}
+
+	@Test
+	public void createJsonFromRequestAllParametersTest(){
+		RightRequest req = new RightRequest();
+		LocalDateTime time = LocalDateTime.now();
+		req.setId(new UUID(0, 0));
+
+		User sender = new User();
+		sender.setId(new UUID(0, 1));
+		sender.setName("SenderName");
+
+		User receiver = new User();
+		receiver.setId(new UUID(0, 2));
+		receiver.setName("ReceiverName");
+
+		req.setSender(sender);
+		req.setReceiver(receiver);
+
+		IoTApp app = new IoTApp();
+		app.setId(new UUID(0, 3));
+		app.setName("AppName");
+
+		req.setTime(time);
+		req.setApp(app);
+		req.setOther("OtherTest");
+		req.setRightType(RightType.COMPLAIN);
+		req.setHandled(true);
+		req.setDetails("DetailsTest");
+		req.setResponse("ResponseTest");
+
+		ObjectNode node = mapper.createObjectNode();
+		node.put("id", new UUID(0, 0).toString());
+		node.put("senderName", "SenderName");
+		node.put("senderId", new UUID(0, 1).toString());
+		node.put("receiverName", "ReceiverName");
+		node.put("receiverId", new UUID(0, 2).toString());
+		node.put("time", time.toString());
+		node.put("appId", new UUID(0, 3).toString());
+		node.put("appName", "AppName");
+		node.put("rightType", RightType.COMPLAIN.toString());
+		node.put("other", "OtherTest");
+		node.put("handled", true);
+		node.put("details", "DetailsTest");
+		node.put("response", "ResponseTest");
+
+		assertEquals(node, api.createJsonFromRequest(req));
+	}
+
+	@Test
+	public void createJsonRequestCheckAuthorizedUserNullTest(){
+		assertThrows(NullPointerException.class, () -> {
+			api.createJsonRequestCheckAuthorizedUser(null, null);
+		});
+	}
+
+	@Test
+	public void createJsonRequestCheckAuthorizedUserUserNullTest(){
+		ArrayNode reqArray = mapper.createArrayNode();
+		assertEquals(reqArray, api.createJsonRequestCheckAuthorizedUser(createRequestList(), null));
+	}
+
+	@Test
+	public void createJsonRequestCheckAuthorizedUserListNullTest(){
+		assertThrows(NullPointerException.class, () -> {
+			api.createJsonRequestCheckAuthorizedUser(null, new User());
+		});
+	}
+
+	@Test
+	public void createJsonRequestCheckAuthorizedUserReceiverMatchTest(){
+		List<RightRequest> list = createRequestList();
+		ArrayNode reqArray = mapper.createArrayNode();
+		reqArray.add(api.createJsonFromRequest(list.get(0)));
+		reqArray.add(api.createJsonFromRequest(list.get(2)));
+		assertEquals(reqArray, api.createJsonRequestCheckAuthorizedUser(list, list.get(0).getReceiver()));
+	}
+
+	@Test
+	public void createJsonRequestCheckAuthorizedUserSenderMatchTest(){
+		List<RightRequest> list = createRequestList();
+		ArrayNode reqArray = mapper.createArrayNode();
+		reqArray.add(api.createJsonFromRequest(list.get(0)));
+		reqArray.add(api.createJsonFromRequest(list.get(1)));
+		assertEquals(reqArray, api.createJsonRequestCheckAuthorizedUser(list, list.get(0).getSender()));
+	}
+
+	@Test
+	public void createJsonRequestOfAppNullTest(){
+		assertThrows(NullPointerException.class, () -> {
+			api.createJsonRequestOfApp(null, null);
+		});
+	}
+
+	@Test
+	public void createJsonRequestOfAppAppNullTest(){
+		ArrayNode reqArray = mapper.createArrayNode();
+		assertEquals(reqArray, api.createJsonRequestOfApp(createRequestList(), null));
+	}
+
+	@Test
+	public void createJsonRequestOfAppListNullTest(){
+		assertThrows(NullPointerException.class, () -> {
+			api.createJsonRequestOfApp(null, new IoTApp());
+		});
+	}
+
+	@Test
+	public void createJsonRequestOfAppMatchTest(){
+		List<RightRequest> list = createRequestList();
+		ArrayNode reqArray = mapper.createArrayNode();
+		reqArray.add(api.createJsonFromRequest(list.get(0)));
+		reqArray.add(api.createJsonFromRequest(list.get(2)));
+		assertEquals(reqArray, api.createJsonRequestOfApp(list, list.get(0).getApp()));
+	}
+
+	@Test
+	public void createJsonRequestOfRightTypeNullTest(){
+		assertThrows(NullPointerException.class, () -> {
+			api.createJsonRequestOfRightType(null, null);
+		});
+	}
+
+	@Test
+	public void createJsonRequestOfRightTypeListNullTest(){
+		assertThrows(NullPointerException.class, () -> {
+			api.createJsonRequestOfRightType(null, RightType.COMPLAIN.toString());
+		});
+	}
+
+	@Test
+	public void createJsonRequestOfRightTypeInvalidRightTypeTest(){
+		assertThrows(IllegalArgumentException.class, () -> {
+			api.createJsonRequestOfRightType(createRequestList(), "w");
+		});
+	}
+
+	@Test
+	public void createJsonRequestOfRightTypeMatchTest(){
+		List<RightRequest> list = createRequestList();
+		ArrayNode reqArray = mapper.createArrayNode();
+		reqArray.add(api.createJsonFromRequest(list.get(2)));
+		reqArray.add(api.createJsonFromRequest(list.get(3)));
+		assertEquals(reqArray, api.createJsonRequestOfRightType(list, RightType.INFO.toString()));
 	}
 }
