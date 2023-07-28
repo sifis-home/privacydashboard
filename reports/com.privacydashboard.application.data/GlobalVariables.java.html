@@ -4,18 +4,18 @@ import java.util.*;
 
 <span class="nc" id="L5">public class GlobalVariables {</span>
     public static final int nQuestions=30;
-<span class="nc" id="L7">    public static final List&lt;String&gt; notificationType= Arrays.asList(&quot;Message&quot;, &quot;Request&quot;, &quot;PrivacyNotice&quot;);</span>
-<span class="nc" id="L8">    public static String pageTitle=&quot;&quot;;</span>
+<span class="fc" id="L7">    public static final List&lt;String&gt; notificationType= Arrays.asList(&quot;Message&quot;, &quot;Request&quot;, &quot;PrivacyNotice&quot;);</span>
+<span class="fc" id="L8">    public static String pageTitle=&quot;&quot;;</span>
 <span class="fc" id="L9">    public enum RightType {</span>
 <span class="fc" id="L10">        WITHDRAWCONSENT, COMPLAIN, ERASURE, DELTEEVERYTHING, INFO, PORTABILITY</span>
     }
-<span class="nc" id="L12">    public static final HashMap rightDict= new HashMap&lt;RightType, String&gt;(){{put(RightType.WITHDRAWCONSENT, &quot;WITHDRAW CONSENT&quot;);</span>
-<span class="nc" id="L13">                                                                put(RightType.COMPLAIN, &quot;COMPLAIN&quot;);</span>
-<span class="nc" id="L14">                                                                put(RightType.ERASURE, &quot;ERASURE&quot;);</span>
-<span class="nc" id="L15">                                                                put(RightType.DELTEEVERYTHING, &quot;DELETE EVERYTHING&quot;);</span>
-<span class="nc" id="L16">                                                                put(RightType.INFO, &quot;INFORMATION&quot;);</span>
-<span class="nc" id="L17">                                                                put(RightType.PORTABILITY, &quot;DATA PORTABILITY&quot;);</span>
-<span class="nc" id="L18">                                                                }};</span>
+<span class="fc" id="L12">    public static final HashMap rightDict= new HashMap&lt;RightType, String&gt;(){{put(RightType.WITHDRAWCONSENT, &quot;WITHDRAW CONSENT&quot;);</span>
+<span class="fc" id="L13">                                                                put(RightType.COMPLAIN, &quot;COMPLAIN&quot;);</span>
+<span class="fc" id="L14">                                                                put(RightType.ERASURE, &quot;ERASURE&quot;);</span>
+<span class="fc" id="L15">                                                                put(RightType.DELTEEVERYTHING, &quot;DELETE EVERYTHING&quot;);</span>
+<span class="fc" id="L16">                                                                put(RightType.INFO, &quot;INFORMATION&quot;);</span>
+<span class="fc" id="L17">                                                                put(RightType.PORTABILITY, &quot;DATA PORTABILITY&quot;);</span>
+<span class="fc" id="L18">                                                                }};</span>
 <span class="fc" id="L19">    public enum Role {</span>
 <span class="fc" id="L20">        SUBJECT, CONTROLLER, DPO</span>
     }

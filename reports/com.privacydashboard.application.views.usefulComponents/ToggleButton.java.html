@@ -23,23 +23,23 @@ public class ToggleButton extends
         HasSize, Focusable&lt;ToggleButton&gt;, ClickNotifier&lt;ToggleButton&gt; {
 
     public ToggleButton() {
-<span class="nc" id="L26">        super(&quot;checked&quot;, false, false);</span>
-<span class="nc" id="L27">    }</span>
+<span class="fc" id="L26">        super(&quot;checked&quot;, false, false);</span>
+<span class="fc" id="L27">    }</span>
 
     public ToggleButton(String labelText) {
-<span class="nc" id="L30">        this();</span>
-<span class="nc" id="L31">        setLabel(labelText);</span>
-<span class="nc" id="L32">    }</span>
+<span class="fc" id="L30">        this();</span>
+<span class="fc" id="L31">        setLabel(labelText);</span>
+<span class="fc" id="L32">    }</span>
 
     public ToggleButton(boolean initialValue) {
-<span class="nc" id="L35">        this();</span>
-<span class="nc" id="L36">        setValue(initialValue);</span>
-<span class="nc" id="L37">    }</span>
+<span class="fc" id="L35">        this();</span>
+<span class="fc" id="L36">        setValue(initialValue);</span>
+<span class="fc" id="L37">    }</span>
 
     public ToggleButton(String labelText, boolean initialValue) {
-<span class="nc" id="L40">        this(labelText);</span>
-<span class="nc" id="L41">        setValue(initialValue);</span>
-<span class="nc" id="L42">    }</span>
+<span class="fc" id="L40">        this(labelText);</span>
+<span class="fc" id="L41">        setValue(initialValue);</span>
+<span class="fc" id="L42">    }</span>
 
     public ToggleButton(String label,
                         ValueChangeListener&lt;ComponentValueChangeEvent&lt;ToggleButton, Boolean&gt;&gt; listener) {
@@ -48,20 +48,20 @@ public class ToggleButton extends
 <span class="nc" id="L48">    }</span>
 
     public String getLabel() {
-<span class="nc" id="L51">        return getElement().getProperty(&quot;label&quot;);</span>
+<span class="fc" id="L51">        return getElement().getProperty(&quot;label&quot;);</span>
     }
 
     public void setLabel(String label) {
-<span class="nc" id="L55">        getElement().setProperty(&quot;label&quot;, label);</span>
-<span class="nc" id="L56">    }</span>
+<span class="fc" id="L55">        getElement().setProperty(&quot;label&quot;, label);</span>
+<span class="fc" id="L56">    }</span>
 
     protected boolean isDisabled() {
-<span class="nc" id="L59">        return getElement().getProperty(&quot;disabled&quot;, false);</span>
+<span class="fc" id="L59">        return getElement().getProperty(&quot;disabled&quot;, false);</span>
     }
 
     public void setDisabled(boolean disabled) {
-<span class="nc" id="L63">        getElement().setProperty(&quot;disabled&quot;, disabled);</span>
-<span class="nc" id="L64">    }</span>
+<span class="fc" id="L63">        getElement().setProperty(&quot;disabled&quot;, disabled);</span>
+<span class="fc" id="L64">    }</span>
 
     @DomEvent(&quot;change&quot;)
     public static class ChangeEvent extends ComponentEvent&lt;ToggleButton&gt; {

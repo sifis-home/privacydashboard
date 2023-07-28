@@ -23,70 +23,70 @@ import java.time.format.DateTimeFormatter;
 public class GridComponentRightsView extends Dialog {
     private final Role role;
 
-<span class="nc" id="L26">    public GridComponentRightsView(Role role){</span>
-<span class="nc" id="L27">        this.role=role;</span>
-<span class="nc" id="L28">    }</span>
+<span class="fc" id="L26">    public GridComponentRightsView(Role role){</span>
+<span class="fc" id="L27">        this.role=role;</span>
+<span class="fc" id="L28">    }</span>
 
     public HorizontalLayout getHeaderLayout(){
-<span class="nc" id="L31">        return getHeaderLayout(null);</span>
+<span class="fc" id="L31">        return getHeaderLayout(null);</span>
     }
 
     public HorizontalLayout getHeaderLayout(ToggleButton toggleButton){
-<span class="nc" id="L35">        Span[] spans= new Span[5];</span>
-<span class="nc bnc" id="L36" title="All 2 branches missed.">        if(role.equals(Role.SUBJECT)){</span>
-<span class="nc" id="L37">            spans[0]= new Span(&quot;RECEIVER&quot;);</span>
-<span class="nc" id="L38">            spans[4]= new Span(&quot;HANDLED&quot;);</span>
+<span class="fc" id="L35">        Span[] spans= new Span[5];</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if(role.equals(Role.SUBJECT)){</span>
+<span class="fc" id="L37">            spans[0]= new Span(&quot;RECEIVER&quot;);</span>
+<span class="fc" id="L38">            spans[4]= new Span(&quot;HANDLED&quot;);</span>
         }
         else{
-<span class="nc" id="L41">            spans[0]= new Span(&quot;SENDER&quot;);</span>
-<span class="nc" id="L42">            spans[4] = new Span(toggleButton);</span>
+<span class="fc" id="L41">            spans[0]= new Span(&quot;SENDER&quot;);</span>
+<span class="fc" id="L42">            spans[4] = new Span(toggleButton);</span>
         }
-<span class="nc" id="L44">        spans[1]= new Span(&quot;RIGHT TYPE&quot;);</span>
-<span class="nc" id="L45">        spans[2]= new Span(&quot;APP&quot;);</span>
-<span class="nc" id="L46">        spans[3]= new Span(&quot;TIME&quot;);</span>
-<span class="nc bnc" id="L47" title="All 2 branches missed.">        for(Span span : spans){</span>
-<span class="nc" id="L48">            span.addClassName(&quot;name&quot;);</span>
+<span class="fc" id="L44">        spans[1]= new Span(&quot;RIGHT TYPE&quot;);</span>
+<span class="fc" id="L45">        spans[2]= new Span(&quot;APP&quot;);</span>
+<span class="fc" id="L46">        spans[3]= new Span(&quot;TIME&quot;);</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        for(Span span : spans){</span>
+<span class="fc" id="L48">            span.addClassName(&quot;name&quot;);</span>
         }
-<span class="nc" id="L50">        HorizontalLayout headerLayout= new HorizontalLayout(spans);</span>
-<span class="nc" id="L51">        headerLayout.addClassName(&quot;headerLayout&quot;);</span>
-<span class="nc" id="L52">        return headerLayout;</span>
+<span class="fc" id="L50">        HorizontalLayout headerLayout= new HorizontalLayout(spans);</span>
+<span class="fc" id="L51">        headerLayout.addClassName(&quot;headerLayout&quot;);</span>
+<span class="fc" id="L52">        return headerLayout;</span>
     }
 
     public HorizontalLayout getCard(RightRequest request){
-<span class="nc" id="L56">        Span[] spans= new Span[5];</span>
-<span class="nc bnc" id="L57" title="All 2 branches missed.">        if(role.equals(Role.SUBJECT)){</span>
-<span class="nc" id="L58">            spans[0] = new Span(request.getReceiver().getName());</span>
+<span class="fc" id="L56">        Span[] spans= new Span[5];</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if(role.equals(Role.SUBJECT)){</span>
+<span class="fc" id="L58">            spans[0] = new Span(request.getReceiver().getName());</span>
         }
         else {
-<span class="nc" id="L61">            spans[0] = new Span(request.getSender().getName());</span>
+<span class="fc" id="L61">            spans[0] = new Span(request.getSender().getName());</span>
         }
-<span class="nc" id="L63">        spans[1]= new Span(GlobalVariables.rightDict.get(request.getRightType()).toString());</span>
-<span class="nc" id="L64">        spans[2]= new Span(request.getApp().getName());</span>
-<span class="nc" id="L65">        spans[3]= new Span(DateTimeFormatter.ofPattern(&quot;dd/MM/yyy&quot;).format(request.getTime()));</span>
-<span class="nc" id="L66">        spans[4]= new Span(request.getHandled().toString());</span>
-<span class="nc bnc" id="L67" title="All 2 branches missed.">        for(Span span : spans){</span>
-<span class="nc" id="L68">            span.addClassName(&quot;name&quot;);</span>
+<span class="fc" id="L63">        spans[1]= new Span(GlobalVariables.rightDict.get(request.getRightType()).toString());</span>
+<span class="fc" id="L64">        spans[2]= new Span(request.getApp().getName());</span>
+<span class="fc" id="L65">        spans[3]= new Span(DateTimeFormatter.ofPattern(&quot;dd/MM/yyy&quot;).format(request.getTime()));</span>
+<span class="fc" id="L66">        spans[4]= new Span(request.getHandled().toString());</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        for(Span span : spans){</span>
+<span class="fc" id="L68">            span.addClassName(&quot;name&quot;);</span>
         }
 
-<span class="nc" id="L71">        HorizontalLayout card= new HorizontalLayout(spans);</span>
-<span class="nc" id="L72">        card.setVerticalComponentAlignment(FlexComponent.Alignment.CENTER);</span>
-<span class="nc" id="L73">        card.addClassName(&quot;card&quot;);</span>
-<span class="nc" id="L74">        card.addClassName(&quot;canOpen&quot;);</span>
-<span class="nc" id="L75">        return card;</span>
+<span class="fc" id="L71">        HorizontalLayout card= new HorizontalLayout(spans);</span>
+<span class="fc" id="L72">        card.setVerticalComponentAlignment(FlexComponent.Alignment.CENTER);</span>
+<span class="fc" id="L73">        card.addClassName(&quot;card&quot;);</span>
+<span class="fc" id="L74">        card.addClassName(&quot;canOpen&quot;);</span>
+<span class="fc" id="L75">        return card;</span>
     }
 
     public VerticalLayout getContent(RightRequest request){
-<span class="nc" id="L79">        Span[] boldSpans= new Span[7];</span>
-<span class="nc" id="L80">        Span[] normalSpans= new Span[7];</span>
-<span class="nc" id="L81">        HorizontalLayout[] horizontalLayouts= new HorizontalLayout[7];</span>
+<span class="fc" id="L79">        Span[] boldSpans= new Span[7];</span>
+<span class="fc" id="L80">        Span[] normalSpans= new Span[7];</span>
+<span class="fc" id="L81">        HorizontalLayout[] horizontalLayouts= new HorizontalLayout[7];</span>
 
         User contact;
-<span class="nc bnc" id="L84" title="All 2 branches missed.">        if(role.equals(Role.SUBJECT)){</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if(role.equals(Role.SUBJECT)){</span>
 <span class="nc" id="L85">            boldSpans[0]= new Span(&quot;Receiver User:   &quot;);</span>
 <span class="nc" id="L86">            contact=request.getReceiver();</span>
         }
         else{
-<span class="nc" id="L89">            boldSpans[0]= new Span(&quot;Sender User:   &quot;);</span>
+<span class="fc" id="L89">            boldSpans[0]= new Span(&quot;Sender User:   &quot;);</span>
 <span class="nc" id="L90">            contact=request.getSender();</span>
         }
 <span class="nc" id="L92">        normalSpans[0]= new Span(contact.getName());</span>
@@ -182,7 +182,7 @@ public class GridComponentRightsView extends Dialog {
 
     public &lt;T extends ComponentEvent&lt;?&gt;&gt; Registration addListener(Class&lt;T&gt; eventType,
                                                                   ComponentEventListener&lt;T&gt; listener) {
-<span class="nc" id="L185">        return getEventBus().addListener(eventType, listener);</span>
+<span class="fc" id="L185">        return getEventBus().addListener(eventType, listener);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

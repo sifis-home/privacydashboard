@@ -575,15 +575,15 @@ import java.util.UUID;
      * @throws IllegalArgumentException if PrivacyNotice has not id, app or text
      */
     public JsonNode createJsonFromPrivacyNotice(PrivacyNotice privacyNotice) throws IllegalArgumentException {
-<span class="nc" id="L578">        ObjectNode privacyNoticeJson = mapper.createObjectNode();</span>
-<span class="nc bnc" id="L579" title="All 6 branches missed.">        if (privacyNotice.getId() == null || privacyNotice.getText() == null || privacyNotice.getApp() == null) {</span>
-<span class="nc" id="L580">            throw new IllegalArgumentException(&quot;invalid privacy notice&quot;);</span>
+<span class="fc" id="L578">        ObjectNode privacyNoticeJson = mapper.createObjectNode();</span>
+<span class="fc bfc" id="L579" title="All 6 branches covered.">        if (privacyNotice.getId() == null || privacyNotice.getText() == null || privacyNotice.getApp() == null) {</span>
+<span class="fc" id="L580">            throw new IllegalArgumentException(&quot;invalid privacy notice&quot;);</span>
         }
-<span class="nc" id="L582">        privacyNoticeJson.put(&quot;id&quot;, privacyNotice.getId().toString());</span>
-<span class="nc" id="L583">        privacyNoticeJson.put(&quot;appname&quot;, privacyNotice.getApp().getName());</span>
-<span class="nc" id="L584">        privacyNoticeJson.put(&quot;appId&quot;, privacyNotice.getApp().getId().toString());</span>
-<span class="nc" id="L585">        privacyNoticeJson.put(&quot;text&quot;, privacyNotice.getText());</span>
-<span class="nc" id="L586">        return privacyNoticeJson;</span>
+<span class="fc" id="L582">        privacyNoticeJson.put(&quot;id&quot;, privacyNotice.getId().toString());</span>
+<span class="fc" id="L583">        privacyNoticeJson.put(&quot;appname&quot;, privacyNotice.getApp().getName());</span>
+<span class="fc" id="L584">        privacyNoticeJson.put(&quot;appId&quot;, privacyNotice.getApp().getId().toString());</span>
+<span class="fc" id="L585">        privacyNoticeJson.put(&quot;text&quot;, privacyNotice.getText());</span>
+<span class="fc" id="L586">        return privacyNoticeJson;</span>
     }
 
     /**
@@ -632,26 +632,26 @@ import java.util.UUID;
      * @throws IllegalArgumentException if Notification has not id, senderId, receiverId, type, objectId
      */
     public JsonNode createJsonFromNotification(Notification notification) throws IllegalArgumentException {
-<span class="nc" id="L635">        ObjectNode notificationJson = mapper.createObjectNode();</span>
-<span class="nc bnc" id="L636" title="All 10 branches missed.">        if (notification.getId() == null || notification.getReceiver() == null || notification.getSender() == null || notification.getType()==null || notification.getObjectId()==null) {</span>
-<span class="nc" id="L637">            throw new IllegalArgumentException(&quot;invalid notification&quot;);</span>
+<span class="fc" id="L635">        ObjectNode notificationJson = mapper.createObjectNode();</span>
+<span class="fc bfc" id="L636" title="All 10 branches covered.">        if (notification.getId() == null || notification.getReceiver() == null || notification.getSender() == null || notification.getType()==null || notification.getObjectId()==null) {</span>
+<span class="fc" id="L637">            throw new IllegalArgumentException(&quot;invalid notification&quot;);</span>
         }
-<span class="nc" id="L639">        notificationJson.put(&quot;id&quot;, notification.getId().toString());</span>
-<span class="nc" id="L640">        notificationJson.put(&quot;senderId&quot;, notification.getSender().getId().toString());</span>
-<span class="nc" id="L641">        notificationJson.put(&quot;senderName&quot;, notification.getSender().getName());</span>
-<span class="nc" id="L642">        notificationJson.put(&quot;receiverId&quot;, notification.getReceiver().getId().toString());</span>
-<span class="nc" id="L643">        notificationJson.put(&quot;receiverName&quot;, notification.getReceiver().getName());</span>
-<span class="nc" id="L644">        notificationJson.put(&quot;description&quot;, notification.getDescription());</span>
-<span class="nc" id="L645">        notificationJson.put(&quot;type&quot;, notification.getType());</span>
-<span class="nc" id="L646">        notificationJson.put(&quot;objectId&quot;, notification.getObjectId().toString());</span>
+<span class="fc" id="L639">        notificationJson.put(&quot;id&quot;, notification.getId().toString());</span>
+<span class="fc" id="L640">        notificationJson.put(&quot;senderId&quot;, notification.getSender().getId().toString());</span>
+<span class="fc" id="L641">        notificationJson.put(&quot;senderName&quot;, notification.getSender().getName());</span>
+<span class="fc" id="L642">        notificationJson.put(&quot;receiverId&quot;, notification.getReceiver().getId().toString());</span>
+<span class="fc" id="L643">        notificationJson.put(&quot;receiverName&quot;, notification.getReceiver().getName());</span>
+<span class="fc" id="L644">        notificationJson.put(&quot;description&quot;, notification.getDescription());</span>
+<span class="fc" id="L645">        notificationJson.put(&quot;type&quot;, notification.getType());</span>
+<span class="fc" id="L646">        notificationJson.put(&quot;objectId&quot;, notification.getObjectId().toString());</span>
 
-<span class="nc bnc" id="L648" title="All 2 branches missed.">        if(notification.getTime()!=null){</span>
-<span class="nc" id="L649">            notificationJson.put(&quot;time&quot;, notification.getTime().toString());</span>
+<span class="fc bfc" id="L648" title="All 2 branches covered.">        if(notification.getTime()!=null){</span>
+<span class="fc" id="L649">            notificationJson.put(&quot;time&quot;, notification.getTime().toString());</span>
         }
-<span class="nc bnc" id="L651" title="All 2 branches missed.">        if(notification.getRead()!=null){</span>
-<span class="nc" id="L652">            notificationJson.put(&quot;isRead&quot;, notification.getRead());</span>
+<span class="fc bfc" id="L651" title="All 2 branches covered.">        if(notification.getRead()!=null){</span>
+<span class="fc" id="L652">            notificationJson.put(&quot;isRead&quot;, notification.getRead());</span>
         }
-<span class="nc" id="L654">        return notificationJson;</span>
+<span class="fc" id="L654">        return notificationJson;</span>
     }
 
     /**
@@ -750,63 +750,63 @@ import java.util.UUID;
      * @throws IllegalArgumentException if request does not exist or is invalid
      */
     public JsonNode createJsonFromRequest(RightRequest request) throws IllegalArgumentException{
-<span class="nc" id="L753">        ObjectNode requestJson = mapper.createObjectNode();</span>
-<span class="nc bnc" id="L754" title="All 8 branches missed.">        if(request.getId()==null || request.getSender()==null || request.getReceiver()==null || request.getRightType()==null){</span>
-<span class="nc" id="L755">            throw new IllegalArgumentException(&quot;invalid right request&quot;);</span>
+<span class="fc" id="L753">        ObjectNode requestJson = mapper.createObjectNode();</span>
+<span class="fc bfc" id="L754" title="All 8 branches covered.">        if(request.getId()==null || request.getSender()==null || request.getReceiver()==null || request.getRightType()==null){</span>
+<span class="fc" id="L755">            throw new IllegalArgumentException(&quot;invalid right request&quot;);</span>
         }
 
-<span class="nc" id="L758">        requestJson.put(&quot;id&quot;, request.getId().toString());</span>
-<span class="nc" id="L759">        requestJson.put(&quot;senderName&quot;, request.getSender().getName());</span>
-<span class="nc" id="L760">        requestJson.put(&quot;senderId&quot;, request.getSender().getId().toString());</span>
-<span class="nc" id="L761">        requestJson.put(&quot;receiverName&quot;, request.getReceiver().getName());</span>
-<span class="nc" id="L762">        requestJson.put(&quot;receiverId&quot;, request.getReceiver().getId().toString());</span>
-<span class="nc bnc" id="L763" title="All 2 branches missed.">        if(request.getTime()!=null){</span>
-<span class="nc" id="L764">            requestJson.put(&quot;time&quot;, request.getTime().toString());</span>
+<span class="fc" id="L758">        requestJson.put(&quot;id&quot;, request.getId().toString());</span>
+<span class="fc" id="L759">        requestJson.put(&quot;senderName&quot;, request.getSender().getName());</span>
+<span class="fc" id="L760">        requestJson.put(&quot;senderId&quot;, request.getSender().getId().toString());</span>
+<span class="fc" id="L761">        requestJson.put(&quot;receiverName&quot;, request.getReceiver().getName());</span>
+<span class="fc" id="L762">        requestJson.put(&quot;receiverId&quot;, request.getReceiver().getId().toString());</span>
+<span class="fc bfc" id="L763" title="All 2 branches covered.">        if(request.getTime()!=null){</span>
+<span class="fc" id="L764">            requestJson.put(&quot;time&quot;, request.getTime().toString());</span>
         }
-<span class="nc bnc" id="L766" title="All 2 branches missed.">        if(request.getApp()!=null){</span>
-<span class="nc" id="L767">            requestJson.put(&quot;appId&quot;, request.getApp().getId().toString());</span>
-<span class="nc" id="L768">            requestJson.put(&quot;appName&quot;, request.getApp().getName());</span>
+<span class="fc bfc" id="L766" title="All 2 branches covered.">        if(request.getApp()!=null){</span>
+<span class="fc" id="L767">            requestJson.put(&quot;appId&quot;, request.getApp().getId().toString());</span>
+<span class="fc" id="L768">            requestJson.put(&quot;appName&quot;, request.getApp().getName());</span>
         }
-<span class="nc" id="L770">        requestJson.put(&quot;rightType&quot;, request.getRightType().toString());</span>
-<span class="nc bnc" id="L771" title="All 2 branches missed.">        if(request.getOther()!=null){</span>
-<span class="nc" id="L772">            requestJson.put(&quot;other&quot;, request.getOther());</span>
+<span class="fc" id="L770">        requestJson.put(&quot;rightType&quot;, request.getRightType().toString());</span>
+<span class="fc bfc" id="L771" title="All 2 branches covered.">        if(request.getOther()!=null){</span>
+<span class="fc" id="L772">            requestJson.put(&quot;other&quot;, request.getOther());</span>
         }
-<span class="nc bnc" id="L774" title="All 2 branches missed.">        if(request.getHandled()!=null){</span>
-<span class="nc" id="L775">            requestJson.put(&quot;handled&quot;, request.getHandled());</span>
+<span class="fc bfc" id="L774" title="All 2 branches covered.">        if(request.getHandled()!=null){</span>
+<span class="fc" id="L775">            requestJson.put(&quot;handled&quot;, request.getHandled());</span>
         }
-<span class="nc bnc" id="L777" title="All 2 branches missed.">        if(request.getDetails()!=null){</span>
-<span class="nc" id="L778">            requestJson.put(&quot;details&quot;, request.getDetails());</span>
+<span class="fc bfc" id="L777" title="All 2 branches covered.">        if(request.getDetails()!=null){</span>
+<span class="fc" id="L778">            requestJson.put(&quot;details&quot;, request.getDetails());</span>
         }
-<span class="nc bnc" id="L780" title="All 2 branches missed.">        if(request.getResponse()!=null){</span>
-<span class="nc" id="L781">            requestJson.put(&quot;response&quot;, request.getResponse());</span>
+<span class="fc bfc" id="L780" title="All 2 branches covered.">        if(request.getResponse()!=null){</span>
+<span class="fc" id="L781">            requestJson.put(&quot;response&quot;, request.getResponse());</span>
         }
-<span class="nc" id="L783">        return requestJson;</span>
+<span class="fc" id="L783">        return requestJson;</span>
     }
 
     /**
      * @return JSON representing the requests in the request list that have the sender or the receiver equals to the parameter user
      */
     public ArrayNode createJsonRequestCheckAuthorizedUser(List&lt;RightRequest&gt; requestList, User user){
-<span class="nc" id="L790">        ArrayNode requestArray = mapper.createArrayNode();</span>
-<span class="nc bnc" id="L791" title="All 2 branches missed.">        for(RightRequest request : requestList){</span>
-<span class="nc bnc" id="L792" title="All 4 branches missed.">            if(request.getSender().equals(user) || request.getReceiver().equals(user)){</span>
-<span class="nc" id="L793">                requestArray.add(createJsonFromRequest(request));</span>
+<span class="fc" id="L790">        ArrayNode requestArray = mapper.createArrayNode();</span>
+<span class="fc bfc" id="L791" title="All 2 branches covered.">        for(RightRequest request : requestList){</span>
+<span class="fc bfc" id="L792" title="All 4 branches covered.">            if(request.getSender().equals(user) || request.getReceiver().equals(user)){</span>
+<span class="fc" id="L793">                requestArray.add(createJsonFromRequest(request));</span>
             }
-<span class="nc" id="L795">        }</span>
-<span class="nc" id="L796">        return requestArray;</span>
+<span class="fc" id="L795">        }</span>
+<span class="fc" id="L796">        return requestArray;</span>
     }
 
     /**
      * @return JSON representing the requests in the request list that have the app equals to the parameter app
      */
     public ArrayNode createJsonRequestOfApp(List&lt;RightRequest&gt; requestList, IoTApp app){
-<span class="nc" id="L803">        ArrayNode requestArray = mapper.createArrayNode();</span>
-<span class="nc bnc" id="L804" title="All 2 branches missed.">        for(RightRequest request : requestList){</span>
-<span class="nc bnc" id="L805" title="All 2 branches missed.">            if(request.getApp().equals(app)){</span>
-<span class="nc" id="L806">                requestArray.add(createJsonFromRequest(request));</span>
+<span class="fc" id="L803">        ArrayNode requestArray = mapper.createArrayNode();</span>
+<span class="fc bfc" id="L804" title="All 2 branches covered.">        for(RightRequest request : requestList){</span>
+<span class="fc bfc" id="L805" title="All 2 branches covered.">            if(request.getApp().equals(app)){</span>
+<span class="fc" id="L806">                requestArray.add(createJsonFromRequest(request));</span>
             }
-<span class="nc" id="L808">        }</span>
-<span class="nc" id="L809">        return requestArray;</span>
+<span class="fc" id="L808">        }</span>
+<span class="fc" id="L809">        return requestArray;</span>
     }
 
     /**
@@ -815,17 +815,17 @@ import java.util.UUID;
     public ArrayNode createJsonRequestOfRightType(List&lt;RightRequest&gt; requestList, String rightTypeString) throws IllegalArgumentException{
         RightType rightType;
         try {
-<span class="nc" id="L818">            rightType = RightType.valueOf(rightTypeString.toUpperCase());</span>
-<span class="nc" id="L819">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L820">            throw new IllegalArgumentException(&quot;invalid Right Type&quot;);</span>
-<span class="nc" id="L821">        }</span>
-<span class="nc" id="L822">        ArrayNode requestArray = mapper.createArrayNode();</span>
-<span class="nc bnc" id="L823" title="All 2 branches missed.">        for(RightRequest request : requestList){</span>
-<span class="nc bnc" id="L824" title="All 2 branches missed.">            if(request.getRightType().equals(rightType)){</span>
-<span class="nc" id="L825">                requestArray.add(createJsonFromRequest(request));</span>
+<span class="fc" id="L818">            rightType = RightType.valueOf(rightTypeString.toUpperCase());</span>
+<span class="fc" id="L819">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L820">            throw new IllegalArgumentException(&quot;invalid Right Type&quot;);</span>
+<span class="fc" id="L821">        }</span>
+<span class="fc" id="L822">        ArrayNode requestArray = mapper.createArrayNode();</span>
+<span class="fc bfc" id="L823" title="All 2 branches covered.">        for(RightRequest request : requestList){</span>
+<span class="fc bfc" id="L824" title="All 2 branches covered.">            if(request.getRightType().equals(rightType)){</span>
+<span class="fc" id="L825">                requestArray.add(createJsonFromRequest(request));</span>
             }
-<span class="nc" id="L827">        }</span>
-<span class="nc" id="L828">        return requestArray;</span>
+<span class="fc" id="L827">        }</span>
+<span class="fc" id="L828">        return requestArray;</span>
     }
 
     /**
