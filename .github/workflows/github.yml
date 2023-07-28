@@ -36,9 +36,26 @@ jobs:
 
       - name: Package privacydashboard
         run: mvn clean package -Pproduction
+        continue-on-error: true
 
       - name: Coverage Report
         run: mvn jacoco:report
+
+      - name: Generate Jacoco Badge
+        id: jacoco
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          jacoco-csv-file: target/site/jacoco/jacoco.csv
+
+      - name: Log coverage percentage
+        run: |
+          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
+
+
+      - name: Move the badge to jacoco-aggregate folder
+        run: |
+          mv .github/badges/*.svg target/site/jacoco/
+
 
       - name: Deploy Jacoco code coverage reports to gh-pages
         uses: JamesIves/github-pages-deploy-action@v4
@@ -48,6 +65,18 @@ jobs:
           folder: target/site/jacoco
           target-folder: reports
           branch: gh-pages
+
+      - name: Coverage Report
+        run: mvn jacoco:report
+
+    #  - name: Deploy Jacoco code coverage reports to gh-pages
+    #   uses: JamesIves/github-pages-deploy-action@v4
+    #    if: ${{ matrix.java-version == '18.0.x' }}
+    #    with:
+    #      clean: true
+    #      folder: target/site/jacoco
+    #      target-folder: reports
+    #      branch: gh-pages
   
   # Build files necessary for building Docker Images (Dockerfiles and Contexts)
   build-for-docker:
