@@ -12,8 +12,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    continue-on-error: true
-
     strategy:
       matrix:
         java-version: [
@@ -53,11 +51,9 @@ jobs:
         run: |
           echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
 
-
       - name: Move the badge to jacoco-aggregate folder
         run: |
           mv .github/badges/*.svg target/site/jacoco/
-
 
       - name: Deploy Jacoco code coverage reports to gh-pages
         uses: JamesIves/github-pages-deploy-action@v4
@@ -67,9 +63,6 @@ jobs:
           folder: target/site/jacoco
           target-folder: reports
           branch: gh-pages
-
-      - name: Coverage Report
-        run: mvn jacoco:report
 
     #  - name: Deploy Jacoco code coverage reports to gh-pages
     #   uses: JamesIves/github-pages-deploy-action@v4
