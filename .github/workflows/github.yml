@@ -63,15 +63,6 @@ jobs:
           folder: target/site/jacoco
           target-folder: reports
           branch: gh-pages
-
-    #  - name: Deploy Jacoco code coverage reports to gh-pages
-    #   uses: JamesIves/github-pages-deploy-action@v4
-    #    if: ${{ matrix.java-version == '18.0.x' }}
-    #    with:
-    #      clean: true
-    #      folder: target/site/jacoco
-    #      target-folder: reports
-    #      branch: gh-pages
   
   # Build files necessary for building Docker Images (Dockerfiles and Contexts)
   build-for-docker:
