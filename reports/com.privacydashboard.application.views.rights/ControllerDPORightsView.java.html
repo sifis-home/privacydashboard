@@ -31,11 +31,11 @@ public class ControllerDPORightsView extends VerticalLayout implements BeforeEnt
     private final AuthenticatedUser authenticatedUser;
     private final CommunicationService communicationService;
 
-<span class="nc" id="L34">    private final Grid&lt;RightRequest&gt; grid= new Grid&lt;&gt;();</span>
-<span class="nc" id="L35">    private final ToggleButton toggleButton=new ToggleButton(&quot;HANDLED&quot;, false);</span>
-<span class="nc" id="L36">    private MyDialog requestDialog= new MyDialog();</span>
+<span class="fc" id="L34">    private final Grid&lt;RightRequest&gt; grid= new Grid&lt;&gt;();</span>
+<span class="fc" id="L35">    private final ToggleButton toggleButton=new ToggleButton(&quot;HANDLED&quot;, false);</span>
+<span class="fc" id="L36">    private MyDialog requestDialog= new MyDialog();</span>
     private final GridComponentRightsView gridComponentRightsView;
-<span class="nc" id="L38">    private RightRequest priorityRight=null;</span>
+<span class="fc" id="L38">    private RightRequest priorityRight=null;</span>
 
     @Override
     public void beforeEnter(BeforeEnterEvent event){
@@ -45,30 +45,30 @@ public class ControllerDPORightsView extends VerticalLayout implements BeforeEnt
         }
 <span class="nc" id="L46">    }</span>
 
-<span class="nc" id="L48">    public ControllerDPORightsView(DataBaseService dataBaseService, AuthenticatedUser authenticatedUser, CommunicationService communicationService) {</span>
-<span class="nc" id="L49">        this.dataBaseService = dataBaseService;</span>
-<span class="nc" id="L50">        this.authenticatedUser = authenticatedUser;</span>
-<span class="nc" id="L51">        this.communicationService= communicationService;</span>
+<span class="fc" id="L48">    public ControllerDPORightsView(DataBaseService dataBaseService, AuthenticatedUser authenticatedUser, CommunicationService communicationService) {</span>
+<span class="fc" id="L49">        this.dataBaseService = dataBaseService;</span>
+<span class="fc" id="L50">        this.authenticatedUser = authenticatedUser;</span>
+<span class="fc" id="L51">        this.communicationService= communicationService;</span>
 
-<span class="nc" id="L53">        addClassName(&quot;rights-view&quot;);</span>
-<span class="nc" id="L54">        gridComponentRightsView= new GridComponentRightsView(authenticatedUser.getUser().getRole());</span>
-<span class="nc" id="L55">        initializeGridComponentRightsView();</span>
-<span class="nc" id="L56">        initializeGrid();</span>
-<span class="nc" id="L57">    }</span>
+<span class="fc" id="L53">        addClassName(&quot;rights-view&quot;);</span>
+<span class="fc" id="L54">        gridComponentRightsView= new GridComponentRightsView(authenticatedUser.getUser().getRole());</span>
+<span class="fc" id="L55">        initializeGridComponentRightsView();</span>
+<span class="fc" id="L56">        initializeGrid();</span>
+<span class="fc" id="L57">    }</span>
 
     private void initializeGridComponentRightsView(){
-<span class="nc" id="L60">        gridComponentRightsView.addListener(GridComponentRightsView.ContactEvent.class, this::goToUser);</span>
-<span class="nc" id="L61">        gridComponentRightsView.addListener(GridComponentRightsView.AppEvent.class, this::goToApp);</span>
-<span class="nc" id="L62">    }</span>
+<span class="fc" id="L60">        gridComponentRightsView.addListener(GridComponentRightsView.ContactEvent.class, this::goToUser);</span>
+<span class="fc" id="L61">        gridComponentRightsView.addListener(GridComponentRightsView.AppEvent.class, this::goToApp);</span>
+<span class="fc" id="L62">    }</span>
 
     private void initializeGrid(){
-<span class="nc" id="L65">        HorizontalLayout headerGrid=gridComponentRightsView.getHeaderLayout(toggleButton);</span>
-<span class="nc" id="L66">        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);</span>
-<span class="nc" id="L67">        grid.addComponentColumn(this::showRequestCard);</span>
-<span class="nc" id="L68">        grid.getColumns().get(0).setHeader(headerGrid);</span>
-<span class="nc" id="L69">        toggleButton.addClickListener(e-&gt; updateGrid(toggleButton.getValue()));</span>
-<span class="nc" id="L70">        add(grid);</span>
-<span class="nc" id="L71">    }</span>
+<span class="fc" id="L65">        HorizontalLayout headerGrid=gridComponentRightsView.getHeaderLayout(toggleButton);</span>
+<span class="fc" id="L66">        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);</span>
+<span class="fc" id="L67">        grid.addComponentColumn(this::showRequestCard);</span>
+<span class="fc" id="L68">        grid.getColumns().get(0).setHeader(headerGrid);</span>
+<span class="pc" id="L69">        toggleButton.addClickListener(e-&gt; updateGrid(toggleButton.getValue()));</span>
+<span class="fc" id="L70">        add(grid);</span>
+<span class="fc" id="L71">    }</span>
 
     private HorizontalLayout showRequestCard(RightRequest request){
 <span class="nc" id="L74">        HorizontalLayout card=gridComponentRightsView.getCard(request);</span>

@@ -33,78 +33,78 @@ public class Questionnaire extends Div implements AfterNavigationObserver{
     private final AuthenticatedUser authenticatedUser;
     private final CommunicationService communicationService;
 
-<span class="nc" id="L36">    private final TextField searchText=new TextField();</span>
-<span class="nc" id="L37">    private final Grid&lt;IoTApp&gt; grid= new Grid&lt;&gt;();</span>
-<span class="nc" id="L38">    private final MyDialog newQuestionnaireDialog= new MyDialog();</span>
-<span class="nc" id="L39">    private final Button newQuestionnaireButton= new Button(&quot;Compile new Questionnaire&quot;, e-&gt; newQuestionnaireDialog.open());</span>
+<span class="fc" id="L36">    private final TextField searchText=new TextField();</span>
+<span class="fc" id="L37">    private final Grid&lt;IoTApp&gt; grid= new Grid&lt;&gt;();</span>
+<span class="fc" id="L38">    private final MyDialog newQuestionnaireDialog= new MyDialog();</span>
+<span class="pc" id="L39">    private final Button newQuestionnaireButton= new Button(&quot;Compile new Questionnaire&quot;, e-&gt; newQuestionnaireDialog.open());</span>
 
-<span class="nc" id="L41">    public Questionnaire(DataBaseService dataBaseService, AuthenticatedUser authenticatedUser, CommunicationService communicationService) {</span>
-<span class="nc" id="L42">        this.dataBaseService = dataBaseService;</span>
-<span class="nc" id="L43">        this.authenticatedUser = authenticatedUser;</span>
-<span class="nc" id="L44">        this.communicationService = communicationService;</span>
-<span class="nc" id="L45">        addClassName(&quot;grid-view&quot;);</span>
-<span class="nc" id="L46">        initializeSearchText();</span>
-<span class="nc" id="L47">        initializeGrid();</span>
-<span class="nc" id="L48">        initializeNewQuestionnaireDialog();</span>
+<span class="fc" id="L41">    public Questionnaire(DataBaseService dataBaseService, AuthenticatedUser authenticatedUser, CommunicationService communicationService) {</span>
+<span class="fc" id="L42">        this.dataBaseService = dataBaseService;</span>
+<span class="fc" id="L43">        this.authenticatedUser = authenticatedUser;</span>
+<span class="fc" id="L44">        this.communicationService = communicationService;</span>
+<span class="fc" id="L45">        addClassName(&quot;grid-view&quot;);</span>
+<span class="fc" id="L46">        initializeSearchText();</span>
+<span class="fc" id="L47">        initializeGrid();</span>
+<span class="fc" id="L48">        initializeNewQuestionnaireDialog();</span>
 
-<span class="nc" id="L50">        HorizontalLayout headerLayout= new HorizontalLayout(searchText, newQuestionnaireButton);</span>
-<span class="nc" id="L51">        headerLayout.setAlignItems(FlexComponent.Alignment.CENTER);</span>
-<span class="nc" id="L52">        add(headerLayout, grid);</span>
-<span class="nc" id="L53">    }</span>
+<span class="fc" id="L50">        HorizontalLayout headerLayout= new HorizontalLayout(searchText, newQuestionnaireButton);</span>
+<span class="fc" id="L51">        headerLayout.setAlignItems(FlexComponent.Alignment.CENTER);</span>
+<span class="fc" id="L52">        add(headerLayout, grid);</span>
+<span class="fc" id="L53">    }</span>
 
     private void initializeSearchText(){
-<span class="nc" id="L56">        searchText.setPlaceholder(&quot;Search...&quot;);</span>
-<span class="nc" id="L57">        searchText.setValueChangeMode(ValueChangeMode.LAZY);</span>
-<span class="nc" id="L58">        searchText.addValueChangeListener(e-&gt; updateGrid());</span>
-<span class="nc" id="L59">        searchText.addClassName(&quot;search&quot;);</span>
-<span class="nc" id="L60">    }</span>
+<span class="fc" id="L56">        searchText.setPlaceholder(&quot;Search...&quot;);</span>
+<span class="fc" id="L57">        searchText.setValueChangeMode(ValueChangeMode.LAZY);</span>
+<span class="pc" id="L58">        searchText.addValueChangeListener(e-&gt; updateGrid());</span>
+<span class="fc" id="L59">        searchText.addClassName(&quot;search&quot;);</span>
+<span class="fc" id="L60">    }</span>
 
     private void initializeGrid(){
-<span class="nc" id="L63">        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);</span>
-<span class="nc" id="L64">        grid.addComponentColumn(this::createQuestionnaireApp);</span>
-<span class="nc" id="L65">    }</span>
+<span class="fc" id="L63">        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);</span>
+<span class="fc" id="L64">        grid.addComponentColumn(this::createQuestionnaireApp);</span>
+<span class="fc" id="L65">    }</span>
 
     private HorizontalLayout createQuestionnaireApp(IoTApp app){
-<span class="nc" id="L68">        Avatar avatar = new Avatar(app.getName());</span>
-<span class="nc" id="L69">        Span name= new Span(app.getName());</span>
-<span class="nc" id="L70">        name.addClassName(&quot;name&quot;);</span>
-<span class="nc" id="L71">        HorizontalLayout card = new HorizontalLayout(avatar, name);</span>
-<span class="nc" id="L72">        card.addClassName(&quot;card&quot;);</span>
-<span class="nc" id="L73">        card.addClassName(&quot;canOpen&quot;);</span>
-<span class="nc" id="L74">        card.addClickListener(e-&gt; goToSingleQuestionnaire(app));</span>
-<span class="nc bnc" id="L75" title="All 2 branches missed.">        if(app.getQuestionnaireVote()==null){</span>
-<span class="nc" id="L76">            name.addClassName(&quot;link&quot;);</span>
+<span class="fc" id="L68">        Avatar avatar = new Avatar(app.getName());</span>
+<span class="fc" id="L69">        Span name= new Span(app.getName());</span>
+<span class="fc" id="L70">        name.addClassName(&quot;name&quot;);</span>
+<span class="fc" id="L71">        HorizontalLayout card = new HorizontalLayout(avatar, name);</span>
+<span class="fc" id="L72">        card.addClassName(&quot;card&quot;);</span>
+<span class="fc" id="L73">        card.addClassName(&quot;canOpen&quot;);</span>
+<span class="pc" id="L74">        card.addClickListener(e-&gt; goToSingleQuestionnaire(app));</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        if(app.getQuestionnaireVote()==null){</span>
+<span class="fc" id="L76">            name.addClassName(&quot;link&quot;);</span>
         }
         else{
-<span class="nc" id="L79">            name.addClassName(&quot;linkQuestionnaire&quot;);</span>
-<span class="nc bnc" id="L80" title="All 2 branches missed.">            if(app.getQuestionnaireVote().equals(QuestionnaireVote.GREEN)){</span>
-<span class="nc" id="L81">                name.addClassName(&quot;greenName&quot;);</span>
+<span class="fc" id="L79">            name.addClassName(&quot;linkQuestionnaire&quot;);</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            if(app.getQuestionnaireVote().equals(QuestionnaireVote.GREEN)){</span>
+<span class="fc" id="L81">                name.addClassName(&quot;greenName&quot;);</span>
             }
-<span class="nc bnc" id="L83" title="All 2 branches missed.">            else if(app.getQuestionnaireVote().equals(QuestionnaireVote.ORANGE)){</span>
-<span class="nc" id="L84">                card.addClassName(&quot;orangeName&quot;);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            else if(app.getQuestionnaireVote().equals(QuestionnaireVote.ORANGE)){</span>
+<span class="fc" id="L84">                card.addClassName(&quot;orangeName&quot;);</span>
             }
             else{
-<span class="nc" id="L87">                card.addClassName(&quot;redName&quot;);</span>
+<span class="fc" id="L87">                card.addClassName(&quot;redName&quot;);</span>
             }
         }
-<span class="nc" id="L90">        return card;</span>
+<span class="fc" id="L90">        return card;</span>
     }
 
     private void initializeNewQuestionnaireDialog(){
-<span class="nc" id="L94">        ComboBox&lt;IoTApp&gt; appComboBox= new ComboBox&lt;&gt;(&quot;Apps&quot;);</span>
-<span class="nc" id="L95">        appComboBox.setItems(dataBaseService.getUserApps(authenticatedUser.getUser()));</span>
-<span class="nc" id="L96">        appComboBox.setItemLabelGenerator(IoTApp::getName);</span>
-<span class="nc" id="L97">        Button continueButton= new Button(&quot;Continue&quot;, e-&gt;{</span>
+<span class="fc" id="L94">        ComboBox&lt;IoTApp&gt; appComboBox= new ComboBox&lt;&gt;(&quot;Apps&quot;);</span>
+<span class="fc" id="L95">        appComboBox.setItems(dataBaseService.getUserApps(authenticatedUser.getUser()));</span>
+<span class="fc" id="L96">        appComboBox.setItemLabelGenerator(IoTApp::getName);</span>
+<span class="fc" id="L97">        Button continueButton= new Button(&quot;Continue&quot;, e-&gt;{</span>
 <span class="nc bnc" id="L98" title="All 2 branches missed.">            if(appComboBox.getValue()!=null) {</span>
 <span class="nc" id="L99">                newQuestionnaireDialog.close();</span>
 <span class="nc" id="L100">                goToSingleQuestionnaire(appComboBox.getValue());</span>
             }
 <span class="nc" id="L102">        });</span>
 
-<span class="nc" id="L104">        newQuestionnaireDialog.setTitle(&quot;Select app&quot;);</span>
-<span class="nc" id="L105">        newQuestionnaireDialog.setContent(new VerticalLayout(appComboBox));</span>
-<span class="nc" id="L106">        newQuestionnaireDialog.setContinueButton(continueButton);</span>
-<span class="nc" id="L107">    }</span>
+<span class="fc" id="L104">        newQuestionnaireDialog.setTitle(&quot;Select app&quot;);</span>
+<span class="fc" id="L105">        newQuestionnaireDialog.setContent(new VerticalLayout(appComboBox));</span>
+<span class="fc" id="L106">        newQuestionnaireDialog.setContinueButton(continueButton);</span>
+<span class="fc" id="L107">    }</span>
 
     private void goToSingleQuestionnaire(IoTApp app){
 <span class="nc" id="L110">        communicationService.setApp(app);</span>

@@ -23,61 +23,61 @@ public class DialogRight{
     private final DataBaseService dataBaseService;
     private final AuthenticatedUser authenticatedUser;
 
-<span class="nc" id="L26">    private final MyDialog requestDialog= new MyDialog();</span>
-<span class="nc" id="L27">    private final Button continueButton=new Button(&quot;Continue&quot;);</span>
-<span class="nc" id="L28">    private final MyDialog confirmDialog=new MyDialog();</span>
+<span class="fc" id="L26">    private final MyDialog requestDialog= new MyDialog();</span>
+<span class="fc" id="L27">    private final Button continueButton=new Button(&quot;Continue&quot;);</span>
+<span class="fc" id="L28">    private final MyDialog confirmDialog=new MyDialog();</span>
 
-<span class="nc" id="L30">    public DialogRight(DataBaseService dataBaseService, AuthenticatedUser authenticatedUser){</span>
-<span class="nc" id="L31">        this.dataBaseService=dataBaseService;</span>
-<span class="nc" id="L32">        this.authenticatedUser=authenticatedUser;</span>
-<span class="nc" id="L33">    }</span>
+<span class="fc" id="L30">    public DialogRight(DataBaseService dataBaseService, AuthenticatedUser authenticatedUser){</span>
+<span class="fc" id="L31">        this.dataBaseService=dataBaseService;</span>
+<span class="fc" id="L32">        this.authenticatedUser=authenticatedUser;</span>
+<span class="fc" id="L33">    }</span>
 
     public void showDialogRequest(RightType rightType){
-<span class="nc" id="L36">        User user=authenticatedUser.getUser();</span>
-<span class="nc bnc" id="L37" title="All 2 branches missed.">        if(user==null){</span>
-<span class="nc" id="L38">            return;</span>
+<span class="fc" id="L36">        User user=authenticatedUser.getUser();</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">        if(user==null){</span>
+<span class="fc" id="L38">            return;</span>
         }
-<span class="nc" id="L40">        RightRequest request=initializeRequest(user, rightType);</span>
-<span class="nc bnc" id="L41" title="All 2 branches missed.">        if(request.getRightType().equals(RightType.PORTABILITY)){</span>
-<span class="nc" id="L42">            portability(user, request);</span>
+<span class="fc" id="L40">        RightRequest request=initializeRequest(user, rightType);</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if(request.getRightType().equals(RightType.PORTABILITY)){</span>
+<span class="fc" id="L42">            portability(user, request);</span>
         }
-<span class="nc bnc" id="L44" title="All 2 branches missed.">        else if(request.getRightType().equals(RightType.WITHDRAWCONSENT)){</span>
-<span class="nc" id="L45">            withdrawConsent(user, request);</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        else if(request.getRightType().equals(RightType.WITHDRAWCONSENT)){</span>
+<span class="fc" id="L45">            withdrawConsent(user, request);</span>
         }
-<span class="nc bnc" id="L47" title="All 2 branches missed.">        else if(request.getRightType().equals(RightType.ERASURE)){</span>
-<span class="nc" id="L48">            erasure(user, request);</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        else if(request.getRightType().equals(RightType.ERASURE)){</span>
+<span class="fc" id="L48">            erasure(user, request);</span>
         }
-<span class="nc bnc" id="L50" title="All 2 branches missed.">        else if(request.getRightType().equals(RightType.INFO)){</span>
-<span class="nc" id="L51">            info(user, request);</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        else if(request.getRightType().equals(RightType.INFO)){</span>
+<span class="fc" id="L51">            info(user, request);</span>
         }
-<span class="nc bnc" id="L53" title="All 2 branches missed.">        else if(request.getRightType().equals(RightType.COMPLAIN)){</span>
-<span class="nc" id="L54">            complain(user, request);</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        else if(request.getRightType().equals(RightType.COMPLAIN)){</span>
+<span class="fc" id="L54">            complain(user, request);</span>
         }
-<span class="nc bnc" id="L56" title="All 2 branches missed.">        else if(request.getRightType().equals(RightType.DELTEEVERYTHING)){</span>
-<span class="nc" id="L57">            deleteEverything(user, request);</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        else if(request.getRightType().equals(RightType.DELTEEVERYTHING)){</span>
+<span class="fc" id="L57">            deleteEverything(user, request);</span>
         }
 <span class="nc" id="L59">        requestDialog.open();</span>
 <span class="nc" id="L60">    }</span>
 
     private RightRequest initializeRequest(User user, RightType rightType){
-<span class="nc" id="L63">        RightRequest request= new RightRequest();</span>
-<span class="nc" id="L64">        request.setSender(user);</span>
-<span class="nc" id="L65">        request.setRightType(rightType);</span>
-<span class="nc" id="L66">        request.setHandled(false);</span>
-<span class="nc" id="L67">        return request;</span>
+<span class="fc" id="L63">        RightRequest request= new RightRequest();</span>
+<span class="fc" id="L64">        request.setSender(user);</span>
+<span class="fc" id="L65">        request.setRightType(rightType);</span>
+<span class="fc" id="L66">        request.setHandled(false);</span>
+<span class="fc" id="L67">        return request;</span>
     }
 
     private void portability(User user, RightRequest request){
-<span class="nc" id="L71">        requestDialog.setTitle(&quot;Access data&quot;);</span>
+<span class="fc" id="L71">        requestDialog.setTitle(&quot;Access data&quot;);</span>
 
-<span class="nc" id="L73">        ComboBox&lt;IoTApp&gt; appComboBox= new ComboBox&lt;&gt;(&quot;Apps&quot;);</span>
-<span class="nc" id="L74">        appComboBox.setItems(dataBaseService.getUserApps(user));</span>
-<span class="nc" id="L75">        appComboBox.setItemLabelGenerator(IoTApp::getName);</span>
-<span class="nc" id="L76">        appComboBox.setPlaceholder(&quot;Filter by name...&quot;);</span>
+<span class="fc" id="L73">        ComboBox&lt;IoTApp&gt; appComboBox= new ComboBox&lt;&gt;(&quot;Apps&quot;);</span>
+<span class="fc" id="L74">        appComboBox.setItems(dataBaseService.getUserApps(user));</span>
+<span class="fc" id="L75">        appComboBox.setItemLabelGenerator(IoTApp::getName);</span>
+<span class="fc" id="L76">        appComboBox.setPlaceholder(&quot;Filter by name...&quot;);</span>
 
-<span class="nc" id="L78">        requestDialog.setContent(new HorizontalLayout(appComboBox));</span>
+<span class="fc" id="L78">        requestDialog.setContent(new HorizontalLayout(appComboBox));</span>
 
-<span class="nc" id="L80">        continueButton.addClickListener(e-&gt;{</span>
+<span class="fc" id="L80">        continueButton.addClickListener(e-&gt;{</span>
 <span class="nc bnc" id="L81" title="All 2 branches missed.">            if(appComboBox.getValue()!=null){</span>
 <span class="nc" id="L82">                request.setApp(appComboBox.getValue());</span>
 <span class="nc" id="L83">                request.setReceiver(dataBaseService.getControllersFromApp(appComboBox.getValue()).get(0));</span>
@@ -85,24 +85,24 @@ public class DialogRight{
 <span class="nc" id="L85">                showDialogConfirm(request);</span>
             }
 <span class="nc" id="L87">        });</span>
-<span class="nc" id="L88">        requestDialog.setContinueButton(continueButton);</span>
+<span class="fc" id="L88">        requestDialog.setContinueButton(continueButton);</span>
 
-<span class="nc" id="L90">    }</span>
+<span class="fc" id="L90">    }</span>
 
     private void withdrawConsent(User user, RightRequest request){
-<span class="nc" id="L93">        requestDialog.setTitle(&quot;Withdraw consent&quot;);</span>
+<span class="fc" id="L93">        requestDialog.setTitle(&quot;Withdraw consent&quot;);</span>
 
-<span class="nc" id="L95">        ComboBox&lt;String&gt; consensComboBox= new ComboBox&lt;&gt;(&quot;Consens&quot;);</span>
-<span class="nc" id="L96">        consensComboBox.setPlaceholder(&quot;Filter by name...&quot;);</span>
+<span class="fc" id="L95">        ComboBox&lt;String&gt; consensComboBox= new ComboBox&lt;&gt;(&quot;Consens&quot;);</span>
+<span class="fc" id="L96">        consensComboBox.setPlaceholder(&quot;Filter by name...&quot;);</span>
 
-<span class="nc" id="L98">        ComboBox&lt;IoTApp&gt; appComboBox= new ComboBox&lt;&gt;(&quot;Apps&quot;);</span>
-<span class="nc" id="L99">        appComboBox.setItems(dataBaseService.getUserApps(user));</span>
-<span class="nc" id="L100">        appComboBox.setItemLabelGenerator(IoTApp::getName);</span>
-<span class="nc" id="L101">        appComboBox.setPlaceholder(&quot;Filter by name...&quot;);</span>
-<span class="nc" id="L102">        appComboBox.addValueChangeListener(e-&gt; consensComboBox.setItems(dataBaseService.getConsensesFromUserAndApp(user,appComboBox.getValue())));</span>
-<span class="nc" id="L103">        requestDialog.setContent(new HorizontalLayout(appComboBox, consensComboBox));</span>
+<span class="fc" id="L98">        ComboBox&lt;IoTApp&gt; appComboBox= new ComboBox&lt;&gt;(&quot;Apps&quot;);</span>
+<span class="fc" id="L99">        appComboBox.setItems(dataBaseService.getUserApps(user));</span>
+<span class="fc" id="L100">        appComboBox.setItemLabelGenerator(IoTApp::getName);</span>
+<span class="fc" id="L101">        appComboBox.setPlaceholder(&quot;Filter by name...&quot;);</span>
+<span class="pc" id="L102">        appComboBox.addValueChangeListener(e-&gt; consensComboBox.setItems(dataBaseService.getConsensesFromUserAndApp(user,appComboBox.getValue())));</span>
+<span class="fc" id="L103">        requestDialog.setContent(new HorizontalLayout(appComboBox, consensComboBox));</span>
 
-<span class="nc" id="L105">        continueButton.addClickListener( e-&gt;{</span>
+<span class="fc" id="L105">        continueButton.addClickListener( e-&gt;{</span>
 <span class="nc bnc" id="L106" title="All 4 branches missed.">            if(appComboBox.getValue()!=null &amp;&amp; consensComboBox.getValue()!=null){</span>
 <span class="nc" id="L107">                request.setApp(appComboBox.getValue());</span>
 <span class="nc" id="L108">                request.setReceiver(dataBaseService.getControllersFromApp(appComboBox.getValue()).get(0));</span>
@@ -110,23 +110,23 @@ public class DialogRight{
 <span class="nc" id="L110">                requestDialog.close();</span>
 <span class="nc" id="L111">                showDialogConfirm(request);</span>
 <span class="nc" id="L112">            }});</span>
-<span class="nc" id="L113">        requestDialog.setContinueButton(continueButton);</span>
-<span class="nc" id="L114">    }</span>
+<span class="fc" id="L113">        requestDialog.setContinueButton(continueButton);</span>
+<span class="fc" id="L114">    }</span>
 
     private void erasure(User user, RightRequest request){
-<span class="nc" id="L117">        requestDialog.setTitle(&quot;Erase content&quot;);</span>
+<span class="fc" id="L117">        requestDialog.setTitle(&quot;Erase content&quot;);</span>
 
-<span class="nc" id="L119">        ComboBox&lt;IoTApp&gt; appComboBox= new ComboBox&lt;&gt;(&quot;Apps&quot;);</span>
-<span class="nc" id="L120">        appComboBox.setItems(dataBaseService.getUserApps(user));</span>
-<span class="nc" id="L121">        appComboBox.setItemLabelGenerator(IoTApp::getName);</span>
-<span class="nc" id="L122">        appComboBox.setPlaceholder(&quot;Filter by name...&quot;);</span>
+<span class="fc" id="L119">        ComboBox&lt;IoTApp&gt; appComboBox= new ComboBox&lt;&gt;(&quot;Apps&quot;);</span>
+<span class="fc" id="L120">        appComboBox.setItems(dataBaseService.getUserApps(user));</span>
+<span class="fc" id="L121">        appComboBox.setItemLabelGenerator(IoTApp::getName);</span>
+<span class="fc" id="L122">        appComboBox.setPlaceholder(&quot;Filter by name...&quot;);</span>
 
-<span class="nc" id="L124">        TextArea textArea=new TextArea(&quot;What to erase&quot;);</span>
-<span class="nc" id="L125">        textArea.setPlaceholder(&quot;Descrive what you want to erase&quot;);</span>
-<span class="nc" id="L126">        textArea.setWidthFull();</span>
-<span class="nc" id="L127">        requestDialog.setContent(new HorizontalLayout(appComboBox, textArea));</span>
+<span class="fc" id="L124">        TextArea textArea=new TextArea(&quot;What to erase&quot;);</span>
+<span class="fc" id="L125">        textArea.setPlaceholder(&quot;Descrive what you want to erase&quot;);</span>
+<span class="fc" id="L126">        textArea.setWidthFull();</span>
+<span class="fc" id="L127">        requestDialog.setContent(new HorizontalLayout(appComboBox, textArea));</span>
 
-<span class="nc" id="L129">        continueButton.addClickListener(e-&gt;{</span>
+<span class="fc" id="L129">        continueButton.addClickListener(e-&gt;{</span>
 <span class="nc bnc" id="L130" title="All 4 branches missed.">            if(appComboBox.getValue()!=null &amp;&amp; textArea.getValue()!=null){</span>
 <span class="nc" id="L131">                request.setApp(appComboBox.getValue());</span>
 <span class="nc" id="L132">                request.setReceiver(dataBaseService.getControllersFromApp(appComboBox.getValue()).get(0));</span>
@@ -135,31 +135,31 @@ public class DialogRight{
 <span class="nc" id="L135">                showDialogConfirm(request);</span>
             }
 <span class="nc" id="L137">        });</span>
-<span class="nc" id="L138">        requestDialog.setContinueButton(continueButton);</span>
-<span class="nc" id="L139">    }</span>
+<span class="fc" id="L138">        requestDialog.setContinueButton(continueButton);</span>
+<span class="fc" id="L139">    }</span>
 
     private void info(User user, RightRequest request){
-<span class="nc" id="L142">        requestDialog.setTitle(&quot;Get information&quot;);</span>
+<span class="fc" id="L142">        requestDialog.setTitle(&quot;Get information&quot;);</span>
 
-<span class="nc" id="L144">        ComboBox&lt;IoTApp&gt; appComboBox= new ComboBox&lt;&gt;(&quot;Apps&quot;);</span>
-<span class="nc" id="L145">        appComboBox.setItems(dataBaseService.getUserApps(user));</span>
-<span class="nc" id="L146">        appComboBox.setItemLabelGenerator(IoTApp::getName);</span>
-<span class="nc" id="L147">        appComboBox.setPlaceholder(&quot;Filter by name...&quot;);</span>
+<span class="fc" id="L144">        ComboBox&lt;IoTApp&gt; appComboBox= new ComboBox&lt;&gt;(&quot;Apps&quot;);</span>
+<span class="fc" id="L145">        appComboBox.setItems(dataBaseService.getUserApps(user));</span>
+<span class="fc" id="L146">        appComboBox.setItemLabelGenerator(IoTApp::getName);</span>
+<span class="fc" id="L147">        appComboBox.setPlaceholder(&quot;Filter by name...&quot;);</span>
 
-<span class="nc" id="L149">        ComboBox&lt;String&gt; infoComboBox= new ComboBox&lt;&gt;(&quot;info&quot;);</span>
-<span class="nc" id="L150">        LinkedList&lt;String&gt; infos= new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L149">        ComboBox&lt;String&gt; infoComboBox= new ComboBox&lt;&gt;(&quot;info&quot;);</span>
+<span class="fc" id="L150">        LinkedList&lt;String&gt; infos= new LinkedList&lt;&gt;();</span>
 
-<span class="nc" id="L152">        infos.add(&quot;The period for which the personal data will be stored&quot;);</span>
-<span class="nc" id="L153">        infos.add(&quot;The contact details of the data protection officer&quot;);</span>
-<span class="nc" id="L154">        infos.add(&quot;The purposes of the processing and the legal basis for it&quot;);</span>
-<span class="nc" id="L155">        infos.add(&quot;The legitimate interests pursued by the controller or by a third party&quot;);</span>
-<span class="nc" id="L156">        infos.add(&quot;The recipients or categories of recipients of the personal data&quot;);</span>
-<span class="nc" id="L157">        infos.add(&quot;The fact that the controller intends to transfer personal data to a third country&quot;);</span>
-<span class="nc" id="L158">        infos.add(&quot;Other&quot;);</span>
-<span class="nc" id="L159">        infoComboBox.setItems(infos);</span>
-<span class="nc" id="L160">        requestDialog.setContent(new VerticalLayout(appComboBox, infoComboBox));</span>
+<span class="fc" id="L152">        infos.add(&quot;The period for which the personal data will be stored&quot;);</span>
+<span class="fc" id="L153">        infos.add(&quot;The contact details of the data protection officer&quot;);</span>
+<span class="fc" id="L154">        infos.add(&quot;The purposes of the processing and the legal basis for it&quot;);</span>
+<span class="fc" id="L155">        infos.add(&quot;The legitimate interests pursued by the controller or by a third party&quot;);</span>
+<span class="fc" id="L156">        infos.add(&quot;The recipients or categories of recipients of the personal data&quot;);</span>
+<span class="fc" id="L157">        infos.add(&quot;The fact that the controller intends to transfer personal data to a third country&quot;);</span>
+<span class="fc" id="L158">        infos.add(&quot;Other&quot;);</span>
+<span class="fc" id="L159">        infoComboBox.setItems(infos);</span>
+<span class="fc" id="L160">        requestDialog.setContent(new VerticalLayout(appComboBox, infoComboBox));</span>
 
-<span class="nc" id="L162">        continueButton.addClickListener(e-&gt;{</span>
+<span class="fc" id="L162">        continueButton.addClickListener(e-&gt;{</span>
 <span class="nc bnc" id="L163" title="All 4 branches missed.">            if(appComboBox.getValue()!=null &amp;&amp; infoComboBox.getValue()!=null){</span>
 <span class="nc" id="L164">                request.setApp(appComboBox.getValue());</span>
 <span class="nc" id="L165">                request.setReceiver(dataBaseService.getControllersFromApp(appComboBox.getValue()).get(0));</span>
@@ -168,23 +168,23 @@ public class DialogRight{
 <span class="nc" id="L168">                showDialogConfirm(request);</span>
             }
 <span class="nc" id="L170">        });</span>
-<span class="nc" id="L171">        requestDialog.setContinueButton(continueButton);</span>
-<span class="nc" id="L172">    }</span>
+<span class="fc" id="L171">        requestDialog.setContinueButton(continueButton);</span>
+<span class="fc" id="L172">    }</span>
 
     private void complain(User user, RightRequest request){
-<span class="nc" id="L175">        requestDialog.setTitle(&quot;Compile a complain&quot;);</span>
+<span class="fc" id="L175">        requestDialog.setTitle(&quot;Compile a complain&quot;);</span>
 
-<span class="nc" id="L177">        ComboBox&lt;IoTApp&gt; appComboBox= new ComboBox&lt;&gt;(&quot;Apps&quot;);</span>
-<span class="nc" id="L178">        appComboBox.setItems(dataBaseService.getUserApps(user));</span>
-<span class="nc" id="L179">        appComboBox.setItemLabelGenerator(IoTApp::getName);</span>
-<span class="nc" id="L180">        appComboBox.setPlaceholder(&quot;Filter by name...&quot;);</span>
+<span class="fc" id="L177">        ComboBox&lt;IoTApp&gt; appComboBox= new ComboBox&lt;&gt;(&quot;Apps&quot;);</span>
+<span class="fc" id="L178">        appComboBox.setItems(dataBaseService.getUserApps(user));</span>
+<span class="fc" id="L179">        appComboBox.setItemLabelGenerator(IoTApp::getName);</span>
+<span class="fc" id="L180">        appComboBox.setPlaceholder(&quot;Filter by name...&quot;);</span>
 
-<span class="nc" id="L182">        TextArea textArea=new TextArea(&quot;Complain&quot;);</span>
-<span class="nc" id="L183">        textArea.setPlaceholder(&quot;Write your complain&quot;);</span>
-<span class="nc" id="L184">        textArea.setWidthFull();</span>
-<span class="nc" id="L185">        requestDialog.setContent(new VerticalLayout(appComboBox, textArea));</span>
+<span class="fc" id="L182">        TextArea textArea=new TextArea(&quot;Complain&quot;);</span>
+<span class="fc" id="L183">        textArea.setPlaceholder(&quot;Write your complain&quot;);</span>
+<span class="fc" id="L184">        textArea.setWidthFull();</span>
+<span class="fc" id="L185">        requestDialog.setContent(new VerticalLayout(appComboBox, textArea));</span>
 
-<span class="nc" id="L187">        continueButton.addClickListener(e-&gt;{</span>
+<span class="fc" id="L187">        continueButton.addClickListener(e-&gt;{</span>
 <span class="nc bnc" id="L188" title="All 4 branches missed.">            if(appComboBox.getValue()!=null &amp;&amp; textArea.getValue()!=null){</span>
 <span class="nc" id="L189">                request.setApp(appComboBox.getValue());</span>
 <span class="nc" id="L190">                request.setReceiver(dataBaseService.getControllersFromApp(appComboBox.getValue()).get(0));</span>
@@ -193,20 +193,20 @@ public class DialogRight{
 <span class="nc" id="L193">                showDialogConfirm(request);</span>
             }
 <span class="nc" id="L195">        });</span>
-<span class="nc" id="L196">        requestDialog.setContinueButton(continueButton);</span>
-<span class="nc" id="L197">    }</span>
+<span class="fc" id="L196">        requestDialog.setContinueButton(continueButton);</span>
+<span class="fc" id="L197">    }</span>
 
     private void deleteEverything(User user, RightRequest request){
-<span class="nc" id="L200">        requestDialog.setTitle(&quot;Delete everything&quot;);</span>
+<span class="fc" id="L200">        requestDialog.setTitle(&quot;Delete everything&quot;);</span>
 
-<span class="nc" id="L202">        ComboBox&lt;IoTApp&gt; appComboBox= new ComboBox&lt;&gt;(&quot;Apps&quot;);</span>
-<span class="nc" id="L203">        appComboBox.setItems(dataBaseService.getUserApps(user));</span>
-<span class="nc" id="L204">        appComboBox.setItemLabelGenerator(IoTApp::getName);</span>
-<span class="nc" id="L205">        appComboBox.setPlaceholder(&quot;Filter by name...&quot;);</span>
+<span class="fc" id="L202">        ComboBox&lt;IoTApp&gt; appComboBox= new ComboBox&lt;&gt;(&quot;Apps&quot;);</span>
+<span class="fc" id="L203">        appComboBox.setItems(dataBaseService.getUserApps(user));</span>
+<span class="fc" id="L204">        appComboBox.setItemLabelGenerator(IoTApp::getName);</span>
+<span class="fc" id="L205">        appComboBox.setPlaceholder(&quot;Filter by name...&quot;);</span>
 
-<span class="nc" id="L207">        requestDialog.setContent(appComboBox);</span>
+<span class="fc" id="L207">        requestDialog.setContent(appComboBox);</span>
 
-<span class="nc" id="L209">        continueButton.addClickListener(e-&gt;{</span>
+<span class="fc" id="L209">        continueButton.addClickListener(e-&gt;{</span>
 <span class="nc bnc" id="L210" title="All 2 branches missed.">            if(appComboBox.getValue()!=null){</span>
 <span class="nc" id="L211">                request.setApp(appComboBox.getValue());</span>
 <span class="nc" id="L212">                request.setReceiver(dataBaseService.getControllersFromApp(appComboBox.getValue()).get(0));</span>
@@ -214,80 +214,80 @@ public class DialogRight{
 <span class="nc" id="L214">                showDialogConfirm(request);</span>
             }
 <span class="nc" id="L216">        });</span>
-<span class="nc" id="L217">        requestDialog.setContinueButton(continueButton);</span>
-<span class="nc" id="L218">    }</span>
+<span class="fc" id="L217">        requestDialog.setContinueButton(continueButton);</span>
+<span class="fc" id="L218">    }</span>
 
     public void showDialogConfirm(RightRequest request){
-<span class="nc bnc" id="L221" title="All 2 branches missed.">        if(request==null){</span>
-<span class="nc" id="L222">            return;</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">        if(request==null){</span>
+<span class="fc" id="L222">            return;</span>
         }
-<span class="nc bnc" id="L224" title="All 8 branches missed.">        if(request.getRightType()==null || request.getReceiver()==null || request.getSender()==null || request.getApp()==null){</span>
-<span class="nc" id="L225">            return;</span>
+<span class="fc bfc" id="L224" title="All 8 branches covered.">        if(request.getRightType()==null || request.getReceiver()==null || request.getSender()==null || request.getApp()==null){</span>
+<span class="fc" id="L225">            return;</span>
         }
         // Sender of the request and authenticated user must be the same person
-<span class="nc bnc" id="L228" title="All 2 branches missed.">        if(!request.getSender().equals(authenticatedUser.getUser())){</span>
-<span class="nc" id="L229">            return;</span>
+<span class="fc bfc" id="L228" title="All 2 branches covered.">        if(!request.getSender().equals(authenticatedUser.getUser())){</span>
+<span class="fc" id="L229">            return;</span>
         }
-<span class="nc" id="L231">        confirmDialog.setWidth(&quot;50%&quot;);</span>
+<span class="fc" id="L231">        confirmDialog.setWidth(&quot;50%&quot;);</span>
 
-<span class="nc" id="L233">        Span appNameBold= new Span(&quot;APP: &quot;);</span>
-<span class="nc" id="L234">        Span rightBold= new Span(&quot;RIGHT: &quot;);</span>
-<span class="nc" id="L235">        appNameBold.addClassName(&quot;bold&quot;);</span>
-<span class="nc" id="L236">        rightBold.addClassName(&quot;bold&quot;);</span>
+<span class="fc" id="L233">        Span appNameBold= new Span(&quot;APP: &quot;);</span>
+<span class="fc" id="L234">        Span rightBold= new Span(&quot;RIGHT: &quot;);</span>
+<span class="fc" id="L235">        appNameBold.addClassName(&quot;bold&quot;);</span>
+<span class="fc" id="L236">        rightBold.addClassName(&quot;bold&quot;);</span>
 
-<span class="nc" id="L238">        HorizontalLayout appName=new HorizontalLayout(appNameBold, new Span(request.getApp().getName()));</span>
-<span class="nc" id="L239">        HorizontalLayout right= new HorizontalLayout(rightBold, new Span(GlobalVariables.rightDict.get(request.getRightType()).toString()));</span>
+<span class="fc" id="L238">        HorizontalLayout appName=new HorizontalLayout(appNameBold, new Span(request.getApp().getName()));</span>
+<span class="fc" id="L239">        HorizontalLayout right= new HorizontalLayout(rightBold, new Span(GlobalVariables.rightDict.get(request.getRightType()).toString()));</span>
 
-<span class="nc" id="L241">        TextArea premadeMessage=new TextArea();</span>
-<span class="nc" id="L242">        premadeMessage.setValue(getPremadeText(request));</span>
-<span class="nc" id="L243">        premadeMessage.setWidthFull();</span>
-<span class="nc" id="L244">        premadeMessage.setReadOnly(true);</span>
-<span class="nc" id="L245">        TextArea details=new TextArea();</span>
-<span class="nc" id="L246">        details.setPlaceholder(&quot;Add additional information&quot;);</span>
-<span class="nc" id="L247">        details.setWidthFull();</span>
+<span class="fc" id="L241">        TextArea premadeMessage=new TextArea();</span>
+<span class="fc" id="L242">        premadeMessage.setValue(getPremadeText(request));</span>
+<span class="fc" id="L243">        premadeMessage.setWidthFull();</span>
+<span class="fc" id="L244">        premadeMessage.setReadOnly(true);</span>
+<span class="fc" id="L245">        TextArea details=new TextArea();</span>
+<span class="fc" id="L246">        details.setPlaceholder(&quot;Add additional information&quot;);</span>
+<span class="fc" id="L247">        details.setWidthFull();</span>
 
-<span class="nc" id="L249">        confirmDialog.setTitle(&quot;Confirm&quot;);</span>
-<span class="nc" id="L250">        confirmDialog.setContent(new VerticalLayout(appName, right, premadeMessage, details));</span>
-<span class="nc" id="L251">        confirmDialog.setContinueButton(new Button(&quot;Confirm&quot;, e-&gt; confirmRequest(request, details.getValue())));</span>
+<span class="fc" id="L249">        confirmDialog.setTitle(&quot;Confirm&quot;);</span>
+<span class="fc" id="L250">        confirmDialog.setContent(new VerticalLayout(appName, right, premadeMessage, details));</span>
+<span class="pc" id="L251">        confirmDialog.setContinueButton(new Button(&quot;Confirm&quot;, e-&gt; confirmRequest(request, details.getValue())));</span>
 <span class="nc" id="L252">        confirmDialog.open();</span>
 <span class="nc" id="L253">    }</span>
 
     public String getPremadeText(RightRequest request){
-<span class="nc bnc" id="L256" title="All 2 branches missed.">        if(request.getRightType().equals(RightType.PORTABILITY)){</span>
-<span class="nc" id="L257">            return(&quot;Dear &quot; + request.getReceiver().getName() + &quot;, \n&quot; +</span>
-<span class="nc" id="L258">                    &quot;I would like to have access to my data from the app &quot; +  request.getApp().getName() + &quot; in a commonly used open format (XML, JSON),\n&quot; +</span>
+<span class="fc bfc" id="L256" title="All 2 branches covered.">        if(request.getRightType().equals(RightType.PORTABILITY)){</span>
+<span class="fc" id="L257">            return(&quot;Dear &quot; + request.getReceiver().getName() + &quot;, \n&quot; +</span>
+<span class="fc" id="L258">                    &quot;I would like to have access to my data from the app &quot; +  request.getApp().getName() + &quot; in a commonly used open format (XML, JSON),\n&quot; +</span>
                     &quot;Best regards, \n&quot; +
-<span class="nc" id="L260">                    request.getSender().getName());</span>
+<span class="fc" id="L260">                    request.getSender().getName());</span>
         }
-<span class="nc bnc" id="L262" title="All 2 branches missed.">        else if(request.getRightType().equals(RightType.WITHDRAWCONSENT)){</span>
-<span class="nc" id="L263">            return(&quot;Dear &quot; + request.getReceiver().getName() + &quot;, \n&quot; +</span>
-<span class="nc" id="L264">                    &quot;I would like to withdraw the consent: &quot; +request.getOther() + &quot; from the app &quot; + request.getApp().getName() + &quot;,\n&quot; +</span>
+<span class="fc bfc" id="L262" title="All 2 branches covered.">        else if(request.getRightType().equals(RightType.WITHDRAWCONSENT)){</span>
+<span class="fc" id="L263">            return(&quot;Dear &quot; + request.getReceiver().getName() + &quot;, \n&quot; +</span>
+<span class="fc" id="L264">                    &quot;I would like to withdraw the consent: &quot; +request.getOther() + &quot; from the app &quot; + request.getApp().getName() + &quot;,\n&quot; +</span>
                     &quot;Best regards, \n&quot; +
-<span class="nc" id="L266">                    request.getSender().getName());</span>
+<span class="fc" id="L266">                    request.getSender().getName());</span>
         }
-<span class="nc bnc" id="L268" title="All 2 branches missed.">        else if(request.getRightType().equals(RightType.ERASURE)){</span>
-<span class="nc" id="L269">            return(&quot;Dear &quot; + request.getReceiver().getName() + &quot;, \n&quot; +</span>
-<span class="nc" id="L270">                    &quot;I would like to erase the following information: &quot; +request.getOther() + &quot; ,from the app &quot; + request.getApp().getName() + &quot;,\n&quot; +</span>
+<span class="fc bfc" id="L268" title="All 2 branches covered.">        else if(request.getRightType().equals(RightType.ERASURE)){</span>
+<span class="fc" id="L269">            return(&quot;Dear &quot; + request.getReceiver().getName() + &quot;, \n&quot; +</span>
+<span class="fc" id="L270">                    &quot;I would like to erase the following information: &quot; +request.getOther() + &quot; ,from the app &quot; + request.getApp().getName() + &quot;,\n&quot; +</span>
                     &quot;Best regards, \n&quot; +
-<span class="nc" id="L272">                    request.getSender().getName());</span>
+<span class="fc" id="L272">                    request.getSender().getName());</span>
         }
-<span class="nc bnc" id="L274" title="All 2 branches missed.">        else if(request.getRightType().equals(RightType.INFO)){</span>
-<span class="nc" id="L275">            return(&quot;Dear &quot; + request.getReceiver().getName() + &quot;, \n&quot; +</span>
-<span class="nc" id="L276">                    &quot;I would like to know the following information: &quot; +request.getOther() + &quot; regarding the app &quot; + request.getApp().getName() + &quot;,\n&quot; +</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">        else if(request.getRightType().equals(RightType.INFO)){</span>
+<span class="fc" id="L275">            return(&quot;Dear &quot; + request.getReceiver().getName() + &quot;, \n&quot; +</span>
+<span class="fc" id="L276">                    &quot;I would like to know the following information: &quot; +request.getOther() + &quot; regarding the app &quot; + request.getApp().getName() + &quot;,\n&quot; +</span>
                     &quot;Best regards, \n&quot; +
-<span class="nc" id="L278">                    request.getSender().getName());</span>
+<span class="fc" id="L278">                    request.getSender().getName());</span>
         }
-<span class="nc bnc" id="L280" title="All 2 branches missed.">        else if(request.getRightType().equals(RightType.COMPLAIN)){</span>
-<span class="nc" id="L281">            return(&quot;Dear &quot; + request.getReceiver().getName() + &quot;, \n&quot; +</span>
-<span class="nc" id="L282">                    &quot;I would like to know the complain with the supervision authority: &quot; +request.getOther() + &quot; about the app &quot; + request.getApp().getName() + &quot;,\n&quot; +</span>
+<span class="fc bfc" id="L280" title="All 2 branches covered.">        else if(request.getRightType().equals(RightType.COMPLAIN)){</span>
+<span class="fc" id="L281">            return(&quot;Dear &quot; + request.getReceiver().getName() + &quot;, \n&quot; +</span>
+<span class="fc" id="L282">                    &quot;I would like to know the complain with the supervision authority: &quot; +request.getOther() + &quot; about the app &quot; + request.getApp().getName() + &quot;,\n&quot; +</span>
                     &quot;Best regards, \n&quot; +
-<span class="nc" id="L284">                    request.getSender().getName());</span>
+<span class="fc" id="L284">                    request.getSender().getName());</span>
         }
-<span class="nc bnc" id="L286" title="All 2 branches missed.">        else if(request.getRightType().equals(RightType.DELTEEVERYTHING)){</span>
-<span class="nc" id="L287">            return(&quot;Dear &quot; + request.getReceiver().getName() + &quot;, \n&quot; +</span>
-<span class="nc" id="L288">                    &quot;I would like to remove all my personal data from the app &quot; +  request.getApp().getName() + &quot; ,\n&quot; +</span>
+<span class="pc bpc" id="L286" title="1 of 2 branches missed.">        else if(request.getRightType().equals(RightType.DELTEEVERYTHING)){</span>
+<span class="fc" id="L287">            return(&quot;Dear &quot; + request.getReceiver().getName() + &quot;, \n&quot; +</span>
+<span class="fc" id="L288">                    &quot;I would like to remove all my personal data from the app &quot; +  request.getApp().getName() + &quot; ,\n&quot; +</span>
                     &quot;Best regards, \n&quot; +
-<span class="nc" id="L290">                    request.getSender().getName());</span>
+<span class="fc" id="L290">                    request.getSender().getName());</span>
         }
 <span class="nc" id="L292">        return null;</span>
     }

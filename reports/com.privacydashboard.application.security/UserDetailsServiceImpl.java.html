@@ -21,19 +21,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-<span class="nc" id="L24">    public UserDetailsServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {</span>
-<span class="nc" id="L25">        this.userRepository = userRepository;</span>
-<span class="nc" id="L26">        this.passwordEncoder=passwordEncoder;</span>
-<span class="nc" id="L27">    }</span>
+<span class="fc" id="L24">    public UserDetailsServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {</span>
+<span class="fc" id="L25">        this.userRepository = userRepository;</span>
+<span class="fc" id="L26">        this.passwordEncoder=passwordEncoder;</span>
+<span class="fc" id="L27">    }</span>
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-<span class="nc" id="L31">        User user = userRepository.findByName(username);</span>
-<span class="nc bnc" id="L32" title="All 2 branches missed.">        if (user == null) {</span>
-<span class="nc" id="L33">            throw new UsernameNotFoundException(&quot;No user present with username: &quot; + username);</span>
+<span class="fc" id="L31">        User user = userRepository.findByName(username);</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (user == null) {</span>
+<span class="fc" id="L33">            throw new UsernameNotFoundException(&quot;No user present with username: &quot; + username);</span>
         } else {
-<span class="nc" id="L35">            return new org.springframework.security.core.userdetails.User(user.getName(), user.getHashedPassword(),</span>
-<span class="nc" id="L36">                    getAuthorities(user));</span>
+<span class="fc" id="L35">            return new org.springframework.security.core.userdetails.User(user.getName(), user.getHashedPassword(),</span>
+<span class="fc" id="L36">                    getAuthorities(user));</span>
         }
     }
 
@@ -46,9 +46,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     // Per com'è fatto, c'è solo un elemento Authority (User può essere solo uno tra Subject, Controller e DPO)
     // springframework...User però vuole una lista
     private static List&lt;GrantedAuthority&gt; getAuthorities(User user) {
-<span class="nc" id="L49">        List&lt;GrantedAuthority&gt; list=new LinkedList&lt;&gt;();</span>
-<span class="nc" id="L50">        list.add(new SimpleGrantedAuthority(&quot;ROLE_&quot; + user.getRole()));</span>
-<span class="nc" id="L51">        return list;</span>
+<span class="fc" id="L49">        List&lt;GrantedAuthority&gt; list=new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L50">        list.add(new SimpleGrantedAuthority(&quot;ROLE_&quot; + user.getRole()));</span>
+<span class="fc" id="L51">        return list;</span>
 
     }
 
@@ -67,7 +67,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public boolean isAlreadyPresent(String name){
-<span class="nc bnc" id="L70" title="All 2 branches missed.">        return userRepository.findByName(name)!=null;</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        return userRepository.findByName(name)!=null;</span>
     }
 
     public void changeUserPassword(User user, String password){

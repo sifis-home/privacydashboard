@@ -32,50 +32,50 @@ public class MessagesView extends Div implements AfterNavigationObserver{
     private final AuthenticatedUser authenticatedUser;
     private final CommunicationService communicationService;
 
-<span class="nc" id="L35">    private final Grid&lt;User&gt; grid=new Grid&lt;&gt;();</span>
-<span class="nc" id="L36">    private final TextField searchText=new TextField();</span>
-<span class="nc" id="L37">    private final Button newMessageButton=new Button(&quot;New Message&quot;);</span>
-<span class="nc" id="L38">    private final HorizontalLayout headerLayout=new HorizontalLayout(searchText, newMessageButton);</span>
+<span class="fc" id="L35">    private final Grid&lt;User&gt; grid=new Grid&lt;&gt;();</span>
+<span class="fc" id="L36">    private final TextField searchText=new TextField();</span>
+<span class="fc" id="L37">    private final Button newMessageButton=new Button(&quot;New Message&quot;);</span>
+<span class="fc" id="L38">    private final HorizontalLayout headerLayout=new HorizontalLayout(searchText, newMessageButton);</span>
 
-<span class="nc" id="L40">    private final MyDialog newMessageDialog=new MyDialog();</span>
-<span class="nc" id="L41">    private final ComboBox&lt;User&gt; contactComboBox= new ComboBox&lt;&gt;(&quot;Contacts&quot;);</span>
+<span class="fc" id="L40">    private final MyDialog newMessageDialog=new MyDialog();</span>
+<span class="fc" id="L41">    private final ComboBox&lt;User&gt; contactComboBox= new ComboBox&lt;&gt;(&quot;Contacts&quot;);</span>
 
-<span class="nc" id="L43">    public MessagesView(DataBaseService dataBaseService, AuthenticatedUser authenticatedUser, CommunicationService communicationService) {</span>
-<span class="nc" id="L44">        this.dataBaseService= dataBaseService;</span>
-<span class="nc" id="L45">        this.authenticatedUser= authenticatedUser;</span>
-<span class="nc" id="L46">        this.communicationService= communicationService;</span>
+<span class="fc" id="L43">    public MessagesView(DataBaseService dataBaseService, AuthenticatedUser authenticatedUser, CommunicationService communicationService) {</span>
+<span class="fc" id="L44">        this.dataBaseService= dataBaseService;</span>
+<span class="fc" id="L45">        this.authenticatedUser= authenticatedUser;</span>
+<span class="fc" id="L46">        this.communicationService= communicationService;</span>
 
-<span class="nc" id="L48">        addClassName(&quot;grid-view&quot;);</span>
-<span class="nc" id="L49">        initializeHeaderLayout();</span>
-<span class="nc" id="L50">        initializeGrid();</span>
-<span class="nc" id="L51">        initializeNewMessageDialog();</span>
-<span class="nc" id="L52">        add(headerLayout, grid);</span>
-<span class="nc" id="L53">    }</span>
+<span class="fc" id="L48">        addClassName(&quot;grid-view&quot;);</span>
+<span class="fc" id="L49">        initializeHeaderLayout();</span>
+<span class="fc" id="L50">        initializeGrid();</span>
+<span class="fc" id="L51">        initializeNewMessageDialog();</span>
+<span class="fc" id="L52">        add(headerLayout, grid);</span>
+<span class="fc" id="L53">    }</span>
 
     private void initializeGrid(){
-<span class="nc" id="L56">        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);</span>
-<span class="nc" id="L57">        grid.addComponentColumn(this::showContact);</span>
-<span class="nc" id="L58">    }</span>
+<span class="fc" id="L56">        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);</span>
+<span class="fc" id="L57">        grid.addComponentColumn(this::showContact);</span>
+<span class="fc" id="L58">    }</span>
 
     private void initializeHeaderLayout(){
-<span class="nc" id="L61">        newMessageButton.addClickListener(e-&gt; newMessageDialog.open());</span>
-<span class="nc" id="L62">        searchText.setPlaceholder(&quot;Search...&quot;);</span>
-<span class="nc" id="L63">        searchText.setValueChangeMode(ValueChangeMode.LAZY);</span>
-<span class="nc" id="L64">        searchText.addValueChangeListener(e-&gt; updateGrid());</span>
-<span class="nc" id="L65">        searchText.addClassName(&quot;search&quot;);</span>
-<span class="nc" id="L66">        headerLayout.setAlignItems(FlexComponent.Alignment.CENTER);</span>
-<span class="nc" id="L67">    }</span>
+<span class="pc" id="L61">        newMessageButton.addClickListener(e-&gt; newMessageDialog.open());</span>
+<span class="fc" id="L62">        searchText.setPlaceholder(&quot;Search...&quot;);</span>
+<span class="fc" id="L63">        searchText.setValueChangeMode(ValueChangeMode.LAZY);</span>
+<span class="pc" id="L64">        searchText.addValueChangeListener(e-&gt; updateGrid());</span>
+<span class="fc" id="L65">        searchText.addClassName(&quot;search&quot;);</span>
+<span class="fc" id="L66">        headerLayout.setAlignItems(FlexComponent.Alignment.CENTER);</span>
+<span class="fc" id="L67">    }</span>
 
     private void initializeNewMessageDialog(){
-<span class="nc" id="L70">        contactComboBox.setItems(dataBaseService.getAllContactsFromUser(authenticatedUser.getUser()));</span>
-<span class="nc" id="L71">        contactComboBox.setItemLabelGenerator(User::getName);</span>
+<span class="fc" id="L70">        contactComboBox.setItems(dataBaseService.getAllContactsFromUser(authenticatedUser.getUser()));</span>
+<span class="fc" id="L71">        contactComboBox.setItemLabelGenerator(User::getName);</span>
 
-<span class="nc" id="L73">        Button newMessageButton=new Button(&quot;Continue&quot;, e-&gt; confirmNewMessage());</span>
+<span class="pc" id="L73">        Button newMessageButton=new Button(&quot;Continue&quot;, e-&gt; confirmNewMessage());</span>
 
-<span class="nc" id="L75">        newMessageDialog.setTitle(&quot;Select a contact&quot;);</span>
-<span class="nc" id="L76">        newMessageDialog.setContent(new VerticalLayout(contactComboBox));</span>
-<span class="nc" id="L77">        newMessageDialog.setContinueButton(newMessageButton);</span>
-<span class="nc" id="L78">    }</span>
+<span class="fc" id="L75">        newMessageDialog.setTitle(&quot;Select a contact&quot;);</span>
+<span class="fc" id="L76">        newMessageDialog.setContent(new VerticalLayout(contactComboBox));</span>
+<span class="fc" id="L77">        newMessageDialog.setContinueButton(newMessageButton);</span>
+<span class="fc" id="L78">    }</span>
 
     private void confirmNewMessage(){
 <span class="nc bnc" id="L81" title="All 2 branches missed.">        if(contactComboBox.getValue()==null){</span>
@@ -86,14 +86,14 @@ public class MessagesView extends Div implements AfterNavigationObserver{
 <span class="nc" id="L86">    }</span>
 
     private HorizontalLayout showContact(User contact){
-<span class="nc" id="L89">        Avatar avatar = new Avatar(contact.getName(), contact.getProfilePictureUrl());</span>
-<span class="nc" id="L90">        Span name= new Span(contact.getName());</span>
-<span class="nc" id="L91">        name.addClassName(&quot;name&quot;);</span>
-<span class="nc" id="L92">        HorizontalLayout card = new HorizontalLayout(avatar, name);</span>
-<span class="nc" id="L93">        card.addClassName(&quot;card&quot;);</span>
-<span class="nc" id="L94">        card.addClassName(&quot;canOpen&quot;);</span>
-<span class="nc" id="L95">        card.addClickListener(e-&gt; goToConversation(contact));</span>
-<span class="nc" id="L96">        return card;</span>
+<span class="fc" id="L89">        Avatar avatar = new Avatar(contact.getName(), contact.getProfilePictureUrl());</span>
+<span class="fc" id="L90">        Span name= new Span(contact.getName());</span>
+<span class="fc" id="L91">        name.addClassName(&quot;name&quot;);</span>
+<span class="fc" id="L92">        HorizontalLayout card = new HorizontalLayout(avatar, name);</span>
+<span class="fc" id="L93">        card.addClassName(&quot;card&quot;);</span>
+<span class="fc" id="L94">        card.addClassName(&quot;canOpen&quot;);</span>
+<span class="pc" id="L95">        card.addClickListener(e-&gt; goToConversation(contact));</span>
+<span class="fc" id="L96">        return card;</span>
     }
 
     private void goToConversation(User contact){
