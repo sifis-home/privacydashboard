@@ -48,7 +48,6 @@ public class MyDialogTest {
         Button button = new Button();
         button.setText("TestText");
         dialog.setContinueButton(button);
-        System.out.println(dialog.getElement().getChild(1).getChild(0));
         assertEquals(dialog.getElement().getChild(1).getChild(0).getText(), "Cancel");
         assertEquals(dialog.getElement().getChild(1).getChild(0).getAttribute("class"), "cancelButton myDialogCancelButton");
         assertEquals(dialog.getElement().getChild(1).getChild(1).getText(), "TestText");

@@ -17,6 +17,7 @@ import com.privacydashboard.application.data.entity.Message;
 import com.privacydashboard.application.data.entity.Notification;
 import com.privacydashboard.application.data.entity.PrivacyNotice;
 import com.privacydashboard.application.data.entity.RightRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.io.IOException;
