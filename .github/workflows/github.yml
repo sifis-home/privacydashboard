@@ -82,18 +82,6 @@ jobs:
           architecture: x64
           distribution: 'temurin'
           cache: 'maven'
-          
-      - name: Prepare Dockerfiles and files for Contexts
-        run: docker build . --file Dockerfile --tag privacydashboard:latest
-             
-      - name: Upload artifacts for Docker Image building
-        uses: actions/upload-artifact@v3
-        with:
-          name: files-for-docker
-          retention-days: 5
-          if-no-files-found: error
-          path: |
-            ./*
 
   # Build multiarch Docker Images and push as GitHub Packages
   docker-image-push:
@@ -103,11 +91,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download artifacts for Docker Image building
-        uses: actions/download-artifact@v3
-        with:
-          name: files-for-docker
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -121,14 +104,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Prepare Dockerfiles and files for Contexts
+          run: |
+            ls -la
+
       - name: Build and push image
         uses: docker/build-push-action@v4
         with:
-          #platforms: linux/amd64, linux/arm64, linux/arm
-          context: ./
-          file: ./Dockerfile
+          platforms: linux/amd64, linux/arm64, linux/arm
           push: true
           tags: ghcr.io/sifis-home/privacydashboard:latest
-          outputs: type=registry, annotation-index.org.opencontainers.image.description=privacydashboard - Privacydashboard Image
+          outputs: type=registry, annotation-index.org.opencontainers.image.description=PrivacyDashboard
 
       
