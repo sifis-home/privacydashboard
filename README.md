@@ -1,6 +1,6 @@
 # Privacy Dashboard
 
-[![coverage](https://sifis-home.github.io/privacydashboard/reports/jacoco.svg)](https://sifis-home.github.io/privacydashboard/reports/index.html)
+[![coverage](https://raw.githubusercontent.com/sifis-home/privacydashboard/gh-pages/reports/jacoco.svg 'Code Coverage')](https://sifis-home.github.io/privacydashboard/reports/index.html)
 
 ## Running the application
 
