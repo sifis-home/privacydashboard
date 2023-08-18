@@ -32,7 +32,7 @@ jobs:
       - name: Get version
         id: tagName
         run: |
-          VERSION="${{github.ref_name}}"
+          VERSION=$(cat ./VERSION)
           echo "tag=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build Zip file
@@ -47,7 +47,6 @@ jobs:
           name: v${{ steps.tagName.outputs.tag }}
           files: |
             ./*.zip
-          tag_name: "alpha"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
