@@ -105,8 +105,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Prepare Dockerfiles and files for Contexts
-          run: |
-            ls -la
+        run: |
+          ls -la
 
       - name: Build and push image
         uses: docker/build-push-action@v4
