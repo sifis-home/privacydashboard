@@ -24,11 +24,3 @@ COPY --chown=myuser:myuser package-lock.json* pnpm-lock.yaml* webpack.config.js*
 
 # Build the production package, assuming that we validated the version before so no need for running tests again
 RUN mvn clean package -DskipTests -Pproduction
-
-# Running stage: the part that is used for running the application
-FROM openjdk:18-jdk-slim
-COPY --from=build /usr/src/app/target/*.jar /usr/app/app.jar
-RUN useradd -m myuser
-USER myuser
-EXPOSE 8080
-CMD java -jar /usr/app/app.jar
