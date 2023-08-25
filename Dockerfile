@@ -1,6 +1,6 @@
 # Stage that builds the application, a prerequisite for the running stage
 FROM maven:3.8.6-eclipse-temurin-18 as build
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_19.x | bash -
 RUN apt-get update -qq && apt-get install -qq --no-install-recommends nodejs
 
 # Stop running as root at this point
@@ -24,3 +24,11 @@ COPY --chown=myuser:myuser package-lock.json* pnpm-lock.yaml* webpack.config.js*
 
 # Build the production package, assuming that we validated the version before so no need for running tests again
 RUN mvn clean package -DskipTests -Pproduction
+
+# Running stage: the part that is used for running the application
+FROM openjdk:22-oraclelinux8
+COPY --from=build /usr/src/app/target/*.jar /usr/app/app.jar
+RUN useradd -m myuser
+USER myuser
+EXPOSE 8080
+CMD java -jar /usr/app/app.jar
