@@ -1,6 +1,6 @@
 # Stage that builds the application, a prerequisite for the running stage
 FROM maven:3.8.6-eclipse-temurin-18 as build
-RUN curl -fsSL https://deb.nodesource.com/setup_19.x | bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get update -qq && apt-get install -qq --no-install-recommends nodejs
 
 # Stop running as root at this point
