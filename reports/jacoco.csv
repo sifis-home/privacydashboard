@@ -1,12 +1,12 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 Privacy Dashboard,com.privacydashboard.application.data.generator,DataGenerator,1711,0,86,0,253,0,46,0,3,0
 Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiUserAppRelationController,380,0,40,0,78,0,28,0,8,0
-Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiRightRequestController,649,0,72,0,132,0,51,0,15,0
+Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiRightRequestController,375,274,50,22,82,50,31,20,6,9
 Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiAppController,321,0,30,0,69,0,26,0,11,0
 Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiPrivacyNoticeController,501,0,42,0,113,0,33,0,12,0
-Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiUserController,343,3,32,0,75,1,25,1,9,1
+Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiUserController,116,230,8,24,27,49,8,18,4,6
 Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiNotificationController,434,0,54,0,89,0,41,0,12,0
-Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiGeneralController,786,1075,106,162,163,213,79,95,20,17
+Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiGeneralController,18,1843,10,258,2,374,10,164,1,36
 Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiMessageController,275,0,28,0,57,0,21,0,7,0
 Privacy Dashboard,com.privacydashboard.application.views.apps,AppsView,307,677,23,31,58,132,31,24,16,9
 Privacy Dashboard,com.privacydashboard.application.data.entity,UserAppRelation,0,28,0,0,0,11,0,7,0,7

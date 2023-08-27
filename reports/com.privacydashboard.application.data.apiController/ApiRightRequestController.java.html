@@ -17,7 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @RestController
-<span class="nc" id="L20">public class ApiRightRequestController {</span>
+<span class="fc" id="L20">public class ApiRightRequestController {</span>
     @Autowired
     private DataBaseService dataBaseService;
     @Autowired
@@ -35,13 +35,13 @@ import java.util.List;
     @RequestMapping(&quot;api/rightrequest/get&quot;)
     public ResponseEntity&lt;?&gt; get(@RequestParam() String requestId){
         try{
-<span class="nc" id="L38">            RightRequest request= apiGeneralController.getRequestFromId(requestId);</span>
-<span class="nc bnc" id="L39" title="All 2 branches missed.">            if(!isSenderOrReceiver(request, apiGeneralController.getAuthenicatedUser())){</span>
-<span class="nc" id="L40">                return ResponseEntity.badRequest().body(&quot;You MUST be the sender or the receiver of the request&quot;);</span>
+<span class="fc" id="L38">            RightRequest request= apiGeneralController.getRequestFromId(requestId);</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">            if(!isSenderOrReceiver(request, apiGeneralController.getAuthenicatedUser())){</span>
+<span class="fc" id="L40">                return ResponseEntity.badRequest().body(&quot;You MUST be the sender or the receiver of the request&quot;);</span>
             }
-<span class="nc" id="L42">            return ResponseEntity.ok(apiGeneralController.createJsonFromRequest(request));</span>
-<span class="nc" id="L43">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L44">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L42">            return ResponseEntity.ok(apiGeneralController.createJsonFromRequest(request));</span>
+<span class="fc" id="L43">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L44">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -55,11 +55,11 @@ import java.util.List;
     @RequestMapping(&quot;api/rightrequest/getAllFromUser&quot;)
     public ResponseEntity&lt;?&gt; getAllFromUser(@RequestParam() String userId){
         try{
-<span class="nc" id="L58">            User user= apiGeneralController.getUserFromId(userId);</span>
-<span class="nc" id="L59">            List&lt;RightRequest&gt; requestList= getRequestList(user, true, true);</span>
-<span class="nc" id="L60">            return ResponseEntity.ok(apiGeneralController.createJsonRequestCheckAuthorizedUser(requestList, apiGeneralController.getAuthenicatedUser()));</span>
-<span class="nc" id="L61">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L62">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L58">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="fc" id="L59">            List&lt;RightRequest&gt; requestList= getRequestList(user, true, true);</span>
+<span class="fc" id="L60">            return ResponseEntity.ok(apiGeneralController.createJsonRequestCheckAuthorizedUser(requestList, apiGeneralController.getAuthenicatedUser()));</span>
+<span class="fc" id="L61">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L62">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -73,11 +73,11 @@ import java.util.List;
     @RequestMapping(&quot;api/rightrequest/getHandledFromUser&quot;)
     public ResponseEntity&lt;?&gt; getHandledFromUser(@RequestParam() String userId){
         try{
-<span class="nc" id="L76">            User user= apiGeneralController.getUserFromId(userId);</span>
-<span class="nc" id="L77">            List&lt;RightRequest&gt; requestList= getRequestList(user, false, true);</span>
-<span class="nc" id="L78">            return ResponseEntity.ok(apiGeneralController.createJsonRequestCheckAuthorizedUser(requestList, apiGeneralController.getAuthenicatedUser()));</span>
-<span class="nc" id="L79">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L80">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L76">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="fc" id="L77">            List&lt;RightRequest&gt; requestList= getRequestList(user, false, true);</span>
+<span class="fc" id="L78">            return ResponseEntity.ok(apiGeneralController.createJsonRequestCheckAuthorizedUser(requestList, apiGeneralController.getAuthenicatedUser()));</span>
+<span class="fc" id="L79">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L80">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -91,11 +91,11 @@ import java.util.List;
     @RequestMapping(&quot;api/rightrequest/getNotHandledFromUser&quot;)
     public ResponseEntity&lt;?&gt; getNotHandledFromUser(@RequestParam() String userId){
         try{
-<span class="nc" id="L94">            User user= apiGeneralController.getUserFromId(userId);</span>
-<span class="nc" id="L95">            List&lt;RightRequest&gt; requestList= getRequestList(user, false, false);</span>
-<span class="nc" id="L96">            return ResponseEntity.ok(apiGeneralController.createJsonRequestCheckAuthorizedUser(requestList, apiGeneralController.getAuthenicatedUser()));</span>
-<span class="nc" id="L97">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L98">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L94">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="fc" id="L95">            List&lt;RightRequest&gt; requestList= getRequestList(user, false, false);</span>
+<span class="fc" id="L96">            return ResponseEntity.ok(apiGeneralController.createJsonRequestCheckAuthorizedUser(requestList, apiGeneralController.getAuthenicatedUser()));</span>
+<span class="fc" id="L97">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L98">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -110,20 +110,20 @@ import java.util.List;
     @RequestMapping(&quot;api/rightrequest/getFromApp&quot;)
     public ResponseEntity&lt;?&gt; getFromApp(@RequestParam() String appId, @RequestParam(required = false) String isHandled){
         try{
-<span class="nc" id="L113">            IoTApp app= apiGeneralController.getAppFromId(appId);</span>
+<span class="fc" id="L113">            IoTApp app= apiGeneralController.getAppFromId(appId);</span>
             List&lt;RightRequest&gt; requestList;
-<span class="nc bnc" id="L115" title="All 2 branches missed.">            if(isHandled==null){</span>
-<span class="nc" id="L116">                requestList= getRequestList(apiGeneralController.getAuthenicatedUser(), true, true);</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">            if(isHandled==null){</span>
+<span class="fc" id="L116">                requestList= getRequestList(apiGeneralController.getAuthenicatedUser(), true, true);</span>
             }
-<span class="nc bnc" id="L118" title="All 4 branches missed.">            else if(isHandled.equalsIgnoreCase(&quot;true&quot;) || isHandled.equalsIgnoreCase(&quot;false&quot;)){</span>
-<span class="nc" id="L119">                requestList = getRequestList(apiGeneralController.getAuthenicatedUser(), false, Boolean.parseBoolean(isHandled));</span>
+<span class="fc bfc" id="L118" title="All 4 branches covered.">            else if(isHandled.equalsIgnoreCase(&quot;true&quot;) || isHandled.equalsIgnoreCase(&quot;false&quot;)){</span>
+<span class="fc" id="L119">                requestList = getRequestList(apiGeneralController.getAuthenicatedUser(), false, Boolean.parseBoolean(isHandled));</span>
             }
             else{
-<span class="nc" id="L122">                return ResponseEntity.badRequest().body(&quot;invalid isHandled parameter&quot;);</span>
+<span class="fc" id="L122">                return ResponseEntity.badRequest().body(&quot;invalid isHandled parameter&quot;);</span>
             }
-<span class="nc" id="L124">            return ResponseEntity.ok(apiGeneralController.createJsonRequestOfApp(requestList, app));</span>
-<span class="nc" id="L125">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L126">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L124">            return ResponseEntity.ok(apiGeneralController.createJsonRequestOfApp(requestList, app));</span>
+<span class="fc" id="L125">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L126">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -139,18 +139,18 @@ import java.util.List;
     public ResponseEntity&lt;?&gt; getFromRightType(@RequestParam() String rightType, @RequestParam(required = false) String isHandled){
         try{
             List&lt;RightRequest&gt; requestList;
-<span class="nc bnc" id="L142" title="All 2 branches missed.">            if(isHandled==null){</span>
-<span class="nc" id="L143">                requestList= getRequestList(apiGeneralController.getAuthenicatedUser(), true, true);</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">            if(isHandled==null){</span>
+<span class="fc" id="L143">                requestList= getRequestList(apiGeneralController.getAuthenicatedUser(), true, true);</span>
             }
-<span class="nc bnc" id="L145" title="All 4 branches missed.">            else if(isHandled.equalsIgnoreCase(&quot;true&quot;) || isHandled.equalsIgnoreCase(&quot;false&quot;)){</span>
-<span class="nc" id="L146">                requestList = getRequestList(apiGeneralController.getAuthenicatedUser(), false, Boolean.parseBoolean(isHandled));</span>
+<span class="fc bfc" id="L145" title="All 4 branches covered.">            else if(isHandled.equalsIgnoreCase(&quot;true&quot;) || isHandled.equalsIgnoreCase(&quot;false&quot;)){</span>
+<span class="fc" id="L146">                requestList = getRequestList(apiGeneralController.getAuthenicatedUser(), false, Boolean.parseBoolean(isHandled));</span>
             }
             else{
-<span class="nc" id="L149">                return ResponseEntity.badRequest().body(&quot;invalid isHandled parameter&quot;);</span>
+<span class="fc" id="L149">                return ResponseEntity.badRequest().body(&quot;invalid isHandled parameter&quot;);</span>
             }
-<span class="nc" id="L151">            return ResponseEntity.ok(apiGeneralController.createJsonRequestOfRightType(requestList, rightType));</span>
-<span class="nc" id="L152">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L153">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L151">            return ResponseEntity.ok(apiGeneralController.createJsonRequestOfRightType(requestList, rightType));</span>
+<span class="fc" id="L152">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L153">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -336,25 +336,25 @@ import java.util.List;
      * @return List with all the requests
      */
     private List&lt;RightRequest&gt; getRequestList(User user, boolean all, boolean handled){
-<span class="nc" id="L339">        List&lt;RightRequest&gt; requestList= new LinkedList&lt;&gt;();</span>
-<span class="nc bnc" id="L340" title="All 2 branches missed.">        if(all){</span>
-<span class="nc" id="L341">            requestList.addAll(dataBaseService.getAllRequestsFromReceiver(user));</span>
-<span class="nc" id="L342">            requestList.addAll(dataBaseService.getAllRequestsFromSender(user));</span>
+<span class="fc" id="L339">        List&lt;RightRequest&gt; requestList= new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L340" title="All 2 branches covered.">        if(all){</span>
+<span class="fc" id="L341">            requestList.addAll(dataBaseService.getAllRequestsFromReceiver(user));</span>
+<span class="fc" id="L342">            requestList.addAll(dataBaseService.getAllRequestsFromSender(user));</span>
         }
         else {
-<span class="nc bnc" id="L345" title="All 2 branches missed.">            if (handled) {</span>
-<span class="nc" id="L346">                requestList.addAll(dataBaseService.getHandledRequestsFromReceiver(user));</span>
-<span class="nc" id="L347">                requestList.addAll(dataBaseService.getHandledRequestsFromSender(user));</span>
+<span class="fc bfc" id="L345" title="All 2 branches covered.">            if (handled) {</span>
+<span class="fc" id="L346">                requestList.addAll(dataBaseService.getHandledRequestsFromReceiver(user));</span>
+<span class="fc" id="L347">                requestList.addAll(dataBaseService.getHandledRequestsFromSender(user));</span>
             } else {
-<span class="nc" id="L349">                requestList.addAll(dataBaseService.getPendingRequestsFromReceiver(user));</span>
-<span class="nc" id="L350">                requestList.addAll(dataBaseService.getPendingRequestsFromSender(user));</span>
+<span class="fc" id="L349">                requestList.addAll(dataBaseService.getPendingRequestsFromReceiver(user));</span>
+<span class="fc" id="L350">                requestList.addAll(dataBaseService.getPendingRequestsFromSender(user));</span>
             }
         }
-<span class="nc" id="L353">        return requestList;</span>
+<span class="fc" id="L353">        return requestList;</span>
     }
 
     private boolean isSenderOrReceiver(RightRequest request, User user){
-<span class="nc bnc" id="L357" title="All 4 branches missed.">        return request.getSender().equals(user) || request.getReceiver().equals(user);</span>
+<span class="fc bfc" id="L357" title="All 4 branches covered.">        return request.getSender().equals(user) || request.getReceiver().equals(user);</span>
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)

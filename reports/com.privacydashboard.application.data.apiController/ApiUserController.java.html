@@ -35,14 +35,14 @@ import java.util.List;
     @RequestMapping(&quot;api/user/get&quot;)
     public ResponseEntity&lt;?&gt; get(@RequestParam() String userId){
         try {
-<span class="nc" id="L38">            User user= apiGeneralController.getUserFromId(userId);</span>
-<span class="nc" id="L39">            ObjectNode userJson = apiGeneralController.createJsonFromUser(user);</span>
-<span class="nc" id="L40">            userJson.remove(&quot;mail&quot;);</span>
-<span class="nc" id="L41">            userJson.remove(&quot;hashedPassword&quot;);</span>
-<span class="nc" id="L42">            return ResponseEntity.ok(userJson);</span>
+<span class="fc" id="L38">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="fc" id="L39">            ObjectNode userJson = apiGeneralController.createJsonFromUser(user);</span>
+<span class="fc" id="L40">            userJson.remove(&quot;mail&quot;);</span>
+<span class="fc" id="L41">            userJson.remove(&quot;hashedPassword&quot;);</span>
+<span class="fc" id="L42">            return ResponseEntity.ok(userJson);</span>
         }
-<span class="nc" id="L44">        catch (IllegalArgumentException e){</span>
-<span class="nc" id="L45">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L44">        catch (IllegalArgumentException e){</span>
+<span class="fc" id="L45">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -56,16 +56,16 @@ import java.util.List;
     @RequestMapping(&quot;api/user/getDetailed&quot;)
     public ResponseEntity&lt;?&gt; getDetailed(@RequestParam() String userId){
         try {
-<span class="nc" id="L59">            User user= apiGeneralController.getUserFromId(userId);</span>
-<span class="nc bnc" id="L60" title="All 2 branches missed.">            if(!users1CanGetDetailOfUser2(apiGeneralController.getAuthenicatedUser(), user)){</span>
-<span class="nc" id="L61">                return ResponseEntity.badRequest().body(&quot;you must be the user identified by the userId&quot;);</span>
+<span class="fc" id="L59">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">            if(!users1CanGetDetailOfUser2(apiGeneralController.getAuthenicatedUser(), user)){</span>
+<span class="fc" id="L61">                return ResponseEntity.badRequest().body(&quot;you must be the user identified by the userId&quot;);</span>
             }
-<span class="nc" id="L63">            ObjectNode userJson = apiGeneralController.createJsonFromUser(user);</span>
-<span class="nc" id="L64">            userJson.remove(&quot;hashedPassword&quot;);</span>
-<span class="nc" id="L65">            return ResponseEntity.ok(userJson);</span>
+<span class="fc" id="L63">            ObjectNode userJson = apiGeneralController.createJsonFromUser(user);</span>
+<span class="fc" id="L64">            userJson.remove(&quot;hashedPassword&quot;);</span>
+<span class="fc" id="L65">            return ResponseEntity.ok(userJson);</span>
         }
-<span class="nc" id="L67">        catch (IllegalArgumentException e){</span>
-<span class="nc" id="L68">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L67">        catch (IllegalArgumentException e){</span>
+<span class="fc" id="L68">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -79,24 +79,24 @@ import java.util.List;
     @RequestMapping(&quot;api/user/getAllContacts&quot;)
     public ResponseEntity&lt;?&gt; getAllContacts(@RequestParam() String userId){
         try {
-<span class="nc" id="L82">            User user= apiGeneralController.getUserFromId(userId);</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
-<span class="nc" id="L84">                return ResponseEntity.badRequest().body(&quot;you must be the user identified by the userId&quot;);</span>
+<span class="fc" id="L82">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
+<span class="fc" id="L84">                return ResponseEntity.badRequest().body(&quot;you must be the user identified by the userId&quot;);</span>
             }
-<span class="nc" id="L86">            List&lt;User&gt; contacts= dataBaseService.getAllContactsFromUser(user);</span>
-<span class="nc" id="L87">            ObjectMapper mapper = new ObjectMapper();</span>
+<span class="fc" id="L86">            List&lt;User&gt; contacts= dataBaseService.getAllContactsFromUser(user);</span>
+<span class="fc" id="L87">            ObjectMapper mapper = new ObjectMapper();</span>
             ObjectNode contactJson;
-<span class="nc" id="L89">            ArrayNode contactsArray = mapper.createArrayNode();</span>
-<span class="nc bnc" id="L90" title="All 2 branches missed.">            for(User contact : contacts){</span>
-<span class="nc" id="L91">                contactJson= apiGeneralController.createJsonFromUser(contact);</span>
-<span class="nc" id="L92">                contactJson.remove(&quot;hashedPassword&quot;);</span>
-<span class="nc" id="L93">                contactsArray.add(contactJson);</span>
-<span class="nc" id="L94">            }</span>
+<span class="fc" id="L89">            ArrayNode contactsArray = mapper.createArrayNode();</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">            for(User contact : contacts){</span>
+<span class="fc" id="L91">                contactJson= apiGeneralController.createJsonFromUser(contact);</span>
+<span class="fc" id="L92">                contactJson.remove(&quot;hashedPassword&quot;);</span>
+<span class="fc" id="L93">                contactsArray.add(contactJson);</span>
+<span class="fc" id="L94">            }</span>
 
-<span class="nc" id="L96">            return ResponseEntity.ok(contactsArray);</span>
+<span class="fc" id="L96">            return ResponseEntity.ok(contactsArray);</span>
         }
-<span class="nc" id="L98">        catch (IllegalArgumentException e){</span>
-<span class="nc" id="L99">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L98">        catch (IllegalArgumentException e){</span>
+<span class="fc" id="L99">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -110,25 +110,25 @@ import java.util.List;
     @RequestMapping(&quot;api/user/getApps&quot;)
     public  ResponseEntity&lt;?&gt; getApps(@RequestParam() String userId){
         try{
-<span class="nc" id="L113">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="fc" id="L113">            User user= apiGeneralController.getUserFromId(userId);</span>
             List&lt;IoTApp&gt; appList;
-<span class="nc" id="L115">            User authenticatedUser= apiGeneralController.getAuthenicatedUser();</span>
-<span class="nc bnc" id="L116" title="All 4 branches missed.">            if(user.getRole().equals(Role.CONTROLLER) || user.getRole().equals(Role.DPO)) {</span>
-<span class="nc" id="L117">                appList = dataBaseService.getUserApps(user);</span>
+<span class="fc" id="L115">            User authenticatedUser= apiGeneralController.getAuthenicatedUser();</span>
+<span class="fc bfc" id="L116" title="All 4 branches covered.">            if(user.getRole().equals(Role.CONTROLLER) || user.getRole().equals(Role.DPO)) {</span>
+<span class="fc" id="L117">                appList = dataBaseService.getUserApps(user);</span>
             }
-<span class="nc bnc" id="L119" title="All 4 branches missed.">            else if(authenticatedUser.getRole().equals(Role.CONTROLLER) || authenticatedUser.getRole().equals(Role.DPO)){</span>
-<span class="nc" id="L120">                appList= dataBaseService.getAppsFrom2Users(user, authenticatedUser);</span>
+<span class="fc bfc" id="L119" title="All 4 branches covered.">            else if(authenticatedUser.getRole().equals(Role.CONTROLLER) || authenticatedUser.getRole().equals(Role.DPO)){</span>
+<span class="fc" id="L120">                appList= dataBaseService.getAppsFrom2Users(user, authenticatedUser);</span>
             }
             else{
-<span class="nc" id="L123">                return ResponseEntity.badRequest().body(&quot;User must be Controller/DPO or you must be associated with that user&quot;);</span>
+<span class="fc" id="L123">                return ResponseEntity.badRequest().body(&quot;User must be Controller/DPO or you must be associated with that user&quot;);</span>
             }
-<span class="nc" id="L125">            ArrayNode appsArray= new ObjectMapper().createArrayNode();</span>
-<span class="nc bnc" id="L126" title="All 2 branches missed.">            for(IoTApp app : appList){</span>
-<span class="nc" id="L127">                appsArray.add(apiGeneralController.createJsonFromApp(app));</span>
-<span class="nc" id="L128">            }</span>
-<span class="nc" id="L129">            return ResponseEntity.ok(appsArray);</span>
-<span class="nc" id="L130">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L131">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L125">            ArrayNode appsArray= new ObjectMapper().createArrayNode();</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">            for(IoTApp app : appList){</span>
+<span class="fc" id="L127">                appsArray.add(apiGeneralController.createJsonFromApp(app));</span>
+<span class="fc" id="L128">            }</span>
+<span class="fc" id="L129">            return ResponseEntity.ok(appsArray);</span>
+<span class="fc" id="L130">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L131">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -207,13 +207,13 @@ import java.util.List;
     }
 
     private boolean users1CanGetDetailOfUser2(User user1, User user2){
-<span class="nc bnc" id="L210" title="All 2 branches missed.">        if(user1.equals(user2)){</span>
-<span class="nc" id="L211">            return true;</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">        if(user1.equals(user2)){</span>
+<span class="fc" id="L211">            return true;</span>
         }
-<span class="nc bnc" id="L213" title="All 2 branches missed.">        if(dataBaseService.getAllContactsFromUser(user1).contains(user2)){</span>
-<span class="nc" id="L214">            return true;</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">        if(dataBaseService.getAllContactsFromUser(user1).contains(user2)){</span>
+<span class="fc" id="L214">            return true;</span>
         }
-<span class="nc bnc" id="L216" title="All 4 branches missed.">        return user2.getRole().equals(Role.CONTROLLER) || user2.getRole().equals(Role.DPO);</span>
+<span class="fc bfc" id="L216" title="All 4 branches covered.">        return user2.getRole().equals(Role.CONTROLLER) || user2.getRole().equals(Role.DPO);</span>
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
