@@ -1,5 +1,6 @@
 package com.privacydashboard.application.views.apps;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.privacydashboard.application.data.GlobalVariables;
 import com.privacydashboard.application.data.GlobalVariables.RightType;
 import com.privacydashboard.application.data.GlobalVariables.Role;
@@ -43,10 +44,18 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import javax.annotation.security.PermitAll;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,6 +75,43 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
     private final Grid<IoTApp> grid= new Grid<>();
 
     private IoTApp priorityApp;
+/*
+    private String getJsonAppsFromUrl(){
+        HttpURLConnection connection = null;
+        System.err.println("Entered getJsonAppsFromUrl()\n");
+
+        try{
+            URL url = new URL("https://yggio.sifis-home.eu:3000/dht-insecure/topic_name/SIFIS:container_list");
+            System.err.println("About to open the connection\n");
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            int resCode = connection.getResponseCode();
+
+            if(resCode == HttpURLConnection.HTTP_OK){
+                BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuffer res = new StringBuffer();
+                String line;
+                while((line = rd.readLine()) != null){
+                    System.err.print(line);
+                    res.append(line);
+                }
+                rd.close();
+                return res.toString();
+            }
+            else{
+                return null;
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        finally{
+            if(connection != null)
+                connection.disconnect();
+        }
+    }
+  */  
 
     @Override
     public void beforeEnter(BeforeEnterEvent event){
@@ -80,6 +126,9 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
         initilizeInfrastuctureEvaluation();
         initializeSearchText();
         initializeGrid();
+        
+        //Span apps = new Span(getJsonAppsFromUrl());
+
         add(summaryEvaluation, searchText, grid);
     }
 
