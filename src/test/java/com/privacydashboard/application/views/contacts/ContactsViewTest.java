@@ -75,11 +75,11 @@ public class ContactsViewTest {
     @Test
     public void ContactsViewConstructorTest(){
         assertEquals(view.getElement().getAttribute("class"), "grid-view");
-        assertEquals(view.getElement().getChildren().toList().get(0).getAttribute("class"), "search");
-        assertEquals(view.getElement().getChildren().toList().get(0).getTag(), "vaadin-text-field");
-        assertEquals(view.getElement().getChildren().toList().get(1).getThemeList().toString(), "["+GridVariant.LUMO_NO_ROW_BORDERS.getVariantName()+", "+GridVariant.LUMO_NO_BORDER.getVariantName()+"]");
-        assertEquals(view.getElement().getChildren().toList().get(1).getTag(), "vaadin-grid");
-        assertEquals(view.getElement().getChildren().toList().get(1).getChild(0).getTag(), "vaadin-grid-column");
+        assertEquals(view.getElement().getChild(0).getAttribute("class"), "search");
+        assertEquals(view.getElement().getChild(0).getTag(), "vaadin-text-field");
+        assertEquals(view.getElement().getChild(1).getThemeList().toString(), "["+GridVariant.LUMO_NO_ROW_BORDERS.getVariantName()+", "+GridVariant.LUMO_NO_BORDER.getVariantName()+"]");
+        assertEquals(view.getElement().getChild(1).getTag(), "vaadin-grid");
+        assertEquals(view.getElement().getChild(1).getChild(0).getTag(), "vaadin-grid-column");
     }
 
     private Method getCreateContactMethod(){

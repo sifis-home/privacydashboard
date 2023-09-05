@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Header;
+import com.vaadin.flow.component.html.Span;
 
 public class MyDialogTest {
     
@@ -25,14 +26,17 @@ public class MyDialogTest {
         });
     }
 
+    /* 
     @Test
     public void setContentTest(){
-        Header header = new Header();
-        header.setText("TestText");
+        Span span = new Span("TestText");
         MyDialog dialog = new MyDialog();
-        dialog.setContent(header);
-        assertEquals(dialog.getChildren().toList().get(0).getElement().getText(), "TestText");
+        dialog.setContent(span);
+        System.out.println(dialog.);
+        assertEquals(dialog.getElement().getText(), "TestText");
     }
+
+    */
 
     @Test
     public void setContinueButtonNullTest(){

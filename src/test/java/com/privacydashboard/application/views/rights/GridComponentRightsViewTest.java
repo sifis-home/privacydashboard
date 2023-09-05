@@ -13,6 +13,7 @@ import com.privacydashboard.application.data.entity.RightRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
+
 import java.util.List;
 
 import com.vaadin.flow.component.Component;
@@ -202,18 +203,17 @@ public class GridComponentRightsViewTest {
     public void getHeaderLayoutSubjectTest(){
         GridComponentRightsView grid = new GridComponentRightsView(Role.SUBJECT);
         HorizontalLayout layout = grid.getHeaderLayout();
-        List<Component> children = layout.getChildren().toList();
         assertEquals(layout.getElement().getAttribute("class"), "headerLayout");
-        assertEquals(children.get(0).getElement().getText(), "RECEIVER");
-        assertEquals(children.get(0).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(1).getElement().getText(), "RIGHT TYPE");
-        assertEquals(children.get(1).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(2).getElement().getText(), "APP");
-        assertEquals(children.get(2).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(3).getElement().getText(), "TIME");
-        assertEquals(children.get(3).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(4).getElement().getText(), "HANDLED");
-        assertEquals(children.get(4).getElement().getAttribute("class"), "name");
+        assertEquals(layout.getElement().getChild(0).getText(), "RECEIVER");
+        assertEquals(layout.getElement().getChild(0).getAttribute("class"), "name");
+        assertEquals(layout.getElement().getChild(1).getText(), "RIGHT TYPE");
+        assertEquals(layout.getElement().getChild(1).getAttribute("class"), "name");
+        assertEquals(layout.getElement().getChild(2).getText(), "APP");
+        assertEquals(layout.getElement().getChild(2).getAttribute("class"), "name");
+        assertEquals(layout.getElement().getChild(3).getText(), "TIME");
+        assertEquals(layout.getElement().getChild(3).getAttribute("class"), "name");
+        assertEquals(layout.getElement().getChild(4).getText(), "HANDLED");
+        assertEquals(layout.getElement().getChild(4).getAttribute("class"), "name");
     }
 
     @Test
@@ -221,18 +221,17 @@ public class GridComponentRightsViewTest {
         GridComponentRightsView grid = new GridComponentRightsView(Role.DPO);
         ToggleButton button = new ToggleButton("ButtonTest");
         HorizontalLayout layout = grid.getHeaderLayout(button);
-        List<Component> children = layout.getChildren().toList();
         assertEquals(layout.getElement().getAttribute("class"), "headerLayout");
-        assertEquals(children.get(0).getElement().getText(), "SENDER");
-        assertEquals(children.get(0).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(1).getElement().getText(), "RIGHT TYPE");
-        assertEquals(children.get(1).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(2).getElement().getText(), "APP");
-        assertEquals(children.get(2).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(3).getElement().getText(), "TIME");
-        assertEquals(children.get(3).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(4).getElement().getChild(0).getProperty("label"), "ButtonTest");
-        assertEquals(children.get(4).getElement().getAttribute("class"), "name");
+        assertEquals(layout.getElement().getChild(0).getText(), "SENDER");
+        assertEquals(layout.getElement().getChild(0).getAttribute("class"), "name");
+        assertEquals(layout.getElement().getChild(1).getText(), "RIGHT TYPE");
+        assertEquals(layout.getElement().getChild(1).getAttribute("class"), "name");
+        assertEquals(layout.getElement().getChild(2).getText(), "APP");
+        assertEquals(layout.getElement().getChild(2).getAttribute("class"), "name");
+        assertEquals(layout.getElement().getChild(3).getText(), "TIME");
+        assertEquals(layout.getElement().getChild(3).getAttribute("class"), "name");
+        assertEquals(layout.getElement().getChild(4).getChild(0).getProperty("label"), "ButtonTest");
+        assertEquals(layout.getElement().getChild(4).getAttribute("class"), "name");
     }
 
     @Test
@@ -250,18 +249,17 @@ public class GridComponentRightsViewTest {
         LocalDateTime time = LocalDateTime.now();
 
         HorizontalLayout card = grid.getCard(createRequestComplain(time));
-        List<Component> children = card.getChildren().toList();
         assertEquals(card.getElement().getAttribute("class"), "card canOpen");
-        assertEquals(children.get(0).getElement().getText(), "Receiver1");
-        assertEquals(children.get(0).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(1).getElement().getText(), "COMPLAIN");
-        assertEquals(children.get(1).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(2).getElement().getText(), "App1");
-        assertEquals(children.get(2).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(3).getElement().getText(), DateTimeFormatter.ofPattern("dd/MM/yyy").format(time));
-        assertEquals(children.get(3).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(4).getElement().getText(), "true");
-        assertEquals(children.get(4).getElement().getAttribute("class"), "name");
+        assertEquals(card.getElement().getChild(0).getText(), "Receiver1");
+        assertEquals(card.getElement().getChild(0).getAttribute("class"), "name");
+        assertEquals(card.getElement().getChild(1).getText(), "COMPLAIN");
+        assertEquals(card.getElement().getChild(1).getAttribute("class"), "name");
+        assertEquals(card.getElement().getChild(2).getText(), "App1");
+        assertEquals(card.getElement().getChild(2).getAttribute("class"), "name");
+        assertEquals(card.getElement().getChild(3).getText(), DateTimeFormatter.ofPattern("dd/MM/yyy").format(time));
+        assertEquals(card.getElement().getChild(3).getAttribute("class"), "name");
+        assertEquals(card.getElement().getChild(4).getText(), "true");
+        assertEquals(card.getElement().getChild(4).getAttribute("class"), "name");
     }
 
     @Test
@@ -271,18 +269,17 @@ public class GridComponentRightsViewTest {
         LocalDateTime time = LocalDateTime.now();
 
         HorizontalLayout card = grid.getCard(createRequestComplain(time));
-        List<Component> children = card.getChildren().toList();
         assertEquals(card.getElement().getAttribute("class"), "card canOpen");
-        assertEquals(children.get(0).getElement().getText(), "Sender1");
-        assertEquals(children.get(0).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(1).getElement().getText(), "COMPLAIN");
-        assertEquals(children.get(1).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(2).getElement().getText(), "App1");
-        assertEquals(children.get(2).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(3).getElement().getText(), DateTimeFormatter.ofPattern("dd/MM/yyy").format(time));
-        assertEquals(children.get(3).getElement().getAttribute("class"), "name");
-        assertEquals(children.get(4).getElement().getText(), "true");
-        assertEquals(children.get(4).getElement().getAttribute("class"), "name");
+        assertEquals(card.getElement().getChild(0).getText(), "Sender1");
+        assertEquals(card.getElement().getChild(0).getAttribute("class"), "name");
+        assertEquals(card.getElement().getChild(1).getText(), "COMPLAIN");
+        assertEquals(card.getElement().getChild(1).getAttribute("class"), "name");
+        assertEquals(card.getElement().getChild(2).getText(), "App1");
+        assertEquals(card.getElement().getChild(2).getAttribute("class"), "name");
+        assertEquals(card.getElement().getChild(3).getText(), DateTimeFormatter.ofPattern("dd/MM/yyy").format(time));
+        assertEquals(card.getElement().getChild(3).getAttribute("class"), "name");
+        assertEquals(card.getElement().getChild(4).getText(), "true");
+        assertEquals(card.getElement().getChild(4).getAttribute("class"), "name");
     }
 
     @Test

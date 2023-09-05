@@ -50,6 +50,16 @@ import java.net.URL;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import javax.annotation.security.PermitAll;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.SSLContext;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.security.cert.X509Certificate;
+import javax.net.ssl.X509TrustManager;
+import java.net.URL;
+import javax.net.ssl.HttpsURLConnection;
+import java.io.StringReader;
+import java.util.UUID;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -113,6 +123,88 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
     }
   */  
 
+  private List<IoTApp> getJsonAppsFromUrl(){
+
+    TrustManager[] dummyTrustManager = new TrustManager[] { new X509TrustManager() {
+
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+    
+            public void checkClientTrusted(X509Certificate[] certs, String authType) {
+            }
+    
+            public void checkServerTrusted(X509Certificate[] certs, String authType) {
+            }
+        }
+
+    };
+
+    String responseString = "";
+        
+    try{
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, dummyTrustManager, new java.security.SecureRandom());        
+        URL url = new URL("https://yggio.sifis-home.eu:3000/dht-insecure/topic_name/SIFIS:container_list");
+
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        int responseCode = connection.getResponseCode();
+        System.out.println("GET response code: "+responseCode);
+
+        if(responseCode == HttpsURLConnection.HTTP_OK){
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            
+
+            while((inputLine = in.readLine()) != null){
+                response.append(inputLine);
+            }
+            in.close();
+
+            responseString = response.toString().substring(response.toString().indexOf("[")+1, response.toString().lastIndexOf("]"));               
+
+            System.out.println(response.toString()+"\n");
+        }
+        else{
+            System.out.println("GET Request failed");
+        }
+
+        
+        JsonNode json = new ObjectMapper().readTree(new StringReader(responseString));
+        json = json.get("value");
+        int size = json.get("containers").size();
+        IoTApp[] appArray = new IoTApp[size];
+        System.out.println(json.get("containers").elements().next().asText());
+
+        for(int i = 0; i < size; i++){
+            IoTApp app = new IoTApp();
+            app.setName(json.get("containers").elements().next().asText());
+            app.setId(new UUID(0, app.getName().hashCode()));
+            System.out.println("App: "+app.getName());
+            appArray[i] = app;
+        }
+        /*
+            IoTApp app = new IoTApp();
+            app.setName("TestApp");
+            appArray[size] = app;
+         */
+        List<IoTApp> apps = List.of(appArray);
+        for(IoTApp app1 : apps){
+            System.out.println("App "+apps.indexOf(app1)+": "+app1.getName());
+        }
+        
+        return apps;
+    }
+    catch(Exception e){
+        System.out.println("JsonFromUrl Exception: "+e.getMessage());
+    }       
+    return null;      
+}
+
     @Override
     public void beforeEnter(BeforeEnterEvent event){
         priorityApp=communicationService.getApp();
@@ -127,9 +219,13 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
         initializeSearchText();
         initializeGrid();
         
-        //Span apps = new Span(getJsonAppsFromUrl());
+        VerticalLayout appLayout = new VerticalLayout();
+        List<IoTApp> apps = getJsonAppsFromUrl();
+        for (IoTApp app : apps) {
+            appLayout.add(createApp(app));
+        }
 
-        add(summaryEvaluation, searchText, grid);
+        add(summaryEvaluation, searchText, appLayout, grid);
     }
 
     private void initilizeInfrastuctureEvaluation(){
@@ -318,6 +414,9 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
 
     private VerticalLayout getConsenses(IoTApp i){
         VerticalLayout layout=new VerticalLayout();
+        if(i.getConsenses() == null){
+            return layout;
+        }
         String[] appConsenses= i.getConsenses();
         String[] userConsenses=dataBaseService.getConsensesFromUserAndApp(authenticatedUser.getUser(), i);
         for(String consens :  appConsenses){
