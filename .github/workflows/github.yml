@@ -36,7 +36,6 @@ jobs:
 
       - name: Package privacydashboard
         run: mvn clean package -Pproduction
-        continue-on-error: true
 
       - name: Coverage Report
         run: mvn jacoco:report
