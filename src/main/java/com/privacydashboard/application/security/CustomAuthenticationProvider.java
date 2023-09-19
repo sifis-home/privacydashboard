@@ -115,6 +115,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 userProvider.registerUser(tmp);
                 return true;
             }
+            return true;
 
         } catch (HttpClientErrorException e) {
             System.err.println("401");
