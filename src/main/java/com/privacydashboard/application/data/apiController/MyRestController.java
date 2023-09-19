@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/userapi")
 public class MyRestController {
 
-    @GetMapping("/hello")
-    public String sayHello() {
-        return "Hello, world!";
+    @GetMapping("/login")
+    public String login() {
+        return "{  \"status\":\"logged in\"}";
     }
 }

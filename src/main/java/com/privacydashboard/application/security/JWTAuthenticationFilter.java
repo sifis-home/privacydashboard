@@ -40,14 +40,14 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             PublicKey publicKey = keyFactory.generatePublic(keySpec);
-
+            String userID;
             if (jwtToken != null ) {
                 Claims claims = Jwts.parserBuilder()
                         .setSigningKey(publicKey)
                         .build()
                         .parseClaimsJws(jwtToken)
                         .getBody();
-                String userID = claims.get("email", String.class);
+                userID = claims.get("email", String.class);
 
                 User user = null;
 
@@ -62,7 +62,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 }
 
 
-                Authentication auth = new UsernamePasswordAuthenticationToken(user, null, userProvider.getAuthoritiesByUser(user));
+                Authentication auth = new UsernamePasswordAuthenticationToken(userID, null, userProvider.getAuthoritiesByUser(userProvider.loadUser(userID)));
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
                 Authentication authCheck = SecurityContextHolder.getContext().getAuthentication();
