@@ -14,6 +14,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     User findByName(String username);
 
+    User findByMail(String mail);
+
     @Modifying
     @Query("UPDATE User SET hashedPassword=:pass WHERE id=:id")
     @Transactional

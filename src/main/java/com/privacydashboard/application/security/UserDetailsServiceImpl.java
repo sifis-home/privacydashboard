@@ -14,11 +14,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+
+    @PostConstruct
+    public void init() {
+        System.out.println("UserDetailsServiceImpl initialized");
+    }
 
     @Autowired
     public UserDetailsServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -28,14 +36,28 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        User user = loadUser(username);
+
+        return new org.springframework.security.core.userdetails.User(user.getName(), user.getHashedPassword(),
+                    getAuthorities(user));
+
+    }
+
+    public User loadUser(String username) throws UsernameNotFoundException {
         User user = userRepository.findByName(username);
         if (user == null) {
             throw new UsernameNotFoundException("No user present with username: " + username);
-        } else {
-            return new org.springframework.security.core.userdetails.User(user.getName(), user.getHashedPassword(),
-                    getAuthorities(user));
         }
+
+        return user;
     }
+    public List<GrantedAuthority> getAuthoritiesByUser(User user) {
+        List<GrantedAuthority> list=new LinkedList<>();
+        list.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+        return list;
+    }
+
 
     /*private static List<GrantedAuthority> getAuthorities(User user) {
         return user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role))

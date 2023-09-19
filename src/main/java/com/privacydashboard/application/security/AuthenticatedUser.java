@@ -14,10 +14,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Component
 public class AuthenticatedUser {
     private final UserRepository userRepository;
-
     @Autowired
     public AuthenticatedUser(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -29,6 +30,8 @@ public class AuthenticatedUser {
                 .filter(authentication -> !(authentication instanceof AnonymousAuthenticationToken));
     }
 
+
+
     public Optional<User> get() {
         return getAuthentication().map(authentication -> userRepository.findByName(authentication.getName()));
     }
@@ -37,9 +40,15 @@ public class AuthenticatedUser {
     public User getUser(){
         if(UI.getCurrent().getSession().getAttribute("user")==null){
             Optional<User> maybeUser=get();
+            if (maybeUser == null) {
+                maybeUser = getAuthentication().map(authentication -> userRepository.findByName(authentication.getName()));
+            }
             maybeUser.ifPresent(user -> UI.getCurrent().getSession().setAttribute("user", user));
         }
         return (User) UI.getCurrent().getSession().getAttribute("user");
+
+
+
     }
 
     public User updateUser(){
