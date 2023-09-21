@@ -178,9 +178,7 @@ public class AppsViewTest {
         assertEquals(orangeView.getElement().getChild(1).getTag(), "vaadin-text-field");
         assertEquals(orangeView.getElement().getChild(1).getAttribute("class"), "search");
 
-        assertEquals(orangeView.getElement().getChild(2).getTag(), "vaadin-grid");
-        assertEquals(orangeView.getElement().getChild(2).getThemeList().toString(), "[no-row-borders, no-border]");
-        assertEquals(orangeView.getElement().getChild(2).getChild(0).getTag(), "vaadin-grid-column");
+        assertEquals(orangeView.getElement().getChild(2).getTag(), "vaadin-vertical-layout");
 
     }
 

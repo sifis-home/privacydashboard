@@ -963,7 +963,7 @@ public class ApiGeneralControllerTest {
 	}
 
 	// Test fails and shows a hole in the method's logic,
-	// which considers only messageId, sender and receiver mandatory,
+	// which considers mandatory only messageId, sender and receiver,
 	// but it does not work in absence of all parameters.
 	// The problem lies in not checking Message and Time,
 	// which leads to a NullPointerException

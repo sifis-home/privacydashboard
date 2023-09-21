@@ -1,5 +1,6 @@
 package com.privacydashboard.application.data.apiController;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,6 +12,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.any;
 
 import org.junit.jupiter.api.Test;
@@ -18,7 +20,7 @@ import org.h2.command.ddl.CreateRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.http.ResponseEntity;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-
+import com.github.dockerjava.transport.DockerHttpClient.Response;
 import com.privacydashboard.application.data.GlobalVariables.QuestionnaireVote;
 import com.privacydashboard.application.data.GlobalVariables.RightType;
 import com.privacydashboard.application.data.GlobalVariables.Role;
@@ -27,6 +29,7 @@ import com.privacydashboard.application.data.entity.RightRequest;
 import com.privacydashboard.application.data.entity.User;
 import com.privacydashboard.application.data.service.DataBaseService;
 import com.privacydashboard.application.security.UserDetailsServiceImpl;
+import com.vaadin.flow.theme.lumo.LumoUtility.Margin.Right;
 
 public class ApiRightRequestContollerTest {
     
@@ -100,6 +103,7 @@ public class ApiRightRequestContollerTest {
         req.setApp(createApp());
         req.setRightType(RightType.COMPLAIN);
         req.setTime(time);
+        req.setHandled(false);
 
         return req;
     }
@@ -424,5 +428,479 @@ public class ApiRightRequestContollerTest {
         ResponseEntity res = api.getFromRightType("INFO", "false");
         assertEquals(res.getStatusCode(), HttpStatus.OK);
         assertEquals(res.getBody(), test);
+    }
+
+    @Test
+    public void addNotValidJsonTest(){
+        String body = "NotAJson";
+        try{
+            when(apiGeneralController.getRequestFromJsonString(body, true)).thenThrow(IOException.class);
+        }
+        catch(Exception e){
+            System.out.println("Exception: "+e.getMessage());
+        }
+
+        ResponseEntity res = api.add(body);
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "invalid JSON");
+    }
+
+    @Test
+    public void addUserNotAuthenticatedTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        try{
+            when(apiGeneralController.getRequestFromJsonString(any(), anyBoolean())).thenReturn(req);
+        }
+        catch(Exception e){
+            System.out.println("Exception: "+e.getMessage());
+        }
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.DPO));
+
+        ResponseEntity res = api.add("Body");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "you MUST be the sender of the request");
+
+    }
+
+    @Test
+    public void addUserHasNotAppTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        try{
+            when(apiGeneralController.getRequestFromJsonString(any(), anyBoolean())).thenReturn(req);
+        }
+        catch(Exception e){
+            System.out.println("Exception: "+e.getMessage());
+        }
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(false);
+
+        ResponseEntity res = api.add("Body");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "you MUST have the associated app");
+
+    }
+
+    @Test
+    public void addRequestAlreadyExistsTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        try{
+            when(apiGeneralController.getRequestFromJsonString(any(), anyBoolean())).thenReturn(req);
+        }
+        catch(Exception e){
+            System.out.println("Exception: "+e.getMessage());
+        }
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(true);
+        when(dataBaseService.getRequestFromId(any())).thenReturn(req);
+
+        ResponseEntity res = api.add("Body");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "there is already a Request with that ID");
+
+    }
+
+    @Test
+    public void addReceiverHasNotAppTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        try{
+            when(apiGeneralController.getRequestFromJsonString(any(), anyBoolean())).thenReturn(req);
+        }
+        catch(Exception e){
+            System.out.println("Exception: "+e.getMessage());
+        }
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
+        when(apiGeneralController.userHasApp(req.getSender(), req.getApp())).thenReturn(true);
+        when(dataBaseService.getRequestFromId(any())).thenReturn(null);
+        when(dataBaseService.userHasApp(req.getReceiver(), req.getApp())).thenReturn(false);
+
+        ResponseEntity res = api.add("Body");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "receiver of the request MUST have that app");
+
+    }
+
+    @Test
+    public void addReceiverIsNullTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+        req.setReceiver(null);
+
+        try{
+            when(apiGeneralController.getRequestFromJsonString(any(), anyBoolean())).thenReturn(req);
+        }
+        catch(Exception e){
+            System.out.println("Exception: "+e.getMessage());
+        }
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
+        when(apiGeneralController.userHasApp(req.getSender(), req.getApp())).thenReturn(true);
+        when(dataBaseService.getRequestFromId(any())).thenReturn(null);
+        when(dataBaseService.userHasApp(req.getReceiver(), req.getApp())).thenReturn(true);
+        when(dataBaseService.getControllersFromApp(req.getApp())).thenReturn(List.of(createUser(Role.CONTROLLER)));
+
+        ResponseEntity res = api.add("Body");
+        assertEquals(res.getStatusCode(), HttpStatus.OK);
+        assertEquals(res.getBody().toString(), "request added successfully");
+
+    }
+
+    @Test
+    public void addTimeIsNullTest(){
+        RightRequest req = createRequest(null);
+
+        try{
+            when(apiGeneralController.getRequestFromJsonString(any(), anyBoolean())).thenReturn(req);
+        }
+        catch(Exception e){
+            System.out.println("Exception: "+e.getMessage());
+        }
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
+        when(apiGeneralController.userHasApp(req.getSender(), req.getApp())).thenReturn(true);
+        when(dataBaseService.getRequestFromId(any())).thenReturn(null);
+        when(dataBaseService.userHasApp(req.getReceiver(), req.getApp())).thenReturn(true);
+        when(dataBaseService.getControllersFromApp(req.getApp())).thenReturn(List.of(createUser(Role.CONTROLLER)));
+
+        ResponseEntity res = api.add("Body");
+        assertEquals(res.getStatusCode(), HttpStatus.OK);
+        assertEquals(res.getBody().toString(), "request added successfully");
+
+    }
+
+    @Test
+    public void addHandledIsNullTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+        req.setHandled(null);
+
+        try{
+            when(apiGeneralController.getRequestFromJsonString(any(), anyBoolean())).thenReturn(req);
+        }
+        catch(Exception e){
+            System.out.println("Exception: "+e.getMessage());
+        }
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
+        when(apiGeneralController.userHasApp(req.getSender(), req.getApp())).thenReturn(true);
+        when(dataBaseService.getRequestFromId(any())).thenReturn(null);
+        when(dataBaseService.userHasApp(req.getReceiver(), req.getApp())).thenReturn(true);
+        when(dataBaseService.getControllersFromApp(req.getApp())).thenReturn(List.of(createUser(Role.CONTROLLER)));
+
+        ResponseEntity res = api.add("Body");
+        assertEquals(res.getStatusCode(), HttpStatus.OK);
+        assertEquals(res.getBody().toString(), "request added successfully");
+
+    }
+
+    @Test
+    public void deleteRequestDoesNotExistsTest(){
+        when(apiGeneralController.getRequestFromId(new UUID(0, 0).toString())).thenThrow(IllegalArgumentException.class);
+
+        ResponseEntity res = api.delete(new UUID(0, 0).toString());
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        
+    }
+
+    @Test
+    public void deleteSenderNotAuthTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.DPO));
+
+        ResponseEntity res = api.delete(req.getId().toString());
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "You MUST be the sender of the request");
+    }
+
+    @Test
+    public void deleteMatchTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
+
+        ResponseEntity res = api.delete(req.getId().toString());
+        assertEquals(res.getStatusCode(), HttpStatus.OK);
+        assertEquals(res.getBody().toString(), "Request successfully deleted");
+    }
+
+    @Test
+    public void addResponseIdNotValidTest(){
+        when(apiGeneralController.getRequestFromId(new UUID(0, 0).toString())).thenThrow(IllegalArgumentException.class);
+
+        ResponseEntity res = api.addResponse(new UUID(0, 0).toString(), "Body");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void addResponseReceiverNotAuthTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
+
+        ResponseEntity res = api.addResponse(req.getId().toString(), "Body");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "You MUST be the receiver of the request");
+    }
+
+    @Test
+    public void addResponseReceiverHasNotAppTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.CONTROLLER));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(false);
+
+        ResponseEntity res = api.addResponse(req.getId().toString(), "Body");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "You MUST have the app of the request");
+    }
+
+    @Test
+    public void addResponseReceiverIsSubjectTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+        req.setReceiver(createUser(Role.SUBJECT));
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(true);
+
+        ResponseEntity res = api.addResponse(req.getId().toString(), "Body");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "You MUST be a controller or DPO");
+    }
+
+    @Test
+    public void addResponseInvalidJSONTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.CONTROLLER));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(true);
+
+        ResponseEntity res = api.addResponse(req.getId().toString(), "Body");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "invalid JSON");
+    }
+
+    @Test
+    public void addResponseMissingResponseTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        String body = apiJson.createJsonFromRequest(req).toString();
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.CONTROLLER));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(true);
+
+        ResponseEntity res = api.addResponse(req.getId().toString(), body);
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "JSON invalid: must include response value");
+    }
+
+    @Test
+    public void addResponseTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+        req.setResponse("TestResponse");
+
+        String body = apiJson.createJsonFromRequest(req).toString();
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.CONTROLLER));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(true);
+
+        ResponseEntity res = api.addResponse(req.getId().toString(), body);
+        assertEquals(res.getStatusCode(), HttpStatus.OK);
+        assertEquals(res.getBody().toString(), "Response added successfully");
+    }
+
+    @Test
+    public void changeHandledIdNotValidTest(){
+        when(apiGeneralController.getRequestFromId(new UUID(0, 0).toString())).thenThrow(IllegalArgumentException.class);
+
+        ResponseEntity res = api.changeHandled(new UUID(0, 0).toString(), "true");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void changeHandledReceiverIsNotAuthTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
+
+        ResponseEntity res = api.changeHandled(req.getId().toString(), "true");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "You MUST be the receiver of the request");
+    }
+
+    @Test
+    public void changeHandledReceiverHasNotAppTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.CONTROLLER));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(false);
+
+        ResponseEntity res = api.changeHandled(req.getId().toString(), "true");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "You MUST have the app of the request");
+    }
+
+    @Test
+    public void changeHandledReceiverIsSubjectTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+        req.setReceiver(createUser(Role.SUBJECT));
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(true);
+
+        ResponseEntity res = api.changeHandled(req.getId().toString(), "true");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "You MUST be a controller or DPO");
+    }
+
+    @Test
+    public void changeHandledNotBooleanTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.CONTROLLER));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(true);
+
+        ResponseEntity res = api.changeHandled(req.getId().toString(), "NotABoolean");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "handled parameter invalid: must be true or false");
+    }
+
+    @Test
+    public void changeHandledTrueTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.CONTROLLER));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(true);
+
+        ResponseEntity res = api.changeHandled(req.getId().toString(), "true");
+        assertEquals(res.getStatusCode(), HttpStatus.OK);
+        assertEquals(res.getBody().toString(), "Handled parameter successfully changed");
+    }
+
+    @Test
+    public void changeHandledFalseTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.CONTROLLER));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(true);
+
+        ResponseEntity res = api.changeHandled(req.getId().toString(), "false");
+        assertEquals(res.getStatusCode(), HttpStatus.OK);
+        assertEquals(res.getBody().toString(), "Handled parameter successfully changed");
+    }
+
+    @Test 
+    public void updateIdNotValidTest(){
+        when(apiGeneralController.getRequestFromId(new UUID(0, 0).toString())).thenThrow(IllegalArgumentException.class);
+
+        ResponseEntity res = api.update(new UUID(0, 0).toString(), "body");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void updateSenderIsNotAuthTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.CONTROLLER));
+
+        ResponseEntity res = api.update(req.getId().toString(), "body");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "You MUST be the sender of the request");
+    }
+
+    @Test
+    public void updateSenderHasNotAppTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(false);
+
+        ResponseEntity res = api.update(req.getId().toString(), "body");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "You MUST have the app of the request");
+    }
+
+    @Test
+    public void updateInvalidJSONTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(true);
+
+        ResponseEntity res = api.update(req.getId().toString(), "body");
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "invalid JSON");
+    }
+
+    @Test
+    public void updateMissingJSONFieldTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+
+        String body = apiJson.createJsonFromRequest(req).toString();
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(true);
+
+        ResponseEntity res = api.update(req.getId().toString(), body);
+        assertEquals(res.getStatusCode(), HttpStatus.BAD_REQUEST);
+        assertEquals(res.getBody().toString(), "JSON invalid: must include other and/or details value");
+    }
+
+    @Test
+    public void updateMatchTest(){
+        LocalDateTime time = LocalDateTime.now();
+        RightRequest req = createRequest(time);
+        req.setOther("TestOther");
+        req.setDetails("TestDetails");
+
+        String body = apiJson.createJsonFromRequest(req).toString();
+
+        when(apiGeneralController.getRequestFromId(req.getId().toString())).thenReturn(req);
+        when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
+        when(apiGeneralController.userHasApp(any(), any())).thenReturn(true);
+
+        ResponseEntity res = api.update(req.getId().toString(), body);
+        assertEquals(res.getStatusCode(), HttpStatus.OK);
+        assertEquals(res.getBody().toString(), "Response added successfully");
     }
 }
