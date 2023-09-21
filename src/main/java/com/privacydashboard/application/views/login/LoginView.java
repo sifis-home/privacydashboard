@@ -1,16 +1,19 @@
 package com.privacydashboard.application.views.login;
 
+import com.privacydashboard.application.security.UserDetailsServiceImpl;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Route("login")
 @PageTitle("Login")
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
-    private final LoginForm loginForm= new LoginForm();     //Basic login template
+    private LoginForm loginForm = new LoginForm();
 
-    public LoginView(){
+    @Autowired
+    public LoginView(UserDetailsServiceImpl userProvider) {
         addClassName("login");
         setSizeFull();
         setAlignItems(Alignment.CENTER);
