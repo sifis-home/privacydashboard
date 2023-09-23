@@ -18,7 +18,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
-<span class="nc" id="L21">public class ApiMessageController {</span>
+<span class="fc" id="L21">public class ApiMessageController {</span>
     @Autowired
     private DataBaseService dataBaseService;
     @Autowired
@@ -36,14 +36,14 @@ import java.util.List;
     @RequestMapping(&quot;api/message/get&quot;)
     public ResponseEntity&lt;?&gt; get(@RequestParam() String messageId){
         try{
-<span class="nc" id="L39">            Message message= apiGeneralController.getMessageFromId(messageId);</span>
-<span class="nc bnc" id="L40" title="All 2 branches missed.">            if(!isSenderOrReceiver(message, apiGeneralController.getAuthenicatedUser())){</span>
-<span class="nc" id="L41">                return ResponseEntity.badRequest().body(&quot;you must be sender or receiver of the message&quot;);</span>
+<span class="fc" id="L39">            Message message= apiGeneralController.getMessageFromId(messageId);</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">            if(!isSenderOrReceiver(message, apiGeneralController.getAuthenicatedUser())){</span>
+<span class="fc" id="L41">                return ResponseEntity.badRequest().body(&quot;you must be sender or receiver of the message&quot;);</span>
             }
-<span class="nc" id="L43">            JsonNode messageJson= apiGeneralController.createJsonFromMessage(message);</span>
-<span class="nc" id="L44">            return ResponseEntity.ok(messageJson);</span>
-<span class="nc" id="L45">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L46">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L43">            JsonNode messageJson= apiGeneralController.createJsonFromMessage(message);</span>
+<span class="fc" id="L44">            return ResponseEntity.ok(messageJson);</span>
+<span class="fc" id="L45">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L46">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -58,20 +58,20 @@ import java.util.List;
     @RequestMapping(&quot;api/message/getConversation&quot;)
     public ResponseEntity&lt;?&gt; getConversation(@RequestParam() String user1Id, @RequestParam() String user2Id){
         try{
-<span class="nc bnc" id="L61" title="All 4 branches missed.">            if(!apiGeneralController.isAuthenticatedUserId(user1Id) &amp;&amp; !apiGeneralController.isAuthenticatedUserId(user2Id)){</span>
-<span class="nc" id="L62">                return ResponseEntity.badRequest().body(&quot;you must be one of the two users&quot;);</span>
+<span class="pc bpc" id="L61" title="1 of 4 branches missed.">            if(!apiGeneralController.isAuthenticatedUserId(user1Id) &amp;&amp; !apiGeneralController.isAuthenticatedUserId(user2Id)){</span>
+<span class="fc" id="L62">                return ResponseEntity.badRequest().body(&quot;you must be one of the two users&quot;);</span>
             }
-<span class="nc" id="L64">            User user1= apiGeneralController.getUserFromId(user1Id);</span>
-<span class="nc" id="L65">            User user2= apiGeneralController.getUserFromId(user2Id);</span>
-<span class="nc" id="L66">            List&lt;Message&gt; conversation= dataBaseService.getConversationFromUsers(user1, user2);</span>
-<span class="nc" id="L67">            ObjectMapper mapper = new ObjectMapper();</span>
-<span class="nc" id="L68">            ArrayNode conversationArray = mapper.createArrayNode();</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">            for(Message message : conversation){</span>
-<span class="nc" id="L70">                conversationArray.add(apiGeneralController.createJsonFromMessage(message));</span>
-<span class="nc" id="L71">            }</span>
-<span class="nc" id="L72">            return ResponseEntity.ok(conversationArray);</span>
-<span class="nc" id="L73">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L74">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L64">            User user1= apiGeneralController.getUserFromId(user1Id);</span>
+<span class="fc" id="L65">            User user2= apiGeneralController.getUserFromId(user2Id);</span>
+<span class="fc" id="L66">            List&lt;Message&gt; conversation= dataBaseService.getConversationFromUsers(user1, user2);</span>
+<span class="fc" id="L67">            ObjectMapper mapper = new ObjectMapper();</span>
+<span class="fc" id="L68">            ArrayNode conversationArray = mapper.createArrayNode();</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">            for(Message message : conversation){</span>
+<span class="fc" id="L70">                conversationArray.add(apiGeneralController.createJsonFromMessage(message));</span>
+<span class="fc" id="L71">            }</span>
+<span class="fc" id="L72">            return ResponseEntity.ok(conversationArray);</span>
+<span class="fc" id="L73">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L74">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -85,26 +85,26 @@ import java.util.List;
     @RequestMapping(&quot;api/message/getAllMessagesFromUser&quot;)
     public ResponseEntity&lt;?&gt; getAllMessagesFromUser(@RequestParam() String userId){
         try{
-<span class="nc" id="L88">            User user= apiGeneralController.getUserFromId(userId);</span>
-<span class="nc bnc" id="L89" title="All 2 branches missed.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
-<span class="nc" id="L90">                return ResponseEntity.badRequest().body(&quot;you must be the user identified by the userId&quot;);</span>
+<span class="fc" id="L88">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
+<span class="fc" id="L90">                return ResponseEntity.badRequest().body(&quot;you must be the user identified by the userId&quot;);</span>
             }
-<span class="nc" id="L92">            List&lt;User&gt; userList= dataBaseService.getUserConversationFromUser(user);</span>
-<span class="nc" id="L93">            ObjectMapper mapper = new ObjectMapper();</span>
-<span class="nc" id="L94">            ArrayNode allMessagesJson = mapper.createArrayNode();</span>
-<span class="nc bnc" id="L95" title="All 2 branches missed.">            for(User contact : userList){</span>
-<span class="nc" id="L96">                ObjectNode conversation= mapper.createObjectNode();</span>
-<span class="nc" id="L97">                conversation.put(&quot;contactName&quot;, contact.getName());</span>
-<span class="nc" id="L98">                ArrayNode conversationArray = mapper.createArrayNode();</span>
-<span class="nc bnc" id="L99" title="All 2 branches missed.">                for(Message message : dataBaseService.getConversationFromUsers(user, contact)){</span>
-<span class="nc" id="L100">                    conversationArray.add(apiGeneralController.createJsonFromMessage(message));</span>
-<span class="nc" id="L101">                }</span>
-<span class="nc" id="L102">                conversation.set(&quot;messages&quot;, conversationArray);</span>
-<span class="nc" id="L103">                allMessagesJson.add(conversation);</span>
-<span class="nc" id="L104">            }</span>
-<span class="nc" id="L105">            return ResponseEntity.ok(allMessagesJson);</span>
-<span class="nc" id="L106">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L107">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L92">            List&lt;User&gt; userList= dataBaseService.getUserConversationFromUser(user);</span>
+<span class="fc" id="L93">            ObjectMapper mapper = new ObjectMapper();</span>
+<span class="fc" id="L94">            ArrayNode allMessagesJson = mapper.createArrayNode();</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            for(User contact : userList){</span>
+<span class="fc" id="L96">                ObjectNode conversation= mapper.createObjectNode();</span>
+<span class="fc" id="L97">                conversation.put(&quot;contactName&quot;, contact.getName());</span>
+<span class="fc" id="L98">                ArrayNode conversationArray = mapper.createArrayNode();</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">                for(Message message : dataBaseService.getConversationFromUsers(user, contact)){</span>
+<span class="fc" id="L100">                    conversationArray.add(apiGeneralController.createJsonFromMessage(message));</span>
+<span class="fc" id="L101">                }</span>
+<span class="fc" id="L102">                conversation.set(&quot;messages&quot;, conversationArray);</span>
+<span class="fc" id="L103">                allMessagesJson.add(conversation);</span>
+<span class="fc" id="L104">            }</span>
+<span class="fc" id="L105">            return ResponseEntity.ok(allMessagesJson);</span>
+<span class="fc" id="L106">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L107">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
 
     }
@@ -119,32 +119,32 @@ import java.util.List;
     @RequestMapping(&quot;api/message/add&quot;)
     public ResponseEntity&lt;?&gt; add(@RequestBody() String body){
         try{
-<span class="nc" id="L122">            Message message= apiGeneralController.getMessageFromJsonString(body);</span>
-<span class="nc bnc" id="L123" title="All 2 branches missed.">            if(!apiGeneralController.getAuthenicatedUser().equals(message.getSender())){</span>
-<span class="nc" id="L124">                return ResponseEntity.badRequest().body(&quot;you must be the sender of the message&quot;);</span>
+<span class="fc" id="L122">            Message message= apiGeneralController.getMessageFromJsonString(body);</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">            if(!apiGeneralController.getAuthenicatedUser().equals(message.getSender())){</span>
+<span class="fc" id="L124">                return ResponseEntity.badRequest().body(&quot;you must be the sender of the message&quot;);</span>
             }
-<span class="nc bnc" id="L126" title="All 2 branches missed.">            if(!dataBaseService.getAllContactsFromUser(message.getSender()).contains(message.getReceiver())){</span>
-<span class="nc" id="L127">                return ResponseEntity.badRequest().body(&quot;the 2 users must have 1 app in common&quot;);</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">            if(!dataBaseService.getAllContactsFromUser(message.getSender()).contains(message.getReceiver())){</span>
+<span class="fc" id="L127">                return ResponseEntity.badRequest().body(&quot;the 2 users must have 1 app in common&quot;);</span>
             }
-<span class="nc bnc" id="L129" title="All 4 branches missed.">            if(message.getId()!=null &amp;&amp; dataBaseService.getMessageFromID(message.getId()).isPresent()){</span>
-<span class="nc" id="L130">                return ResponseEntity.badRequest().body(&quot;there is already a message with that ID&quot;);</span>
+<span class="pc bpc" id="L129" title="1 of 4 branches missed.">            if(message.getId()!=null &amp;&amp; dataBaseService.getMessageFromID(message.getId()).isPresent()){</span>
+<span class="fc" id="L130">                return ResponseEntity.badRequest().body(&quot;there is already a message with that ID&quot;);</span>
             }
-<span class="nc bnc" id="L132" title="All 2 branches missed.">            if(message.getTime()==null){</span>
-<span class="nc" id="L133">                dataBaseService.addNowMessage(message);</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">            if(message.getTime()==null){</span>
+<span class="fc" id="L133">                dataBaseService.addNowMessage(message);</span>
             }
             else{
-<span class="nc" id="L136">                dataBaseService.addMessage(message);</span>
+<span class="fc" id="L136">                dataBaseService.addMessage(message);</span>
             }
-<span class="nc" id="L138">            return ResponseEntity.ok(&quot;Message sent successfully&quot;);</span>
-<span class="nc" id="L139">        } catch (IllegalArgumentException | DateTimeParseException e){</span>
-<span class="nc" id="L140">            return ResponseEntity.badRequest().body(e.getMessage());</span>
-<span class="nc" id="L141">        } catch (IOException e){</span>
-<span class="nc" id="L142">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
+<span class="fc" id="L138">            return ResponseEntity.ok(&quot;Message sent successfully&quot;);</span>
+<span class="fc" id="L139">        } catch (IllegalArgumentException | DateTimeParseException e){</span>
+<span class="fc" id="L140">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L141">        } catch (IOException e){</span>
+<span class="fc" id="L142">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
         }
     }
 
     private boolean isSenderOrReceiver(Message message, User user){
-<span class="nc bnc" id="L147" title="All 4 branches missed.">        return message.getSender().equals(user) || message.getReceiver().equals(user);</span>
+<span class="fc bfc" id="L147" title="All 4 branches covered.">        return message.getSender().equals(user) || message.getReceiver().equals(user);</span>
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)

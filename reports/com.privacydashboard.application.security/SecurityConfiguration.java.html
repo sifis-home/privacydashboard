@@ -4,36 +4,39 @@ import com.privacydashboard.application.views.login.LoginView;
 import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
-<span class="nc" id="L15">public class SecurityConfiguration extends VaadinWebSecurityConfigurerAdapter {</span>
+@Order(1)
+<span class="nc" id="L18">public class SecurityConfiguration extends VaadinWebSecurityConfigurerAdapter {</span>
 
     public static final String LOGOUT_URL = &quot;/&quot;;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-<span class="nc" id="L21">        return new BCryptPasswordEncoder();</span>
+<span class="nc" id="L24">        return new BCryptPasswordEncoder();</span>
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-<span class="nc" id="L26">        http.csrf().disable()</span>
-<span class="nc" id="L27">                .authorizeRequests().antMatchers(&quot;/api/**&quot;).authenticated()</span>
-<span class="nc" id="L28">                .and().httpBasic();</span>
-<span class="nc" id="L29">        super.configure(http);</span>
-<span class="nc" id="L30">        setLoginView(http, LoginView.class, LOGOUT_URL);</span>
-<span class="nc" id="L31">    }</span>
+<span class="nc" id="L29">        http.csrf().disable()</span>
+<span class="nc" id="L30">                .authorizeRequests().antMatchers(&quot;/api/**&quot;).authenticated()</span>
+<span class="nc" id="L31">                .and().httpBasic();</span>
+<span class="nc" id="L32">        super.configure(http);</span>
+<span class="nc" id="L33">        setLoginView(http, LoginView.class, LOGOUT_URL);</span>
+<span class="nc" id="L34">    }</span>
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-<span class="nc" id="L35">        super.configure(web);</span>
-<span class="nc" id="L36">        web.ignoring().antMatchers(&quot;/images/*.png&quot;);</span>
-<span class="nc" id="L37">    }</span>
+<span class="nc" id="L38">        super.configure(web);</span>
+<span class="nc" id="L39">        web.ignoring().antMatchers(&quot;/images/*.png&quot;);</span>
+<span class="nc" id="L40">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -19,7 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @RestController
-<span class="nc" id="L22">public class ApiUserAppRelationController {</span>
+<span class="fc" id="L22">public class ApiUserAppRelationController {</span>
 
     @Autowired
     private DataBaseService dataBaseService;
@@ -39,18 +39,18 @@ import java.util.List;
     @RequestMapping(&quot;api/userapprelation/get&quot;)
     public ResponseEntity&lt;?&gt; get(@RequestParam() String userId, @RequestParam() String appId){
         try{
-<span class="nc bnc" id="L42" title="All 2 branches missed.">            if(!apiGeneralController.userHasApp(apiGeneralController.getAuthenicatedUser(), apiGeneralController.getAppFromId(appId))){</span>
-<span class="nc" id="L43">                return ResponseEntity.badRequest().body(&quot;you must be connected with the app&quot;);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">            if(!apiGeneralController.userHasApp(apiGeneralController.getAuthenicatedUser(), apiGeneralController.getAppFromId(appId))){</span>
+<span class="fc" id="L43">                return ResponseEntity.badRequest().body(&quot;you must be connected with the app&quot;);</span>
             }
-<span class="nc bnc" id="L45" title="All 4 branches missed.">            if(!apiGeneralController.isAuthenticatedUserId(userId) &amp;&amp; !apiGeneralController.isControllerOrDpo(true, null)){</span>
-<span class="nc" id="L46">                return ResponseEntity.badRequest().body(&quot;you must be the user identified by the userId or the controller/DPO of the app&quot;);</span>
+<span class="pc bpc" id="L45" title="1 of 4 branches missed.">            if(!apiGeneralController.isAuthenticatedUserId(userId) &amp;&amp; !apiGeneralController.isControllerOrDpo(true, null)){</span>
+<span class="fc" id="L46">                return ResponseEntity.badRequest().body(&quot;you must be the user identified by the userId or the controller/DPO of the app&quot;);</span>
             }
 
-<span class="nc" id="L49">            UserAppRelation userAppRelation= apiGeneralController.getUserAppRelationByUserIdAndAppId(userId, appId);</span>
-<span class="nc" id="L50">            ObjectNode userAppRelationJson= apiGeneralController.createJsonFromUserAppRelation(userAppRelation);</span>
-<span class="nc" id="L51">            return ResponseEntity.ok(userAppRelationJson);</span>
-<span class="nc" id="L52">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L53">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L49">            UserAppRelation userAppRelation= apiGeneralController.getUserAppRelationByUserIdAndAppId(userId, appId);</span>
+<span class="fc" id="L50">            ObjectNode userAppRelationJson= apiGeneralController.createJsonFromUserAppRelation(userAppRelation);</span>
+<span class="fc" id="L51">            return ResponseEntity.ok(userAppRelationJson);</span>
+<span class="fc" id="L52">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L53">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -65,20 +65,20 @@ import java.util.List;
     @RequestMapping(&quot;api/userapprelation/add&quot;)
     public ResponseEntity&lt;?&gt; add(@RequestParam() String userId, @RequestParam() String appId){
         try{
-<span class="nc" id="L68">            User user=apiGeneralController.getUserFromId(userId);</span>
-<span class="nc" id="L69">            IoTApp app=apiGeneralController.getAppFromId(appId);</span>
-<span class="nc bnc" id="L70" title="All 2 branches missed.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
-<span class="nc" id="L71">                return ResponseEntity.badRequest().body(&quot;you must be the user identified by the userId&quot;);</span>
+<span class="fc" id="L68">            User user=apiGeneralController.getUserFromId(userId);</span>
+<span class="fc" id="L69">            IoTApp app=apiGeneralController.getAppFromId(appId);</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
+<span class="fc" id="L71">                return ResponseEntity.badRequest().body(&quot;you must be the user identified by the userId&quot;);</span>
             }
-<span class="nc bnc" id="L73" title="All 2 branches missed.">            if(!apiGeneralController.userHasApp(user,app)){</span>
-<span class="nc" id="L74">                dataBaseService.addUserApp(user, app);</span>
-<span class="nc" id="L75">                return ResponseEntity.ok(&quot;app added successfully&quot;);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">            if(!apiGeneralController.userHasApp(user,app)){</span>
+<span class="fc" id="L74">                dataBaseService.addUserApp(user, app);</span>
+<span class="fc" id="L75">                return ResponseEntity.ok(&quot;app added successfully&quot;);</span>
             }
             else{
-<span class="nc" id="L78">                return ResponseEntity.badRequest().body(&quot;user already has this app&quot;);</span>
+<span class="fc" id="L78">                return ResponseEntity.badRequest().body(&quot;user already has this app&quot;);</span>
             }
-<span class="nc" id="L80">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L81">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L80">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L81">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -94,14 +94,14 @@ import java.util.List;
     @RequestMapping(&quot;api/userapprelation/addConsenses&quot;)
     public ResponseEntity&lt;?&gt; addConsenses(@RequestParam() String userId, @RequestParam() String appId, @RequestBody() String body){
         try{
-<span class="nc" id="L97">            IoTApp app= apiGeneralController.getAppFromId(appId);</span>
-<span class="nc bnc" id="L98" title="All 2 branches missed.">            if(!apiGeneralController.isControllerOrDpo(true, null)){</span>
-<span class="nc" id="L99">                ResponseEntity.badRequest().body(&quot;You must be a controller/DPO&quot;);</span>
+<span class="fc" id="L97">            IoTApp app= apiGeneralController.getAppFromId(appId);</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">            if(!apiGeneralController.isControllerOrDpo(true, null)){</span>
+<span class="fc" id="L99">                return ResponseEntity.badRequest().body(&quot;You must be a controller/DPO&quot;);</span>
             }
-<span class="nc bnc" id="L101" title="All 2 branches missed.">            if(!apiGeneralController.userHasApp(apiGeneralController.getAuthenicatedUser(), app)){</span>
-<span class="nc" id="L102">                return ResponseEntity.badRequest().body(&quot;you must be connected with the app&quot;);</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">            if(!apiGeneralController.userHasApp(apiGeneralController.getAuthenicatedUser(), app)){</span>
+<span class="fc" id="L102">                return ResponseEntity.badRequest().body(&quot;you must be connected with the app&quot;);</span>
             }
-<span class="nc" id="L104">            UserAppRelation userAppRelation= apiGeneralController.getUserAppRelationByUserIdAndAppId(userId, appId);</span>
+<span class="fc" id="L104">            UserAppRelation userAppRelation= apiGeneralController.getUserAppRelationByUserIdAndAppId(userId, appId);</span>
 
 <span class="nc" id="L106">            JsonNode rootNode = new ObjectMapper().readTree(new StringReader(body));</span>
 <span class="nc bnc" id="L107" title="All 4 branches missed.">            if(!rootNode.has(&quot;consenses&quot;) || !rootNode.isArray()){</span>
@@ -113,10 +113,10 @@ import java.util.List;
 <span class="nc" id="L113">            }</span>
 <span class="nc" id="L114">            dataBaseService.addConsenses(userAppRelation, newConsenses);</span>
 <span class="nc" id="L115">            return ResponseEntity.ok(&quot;consenses added successfully&quot;);</span>
-<span class="nc" id="L116">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L117">            return ResponseEntity.badRequest().body(e.getMessage());</span>
-<span class="nc" id="L118">        } catch (IOException e){</span>
-<span class="nc" id="L119">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
+<span class="fc" id="L116">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L117">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L118">        } catch (IOException e){</span>
+<span class="fc" id="L119">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
         }
     }
 
@@ -131,20 +131,20 @@ import java.util.List;
     @RequestMapping(&quot;api/userapprelation/delete&quot;)
     public ResponseEntity&lt;?&gt; delete(@RequestParam() String userId, @RequestParam() String appId){
         try{
-<span class="nc" id="L134">            User user=apiGeneralController.getUserFromId(userId);</span>
-<span class="nc" id="L135">            IoTApp app=apiGeneralController.getAppFromId(appId);</span>
-<span class="nc bnc" id="L136" title="All 2 branches missed.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
-<span class="nc" id="L137">                return ResponseEntity.badRequest().body(&quot;you must be the user identified by the userId&quot;);</span>
+<span class="fc" id="L134">            User user=apiGeneralController.getUserFromId(userId);</span>
+<span class="fc" id="L135">            IoTApp app=apiGeneralController.getAppFromId(appId);</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
+<span class="fc" id="L137">                return ResponseEntity.badRequest().body(&quot;you must be the user identified by the userId&quot;);</span>
             }
 
-<span class="nc bnc" id="L140" title="All 4 branches missed.">            if(apiGeneralController.userHasApp(user,app) &amp;&amp; dataBaseService.deleteAppFromUser(user, app)){</span>
-<span class="nc" id="L141">                return ResponseEntity.ok(&quot;app removed successfully&quot;);</span>
+<span class="pc bpc" id="L140" title="1 of 4 branches missed.">            if(apiGeneralController.userHasApp(user,app) &amp;&amp; dataBaseService.deleteAppFromUser(user, app)){</span>
+<span class="fc" id="L141">                return ResponseEntity.ok(&quot;app removed successfully&quot;);</span>
             }
             else{
-<span class="nc" id="L144">                return ResponseEntity.badRequest().body(&quot;user doesn't have this app&quot;);</span>
+<span class="fc" id="L144">                return ResponseEntity.badRequest().body(&quot;user doesn't have this app&quot;);</span>
             }
-<span class="nc" id="L146">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L147">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L146">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L147">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -160,14 +160,14 @@ import java.util.List;
     @RequestMapping(&quot;api/userapprelation/removeConsenses&quot;)
     public ResponseEntity&lt;?&gt; removeConsenses(@RequestParam() String userId, @RequestParam() String appId, @RequestBody() String body){
         try{
-<span class="nc" id="L163">            IoTApp app= apiGeneralController.getAppFromId(appId);</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">            if(!apiGeneralController.isControllerOrDpo(true, null)){</span>
-<span class="nc" id="L165">                ResponseEntity.badRequest().body(&quot;You must be a controller/DPO&quot;);</span>
+<span class="fc" id="L163">            IoTApp app= apiGeneralController.getAppFromId(appId);</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">            if(!apiGeneralController.isControllerOrDpo(true, null)){</span>
+<span class="fc" id="L165">                return ResponseEntity.badRequest().body(&quot;You must be a controller/DPO&quot;);</span>
             }
-<span class="nc bnc" id="L167" title="All 2 branches missed.">            if(!apiGeneralController.userHasApp(apiGeneralController.getAuthenicatedUser(), app)){</span>
-<span class="nc" id="L168">                return ResponseEntity.badRequest().body(&quot;you must be connected with the app&quot;);</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">            if(!apiGeneralController.userHasApp(apiGeneralController.getAuthenicatedUser(), app)){</span>
+<span class="fc" id="L168">                return ResponseEntity.badRequest().body(&quot;you must be connected with the app&quot;);</span>
             }
-<span class="nc" id="L170">            UserAppRelation userAppRelation= apiGeneralController.getUserAppRelationByUserIdAndAppId(userId, appId);</span>
+<span class="fc" id="L170">            UserAppRelation userAppRelation= apiGeneralController.getUserAppRelationByUserIdAndAppId(userId, appId);</span>
 
 <span class="nc" id="L172">            JsonNode rootNode = new ObjectMapper().readTree(new StringReader(body));</span>
 <span class="nc bnc" id="L173" title="All 4 branches missed.">            if(!rootNode.has(&quot;consenses&quot;) || !rootNode.isArray()){</span>
@@ -179,10 +179,10 @@ import java.util.List;
 <span class="nc" id="L179">            }</span>
 <span class="nc" id="L180">            dataBaseService.removeConsensesFromUserAppRelation(userAppRelation, newConsenses);</span>
 <span class="nc" id="L181">            return ResponseEntity.ok(&quot;consenses removed successfully&quot;);</span>
-<span class="nc" id="L182">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L183">            return ResponseEntity.badRequest().body(e.getMessage());</span>
-<span class="nc" id="L184">        } catch (IOException e){</span>
-<span class="nc" id="L185">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
+<span class="fc" id="L182">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L183">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L184">        } catch (IOException e){</span>
+<span class="fc" id="L185">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
         }
     }
 
@@ -197,18 +197,18 @@ import java.util.List;
     @RequestMapping(&quot;api/userapprelation/removeAllConsenses&quot;)
     public ResponseEntity&lt;?&gt; removeAllConsenses(@RequestParam() String userId, @RequestParam() String appId){
         try{
-<span class="nc" id="L200">            IoTApp app= apiGeneralController.getAppFromId(appId);</span>
-<span class="nc bnc" id="L201" title="All 2 branches missed.">            if(!apiGeneralController.isControllerOrDpo(true, null)){</span>
-<span class="nc" id="L202">                ResponseEntity.badRequest().body(&quot;You must be a controller/DPO&quot;);</span>
+<span class="fc" id="L200">            IoTApp app= apiGeneralController.getAppFromId(appId);</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">            if(!apiGeneralController.isControllerOrDpo(true, null)){</span>
+<span class="fc" id="L202">                return ResponseEntity.badRequest().body(&quot;You must be a controller/DPO&quot;);</span>
             }
-<span class="nc bnc" id="L204" title="All 2 branches missed.">            if(!apiGeneralController.userHasApp(apiGeneralController.getAuthenicatedUser(), app)){</span>
-<span class="nc" id="L205">                return ResponseEntity.badRequest().body(&quot;you must be connected with the app&quot;);</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">            if(!apiGeneralController.userHasApp(apiGeneralController.getAuthenicatedUser(), app)){</span>
+<span class="fc" id="L205">                return ResponseEntity.badRequest().body(&quot;you must be connected with the app&quot;);</span>
             }
-<span class="nc" id="L207">            UserAppRelation userAppRelation= apiGeneralController.getUserAppRelationByUserIdAndAppId(userId, appId);</span>
-<span class="nc" id="L208">            dataBaseService.removeAllConsenses(userAppRelation);</span>
-<span class="nc" id="L209">            return ResponseEntity.ok(&quot;consenses removed successfully&quot;);</span>
-<span class="nc" id="L210">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L211">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L207">            UserAppRelation userAppRelation= apiGeneralController.getUserAppRelationByUserIdAndAppId(userId, appId);</span>
+<span class="fc" id="L208">            dataBaseService.removeAllConsenses(userAppRelation);</span>
+<span class="fc" id="L209">            return ResponseEntity.ok(&quot;consenses removed successfully&quot;);</span>
+<span class="fc" id="L210">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L211">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 

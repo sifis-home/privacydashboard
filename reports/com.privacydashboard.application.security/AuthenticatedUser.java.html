@@ -14,46 +14,55 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Component
 public class AuthenticatedUser {
     private final UserRepository userRepository;
-
     @Autowired
-<span class="nc" id="L22">    public AuthenticatedUser(UserRepository userRepository) {</span>
-<span class="nc" id="L23">        this.userRepository = userRepository;</span>
-<span class="nc" id="L24">    }</span>
+<span class="nc" id="L23">    public AuthenticatedUser(UserRepository userRepository) {</span>
+<span class="nc" id="L24">        this.userRepository = userRepository;</span>
+<span class="nc" id="L25">    }</span>
 
     private Optional&lt;Authentication&gt; getAuthentication() {
-<span class="nc" id="L27">        SecurityContext context = SecurityContextHolder.getContext();</span>
-<span class="nc" id="L28">        return Optional.ofNullable(context.getAuthentication())</span>
-<span class="nc bnc" id="L29" title="All 2 branches missed.">                .filter(authentication -&gt; !(authentication instanceof AnonymousAuthenticationToken));</span>
+<span class="nc" id="L28">        SecurityContext context = SecurityContextHolder.getContext();</span>
+<span class="nc" id="L29">        return Optional.ofNullable(context.getAuthentication())</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">                .filter(authentication -&gt; !(authentication instanceof AnonymousAuthenticationToken));</span>
     }
 
+
+
     public Optional&lt;User&gt; get() {
-<span class="nc" id="L33">        return getAuthentication().map(authentication -&gt; userRepository.findByName(authentication.getName()));</span>
+<span class="nc" id="L36">        return getAuthentication().map(authentication -&gt; userRepository.findByName(authentication.getName()));</span>
     }
 
     // AGGIUNTA, RESTITUISCE USER SENZA DOVER OGNI VOLTA GUARDARE IL DB. E' SICURO??????
     public User getUser(){
-<span class="nc bnc" id="L38" title="All 2 branches missed.">        if(UI.getCurrent().getSession().getAttribute(&quot;user&quot;)==null){</span>
-<span class="nc" id="L39">            Optional&lt;User&gt; maybeUser=get();</span>
-<span class="nc" id="L40">            maybeUser.ifPresent(user -&gt; UI.getCurrent().getSession().setAttribute(&quot;user&quot;, user));</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if(UI.getCurrent().getSession().getAttribute(&quot;user&quot;)==null){</span>
+<span class="nc" id="L42">            Optional&lt;User&gt; maybeUser=get();</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">            if (maybeUser == null) {</span>
+<span class="nc" id="L44">                maybeUser = getAuthentication().map(authentication -&gt; userRepository.findByName(authentication.getName()));</span>
+            }
+<span class="nc" id="L46">            maybeUser.ifPresent(user -&gt; UI.getCurrent().getSession().setAttribute(&quot;user&quot;, user));</span>
         }
-<span class="nc" id="L42">        return (User) UI.getCurrent().getSession().getAttribute(&quot;user&quot;);</span>
+<span class="nc" id="L48">        return (User) UI.getCurrent().getSession().getAttribute(&quot;user&quot;);</span>
+
+
+
     }
 
     public User updateUser(){
-<span class="nc" id="L46">        Optional&lt;User&gt; maybeUser=get();</span>
-<span class="nc" id="L47">        maybeUser.ifPresent(user -&gt; UI.getCurrent().getSession().setAttribute(&quot;user&quot;, user));</span>
-<span class="nc" id="L48">        return (User) UI.getCurrent().getSession().getAttribute(&quot;user&quot;);</span>
+<span class="nc" id="L55">        Optional&lt;User&gt; maybeUser=get();</span>
+<span class="nc" id="L56">        maybeUser.ifPresent(user -&gt; UI.getCurrent().getSession().setAttribute(&quot;user&quot;, user));</span>
+<span class="nc" id="L57">        return (User) UI.getCurrent().getSession().getAttribute(&quot;user&quot;);</span>
     }
 
 
     public void logout() {
-<span class="nc" id="L53">        UI.getCurrent().getPage().setLocation(SecurityConfiguration.LOGOUT_URL);</span>
-<span class="nc" id="L54">        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();</span>
-<span class="nc" id="L55">        logoutHandler.logout(VaadinServletRequest.getCurrent().getHttpServletRequest(), null, null);</span>
-<span class="nc" id="L56">    }</span>
+<span class="nc" id="L62">        UI.getCurrent().getPage().setLocation(SecurityConfiguration.LOGOUT_URL);</span>
+<span class="nc" id="L63">        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();</span>
+<span class="nc" id="L64">        logoutHandler.logout(VaadinServletRequest.getCurrent().getHttpServletRequest(), null, null);</span>
+<span class="nc" id="L65">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

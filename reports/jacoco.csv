@@ -1,14 +1,15 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 Privacy Dashboard,com.privacydashboard.application.data.generator,DataGenerator,1711,0,86,0,253,0,46,0,3,0
-Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiUserAppRelationController,380,0,40,0,78,0,28,0,8,0
-Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiRightRequestController,375,274,50,22,82,50,31,20,6,9
-Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiAppController,321,0,30,0,69,0,26,0,11,0
-Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiPrivacyNoticeController,501,0,42,0,113,0,33,0,12,0
+Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiUserAppRelationController,106,274,14,26,19,59,9,19,1,7
+Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiRightRequestController,12,637,4,68,3,129,5,46,1,14
+Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiAppController,15,306,10,20,1,68,8,18,1,10
+Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiPrivacyNoticeController,6,495,2,40,1,112,3,30,1,11
 Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiUserController,116,230,8,24,27,49,8,18,4,6
-Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiNotificationController,434,0,54,0,89,0,41,0,12,0
-Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiGeneralController,18,1843,10,258,2,374,10,164,1,36
-Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiMessageController,275,0,28,0,57,0,21,0,7,0
-Privacy Dashboard,com.privacydashboard.application.views.apps,AppsView,318,899,24,42,62,174,32,30,16,10
+Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiNotificationController,12,422,9,45,1,88,9,32,1,11
+Privacy Dashboard,com.privacydashboard.application.data.apiController,MyRestController,5,0,0,0,2,0,2,0,2,0
+Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiGeneralController,10,1864,8,260,1,384,8,166,1,36
+Privacy Dashboard,com.privacydashboard.application.data.apiController,ApiMessageController,6,269,2,26,1,56,3,18,1,6
+Privacy Dashboard,com.privacydashboard.application.views.apps,AppsView,318,857,24,40,62,167,32,29,16,10
 Privacy Dashboard,com.privacydashboard.application.views.apps,AppsView.new X509TrustManager() {...},1,9,0,0,1,3,1,3,1,3
 Privacy Dashboard,com.privacydashboard.application.data.entity,UserAppRelation,0,28,0,0,0,11,0,7,0,7
 Privacy Dashboard,com.privacydashboard.application.data.entity,User,0,38,0,0,0,16,0,11,0,11
@@ -35,9 +36,12 @@ Privacy Dashboard,com.privacydashboard.application.data.service,CommunicationSer
 Privacy Dashboard,com.privacydashboard.application.views,MainLayout.MenuItemInfo,60,0,0,0,11,0,2,0,2,0
 Privacy Dashboard,com.privacydashboard.application.views,MainLayout.MenuItemInfo.LineAwesomeIcon,22,0,2,0,5,0,2,0,1,0
 Privacy Dashboard,com.privacydashboard.application.views,MainLayout,471,0,8,0,62,0,14,0,10,0
-Privacy Dashboard,com.privacydashboard.application.security,UserDetailsServiceImpl,47,56,0,4,11,13,6,6,6,4
+Privacy Dashboard,com.privacydashboard.application.security,UserApiSecurityConfiguration,19,0,0,0,7,0,2,0,2,0
+Privacy Dashboard,com.privacydashboard.application.security,UserDetailsServiceImpl,66,62,0,4,16,15,8,7,8,5
+Privacy Dashboard,com.privacydashboard.application.security,JWTAuthenticationFilter,117,0,6,0,36,0,6,0,3,0
 Privacy Dashboard,com.privacydashboard.application.security,SecurityConfiguration,48,0,0,0,11,0,4,0,4,0
-Privacy Dashboard,com.privacydashboard.application.security,AuthenticatedUser,89,0,4,0,18,0,12,0,10,0
+Privacy Dashboard,com.privacydashboard.application.security,AuthenticatedUser,103,0,6,0,20,0,14,0,11,0
+Privacy Dashboard,com.privacydashboard.application.security,CustomAuthenticationProvider,215,0,6,0,59,0,9,0,6,0
 Privacy Dashboard,com.privacydashboard.application.views.rights,ControllerDPORightsView,204,112,16,0,47,23,19,3,11,3
 Privacy Dashboard,com.privacydashboard.application.views.rights,SubjectRightsView,233,229,16,0,56,40,19,6,11,6
 Privacy Dashboard,com.privacydashboard.application.views.rights,DialogRight,235,739,22,36,51,148,21,28,9,11
@@ -49,9 +53,9 @@ Privacy Dashboard,com.privacydashboard.application.views.login,RegisterView,215,
 Privacy Dashboard,com.privacydashboard.application.views.login,LoginView,60,0,2,0,12,0,3,0,2,0
 Privacy Dashboard,com.privacydashboard.application.views.mainLayout,NotificationView,179,0,14,0,44,0,14,0,6,0
 Privacy Dashboard,com.privacydashboard.application.views.mainLayout,ProfileView,639,0,20,0,108,0,35,0,25,0
-Privacy Dashboard,com.privacydashboard.application.views.privacyNotice,FormPrivacyNotice,498,0,6,0,80,0,10,0,7,0
+Privacy Dashboard,com.privacydashboard.application.views.privacyNotice,FormPrivacyNotice,158,340,4,2,34,46,8,2,6,1
 Privacy Dashboard,com.privacydashboard.application.views.privacyNotice,SinglePrivacyNoticeView,508,0,22,0,98,0,26,0,15,0
-Privacy Dashboard,com.privacydashboard.application.views.privacyNotice,PrivacyNoticeView,824,0,34,0,151,0,46,0,29,0
+Privacy Dashboard,com.privacydashboard.application.views.privacyNotice,PrivacyNoticeView,302,522,22,12,65,86,34,12,23,6
 Privacy Dashboard,com.privacydashboard.application.views.messages,MessagesView,73,216,6,0,15,41,11,5,8,5
 Privacy Dashboard,com.privacydashboard.application.views.messages,SingleConversationView,14,260,4,6,5,52,6,9,2,8
 Privacy Dashboard,com.privacydashboard.application.views.contacts,ContactsView,106,296,14,4,19,49,17,7,9,6

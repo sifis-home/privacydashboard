@@ -90,7 +90,10 @@ import java.util.UUID;
 <span class="fc" id="L90">                throw new IllegalArgumentException(&quot;user does not exist&quot;);</span>
             }
 <span class="fc" id="L92">        } catch (IllegalArgumentException e){</span>
-<span class="fc" id="L93">            throw new IllegalArgumentException(&quot;invalid ID&quot;);</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            if(e.getMessage().equals(&quot;user does not exist&quot;))</span>
+<span class="fc" id="L94">                throw e;</span>
+            else
+<span class="fc" id="L96">                throw new IllegalArgumentException(&quot;invalid ID&quot;);</span>
         }
     }
 
@@ -102,27 +105,33 @@ import java.util.UUID;
      */
     public IoTApp getAppFromId(String uuid) throws IllegalArgumentException {
         try {
-<span class="fc" id="L105">            Optional&lt;IoTApp&gt; maybeApp = dataBaseService.getApp(UUID.fromString(uuid));</span>
-<span class="fc bfc" id="L106" title="All 2 branches covered.">            if (maybeApp.isPresent()) {</span>
-<span class="fc" id="L107">                return maybeApp.get();</span>
+<span class="fc" id="L108">            Optional&lt;IoTApp&gt; maybeApp = dataBaseService.getApp(UUID.fromString(uuid));</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">            if (maybeApp.isPresent()) {</span>
+<span class="fc" id="L110">                return maybeApp.get();</span>
             } else {
-<span class="fc" id="L109">                throw new IllegalArgumentException(&quot;app does not exist&quot;);</span>
+<span class="fc" id="L112">                throw new IllegalArgumentException(&quot;app does not exist&quot;);</span>
             }
-<span class="fc" id="L111">        } catch (IllegalArgumentException e){</span>
-<span class="fc" id="L112">            throw new IllegalArgumentException(&quot;invalid ID&quot;);</span>
+<span class="fc" id="L114">        } catch (IllegalArgumentException e){</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">            if(e.getMessage().equals(&quot;app does not exist&quot;))</span>
+<span class="fc" id="L116">                throw e;</span>
+            else
+<span class="fc" id="L118">                throw new IllegalArgumentException(&quot;invalid ID&quot;);</span>
         }
     }
 
     public Message getMessageFromId(String uuid) throws IllegalArgumentException {
         try {
-<span class="fc" id="L118">            Optional&lt;Message&gt; message = dataBaseService.getMessageFromID(UUID.fromString(uuid));</span>
-<span class="fc bfc" id="L119" title="All 2 branches covered.">            if (message.isPresent()) {</span>
-<span class="fc" id="L120">                return message.get();</span>
+<span class="fc" id="L124">            Optional&lt;Message&gt; message = dataBaseService.getMessageFromID(UUID.fromString(uuid));</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">            if (message.isPresent()) {</span>
+<span class="fc" id="L126">                return message.get();</span>
             } else {
-<span class="fc" id="L122">                throw new IllegalArgumentException(&quot;message does not exist&quot;);</span>
+<span class="fc" id="L128">                throw new IllegalArgumentException(&quot;message does not exist&quot;);</span>
             }
-<span class="fc" id="L124">        } catch (IllegalArgumentException e){</span>
-<span class="fc" id="L125">            throw new IllegalArgumentException(&quot;invalid ID&quot;);</span>
+<span class="fc" id="L130">        } catch (IllegalArgumentException e){</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">            if(e.getMessage().equals(&quot;message does not exist&quot;))</span>
+<span class="fc" id="L132">                throw e;</span>
+            else
+<span class="fc" id="L134">                throw new IllegalArgumentException(&quot;invalid ID&quot;);</span>
         }
     }
 
@@ -133,13 +142,13 @@ import java.util.UUID;
      * @throws IllegalArgumentException if IDs invalid, user or app does not exist, user does not have the app
      */
     public UserAppRelation getUserAppRelationByUserIdAndAppId(String userId, String appId) throws IllegalArgumentException {
-<span class="fc" id="L136">        User user = getUserFromId(userId);</span>
-<span class="fc" id="L137">        IoTApp app = getAppFromId(appId);</span>
-<span class="fc" id="L138">        UserAppRelation userAppRelation = dataBaseService.getUserAppRelationByUserAndApp(user, app);</span>
-<span class="fc bfc" id="L139" title="All 2 branches covered.">        if (userAppRelation == null) {</span>
-<span class="fc" id="L140">            throw new IllegalArgumentException(&quot;user does not have this app&quot;);</span>
+<span class="fc" id="L145">        User user = getUserFromId(userId);</span>
+<span class="fc" id="L146">        IoTApp app = getAppFromId(appId);</span>
+<span class="fc" id="L147">        UserAppRelation userAppRelation = dataBaseService.getUserAppRelationByUserAndApp(user, app);</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (userAppRelation == null) {</span>
+<span class="fc" id="L149">            throw new IllegalArgumentException(&quot;user does not have this app&quot;);</span>
         }
-<span class="fc" id="L142">        return userAppRelation;</span>
+<span class="fc" id="L151">        return userAppRelation;</span>
     }
 
     /**
@@ -149,14 +158,17 @@ import java.util.UUID;
      */
     public PrivacyNotice getPrivacyNoticeFromId(String privacyNoticeId) throws IllegalArgumentException {
         try {
-<span class="fc" id="L152">            Optional&lt;PrivacyNotice&gt; privacyNotice = dataBaseService.getPrivacyNoticeFromId(UUID.fromString(privacyNoticeId));</span>
-<span class="fc bfc" id="L153" title="All 2 branches covered.">            if (privacyNotice.isPresent()) {</span>
-<span class="fc" id="L154">                return privacyNotice.get();</span>
+<span class="fc" id="L161">            Optional&lt;PrivacyNotice&gt; privacyNotice = dataBaseService.getPrivacyNoticeFromId(UUID.fromString(privacyNoticeId));</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">            if (privacyNotice.isPresent()) {</span>
+<span class="fc" id="L163">                return privacyNotice.get();</span>
             } else {
-<span class="fc" id="L156">                throw new IllegalArgumentException(&quot;privacy notice does not exist&quot;);</span>
+<span class="fc" id="L165">                throw new IllegalArgumentException(&quot;privacy notice does not exist&quot;);</span>
             }
-<span class="fc" id="L158">        } catch (IllegalArgumentException e){</span>
-<span class="fc" id="L159">            throw new IllegalArgumentException(&quot;invalid ID&quot;);</span>
+<span class="fc" id="L167">        } catch (IllegalArgumentException e){</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">            if(e.getMessage().equals(&quot;privacy notice does not exist&quot;))</span>
+<span class="fc" id="L169">                throw e;</span>
+            else
+<span class="fc" id="L171">                throw new IllegalArgumentException(&quot;invalid ID&quot;);</span>
         }
     }
 
@@ -166,11 +178,11 @@ import java.util.UUID;
      * @throws IllegalArgumentException if IDs invalid, app does not exist, privacy notice does not exist
      */
     public PrivacyNotice getPrivacyNoticeFromAppId(String appId) throws IllegalArgumentException {
-<span class="fc" id="L169">        PrivacyNotice privacyNotice = dataBaseService.getPrivacyNoticeFromApp(getAppFromId(appId));</span>
-<span class="fc bfc" id="L170" title="All 2 branches covered.">        if (privacyNotice == null) {</span>
-<span class="fc" id="L171">            throw new IllegalArgumentException(&quot;privacy notice does not exist&quot;);</span>
+<span class="fc" id="L181">        PrivacyNotice privacyNotice = dataBaseService.getPrivacyNoticeFromApp(getAppFromId(appId));</span>
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        if (privacyNotice == null) {</span>
+<span class="fc" id="L183">            throw new IllegalArgumentException(&quot;privacy notice does not exist&quot;);</span>
         } else {
-<span class="fc" id="L173">            return privacyNotice;</span>
+<span class="fc" id="L185">            return privacyNotice;</span>
         }
     }
 
@@ -181,14 +193,17 @@ import java.util.UUID;
      */
     public Notification getNotificationFromId(String notificationId) throws IllegalArgumentException {
         try {
-<span class="fc" id="L184">            Optional&lt;Notification&gt; notification = dataBaseService.getNotificationFromId(UUID.fromString(notificationId));</span>
-<span class="fc bfc" id="L185" title="All 2 branches covered.">            if (notification.isPresent()) {</span>
-<span class="fc" id="L186">                return notification.get();</span>
+<span class="fc" id="L196">            Optional&lt;Notification&gt; notification = dataBaseService.getNotificationFromId(UUID.fromString(notificationId));</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">            if (notification.isPresent()) {</span>
+<span class="fc" id="L198">                return notification.get();</span>
             } else {
-<span class="fc" id="L188">                throw new IllegalArgumentException(&quot;notification does not exist&quot;);</span>
+<span class="fc" id="L200">                throw new IllegalArgumentException(&quot;notification does not exist&quot;);</span>
             }
-<span class="fc" id="L190">        } catch (IllegalArgumentException e){</span>
-<span class="fc" id="L191">            throw new IllegalArgumentException(&quot;invalid ID&quot;);</span>
+<span class="fc" id="L202">        } catch (IllegalArgumentException e){</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">            if(e.getMessage().equals(&quot;notification does not exist&quot;))</span>
+<span class="fc" id="L204">                throw e;</span>
+            else
+<span class="fc" id="L206">                throw new IllegalArgumentException(&quot;invalid ID&quot;);</span>
         }
     }
 
@@ -199,14 +214,17 @@ import java.util.UUID;
      */
     public RightRequest getRequestFromId(String requestId) throws IllegalArgumentException {
         try {
-<span class="fc" id="L202">            RightRequest request = dataBaseService.getRequestFromId(UUID.fromString(requestId));</span>
-<span class="fc bfc" id="L203" title="All 2 branches covered.">            if (request == null) {</span>
-<span class="fc" id="L204">                throw new IllegalArgumentException(&quot;Right Request does not exist&quot;);</span>
+<span class="fc" id="L217">            RightRequest request = dataBaseService.getRequestFromId(UUID.fromString(requestId));</span>
+<span class="fc bfc" id="L218" title="All 2 branches covered.">            if (request == null) {</span>
+<span class="fc" id="L219">                throw new IllegalArgumentException(&quot;Right Request does not exist&quot;);</span>
             } else {
-<span class="fc" id="L206">                return request;</span>
+<span class="fc" id="L221">                return request;</span>
             }
-<span class="fc" id="L208">        } catch (IllegalArgumentException e){</span>
-<span class="fc" id="L209">            throw new IllegalArgumentException(&quot;invalid ID&quot;);</span>
+<span class="fc" id="L223">        } catch (IllegalArgumentException e){</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">            if(e.getMessage().equals(&quot;Right Request does not exist&quot;))</span>
+<span class="fc" id="L225">                throw e;</span>
+            else
+<span class="fc" id="L227">                throw new IllegalArgumentException(&quot;invalid ID&quot;);</span>
         }
     }
 
@@ -221,39 +239,39 @@ import java.util.UUID;
      * @throws IllegalArgumentException If IoTApp object has not a name
      */
     public ObjectNode createJsonFromApp(IoTApp app) throws IllegalArgumentException {
-<span class="fc" id="L224">        ObjectNode appJson = mapper.createObjectNode();</span>
+<span class="fc" id="L242">        ObjectNode appJson = mapper.createObjectNode();</span>
 
-<span class="pc bpc" id="L226" title="1 of 6 branches missed.">        if (app == null || app.getId() == null || app.getName() == null) {</span>
-<span class="fc" id="L227">            throw new IllegalArgumentException(&quot;invalid app&quot;);</span>
+<span class="pc bpc" id="L244" title="1 of 6 branches missed.">        if (app == null || app.getId() == null || app.getName() == null) {</span>
+<span class="fc" id="L245">            throw new IllegalArgumentException(&quot;invalid app&quot;);</span>
         }
-<span class="fc" id="L229">        appJson.put(&quot;id&quot;, app.getId().toString());</span>
-<span class="fc" id="L230">        appJson.put(&quot;name&quot;, app.getName());</span>
+<span class="fc" id="L247">        appJson.put(&quot;id&quot;, app.getId().toString());</span>
+<span class="fc" id="L248">        appJson.put(&quot;name&quot;, app.getName());</span>
 
-<span class="fc bfc" id="L232" title="All 2 branches covered.">        if (app.getDescription() != null) {</span>
-<span class="fc" id="L233">            appJson.put(&quot;description&quot;, app.getDescription());</span>
-        }
-
-<span class="fc bfc" id="L236" title="All 2 branches covered.">        if (app.getQuestionnaireVote() != null) {</span>
-<span class="fc" id="L237">            appJson.put(&quot;questionnaireVote&quot;, app.getQuestionnaireVote().toString());</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">        if (app.getDescription() != null) {</span>
+<span class="fc" id="L251">            appJson.put(&quot;description&quot;, app.getDescription());</span>
         }
 
-<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (app.getDetailVote() != null) {</span>
-<span class="fc" id="L241">            ArrayNode detailVoteArray = mapper.createArrayNode();</span>
-<span class="fc bfc" id="L242" title="All 2 branches covered.">            for (String answer : app.getDetailVote()) {</span>
-<span class="fc" id="L243">                detailVoteArray.add(answer);</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">        if (app.getQuestionnaireVote() != null) {</span>
+<span class="fc" id="L255">            appJson.put(&quot;questionnaireVote&quot;, app.getQuestionnaireVote().toString());</span>
+        }
+
+<span class="fc bfc" id="L258" title="All 2 branches covered.">        if (app.getDetailVote() != null) {</span>
+<span class="fc" id="L259">            ArrayNode detailVoteArray = mapper.createArrayNode();</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">            for (String answer : app.getDetailVote()) {</span>
+<span class="fc" id="L261">                detailVoteArray.add(answer);</span>
             }
-<span class="fc" id="L245">            appJson.set(&quot;detailVote&quot;, detailVoteArray);</span>
+<span class="fc" id="L263">            appJson.set(&quot;detailVote&quot;, detailVoteArray);</span>
         }
 
-<span class="fc bfc" id="L248" title="All 2 branches covered.">        if (app.getOptionalAnswers() != null) {</span>
-<span class="fc" id="L249">            ArrayNode optionalAnswersArray = mapper.createArrayNode();</span>
-<span class="fc bfc" id="L250" title="All 2 branches covered.">            for (int i = 0; i &lt; GlobalVariables.nQuestions; i++) {</span>
-<span class="fc" id="L251">                optionalAnswersArray.add(app.getOptionalAnswers().get(i));</span>
+<span class="fc bfc" id="L266" title="All 2 branches covered.">        if (app.getOptionalAnswers() != null) {</span>
+<span class="fc" id="L267">            ArrayNode optionalAnswersArray = mapper.createArrayNode();</span>
+<span class="fc bfc" id="L268" title="All 2 branches covered.">            for (int i = 0; i &lt; GlobalVariables.nQuestions; i++) {</span>
+<span class="fc" id="L269">                optionalAnswersArray.add(app.getOptionalAnswers().get(i));</span>
 
             }
-<span class="fc" id="L254">            appJson.set(&quot;optionalAnswers&quot;, optionalAnswersArray);</span>
+<span class="fc" id="L272">            appJson.set(&quot;optionalAnswers&quot;, optionalAnswersArray);</span>
         }
-<span class="fc" id="L256">        return appJson;</span>
+<span class="fc" id="L274">        return appJson;</span>
     }
 
     /**
@@ -266,10 +284,10 @@ import java.util.UUID;
      */
     public IoTApp getAppFromJsonString(boolean nameMandatory, String body) throws IOException, IllegalArgumentException {
         try{
-<span class="fc" id="L269">            JsonNode rootNode = mapper.readTree(new StringReader(body));</span>
-<span class="fc" id="L270">            return getAppFromJsonNode(nameMandatory, rootNode);</span>
-<span class="fc" id="L271">        } catch (IOException e){</span>
-<span class="fc" id="L272">            throw new IOException(&quot;invalid JSON&quot;);</span>
+<span class="fc" id="L287">            JsonNode rootNode = mapper.readTree(new StringReader(body));</span>
+<span class="fc" id="L288">            return getAppFromJsonNode(nameMandatory, rootNode);</span>
+<span class="fc" id="L289">        } catch (IOException e){</span>
+<span class="fc" id="L290">            throw new IOException(&quot;invalid JSON&quot;);</span>
         }
     }
 
@@ -281,17 +299,17 @@ import java.util.UUID;
      * @throws IllegalArgumentException If the indicated ID is an invalid UUID
      */
     public IoTApp getAppFromJsonNode(boolean nameMandatory, JsonNode node) throws IllegalArgumentException {
-<span class="fc" id="L284">        IoTApp app = new IoTApp();</span>
+<span class="fc" id="L302">        IoTApp app = new IoTApp();</span>
 
-<span class="fc bfc" id="L286" title="All 2 branches covered.">        if (node.has(&quot;name&quot;)) {</span>
-<span class="fc" id="L287">            app.setName(node.get(&quot;name&quot;).asText());</span>
-<span class="fc bfc" id="L288" title="All 2 branches covered.">        } else if (nameMandatory) {</span>
-<span class="fc" id="L289">            throw new IllegalArgumentException(&quot;JSON incomplete&quot;);</span>
+<span class="fc bfc" id="L304" title="All 2 branches covered.">        if (node.has(&quot;name&quot;)) {</span>
+<span class="fc" id="L305">            app.setName(node.get(&quot;name&quot;).asText());</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">        } else if (nameMandatory) {</span>
+<span class="fc" id="L307">            throw new IllegalArgumentException(&quot;JSON incomplete&quot;);</span>
         }
 
 
-<span class="fc bfc" id="L293" title="All 2 branches covered.">        if (node.has(&quot;id&quot;)) {</span>
-<span class="fc" id="L294">            app.setId(UUID.fromString(node.get(&quot;id&quot;).asText()));</span>
+<span class="fc bfc" id="L311" title="All 2 branches covered.">        if (node.has(&quot;id&quot;)) {</span>
+<span class="fc" id="L312">            app.setId(UUID.fromString(node.get(&quot;id&quot;).asText()));</span>
         }
         
         //Codice originale, setta l'id con la descrizione
@@ -300,68 +318,63 @@ import java.util.UUID;
         }*/
 
         //Codice aggiornato, descrizione settata con la descrizione
-<span class="fc bfc" id="L303" title="All 2 branches covered.">        if (node.has(&quot;description&quot;)) {</span>
-<span class="fc" id="L304">            app.setDescription(node.get(&quot;description&quot;).asText());</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">        if (node.has(&quot;description&quot;)) {</span>
+<span class="fc" id="L322">            app.setDescription(node.get(&quot;description&quot;).asText());</span>
         }
 
 
-<span class="fc bfc" id="L308" title="All 2 branches covered.">        if (node.has(&quot;questionnaireVote&quot;)) {</span>
-<span class="pc bpc" id="L309" title="1 of 4 branches missed.">            switch (node.get(&quot;questionnaireVote&quot;).asText()) {</span>
+<span class="fc bfc" id="L326" title="All 2 branches covered.">        if (node.has(&quot;questionnaireVote&quot;)) {</span>
+<span class="pc bpc" id="L327" title="1 of 4 branches missed.">            switch (node.get(&quot;questionnaireVote&quot;).asText()) {</span>
                 case &quot;RED&quot;:
-<span class="fc" id="L311">                    app.setQuestionnaireVote(QuestionnaireVote.RED);</span>
-<span class="fc" id="L312">                    break;</span>
+<span class="fc" id="L329">                    app.setQuestionnaireVote(QuestionnaireVote.RED);</span>
+<span class="fc" id="L330">                    break;</span>
                 case &quot;ORANGE&quot;:
-<span class="fc" id="L314">                    app.setQuestionnaireVote(QuestionnaireVote.ORANGE);</span>
-<span class="fc" id="L315">                    break;</span>
+<span class="fc" id="L332">                    app.setQuestionnaireVote(QuestionnaireVote.ORANGE);</span>
+<span class="fc" id="L333">                    break;</span>
                 case &quot;GREEN&quot;:
-<span class="fc" id="L317">                    app.setQuestionnaireVote(QuestionnaireVote.GREEN);</span>
+<span class="fc" id="L335">                    app.setQuestionnaireVote(QuestionnaireVote.GREEN);</span>
                     break;
 
             }
         }
 
-<span class="fc bfc" id="L323" title="All 2 branches covered.">        if (node.has(&quot;detailVote&quot;)) {</span>
-<span class="fc" id="L324">            JsonNode detailVote = node.get(&quot;detailVote&quot;);</span>
-<span class="fc bfc" id="L325" title="All 2 branches covered.">            if (detailVote.isArray()) {</span>
-<span class="fc" id="L326">                String[] detailVoteArray = new String[GlobalVariables.nQuestions];</span>
-<span class="fc" id="L327">                int i = 0;</span>
-<span class="fc bfc" id="L328" title="All 2 branches covered.">                for (JsonNode singleAnswer : detailVote) {</span>
-<span class="fc" id="L329">                    detailVoteArray[i] = singleAnswer.asText();</span>
-<span class="fc" id="L330">                    i++;</span>
-<span class="fc bfc" id="L331" title="All 2 branches covered.">                    if (i &gt;= GlobalVariables.nQuestions) {</span>
-<span class="fc" id="L332">                        break;</span>
+<span class="fc bfc" id="L341" title="All 2 branches covered.">        if (node.has(&quot;detailVote&quot;)) {</span>
+<span class="fc" id="L342">            JsonNode detailVote = node.get(&quot;detailVote&quot;);</span>
+<span class="fc bfc" id="L343" title="All 2 branches covered.">            if (detailVote.isArray()) {</span>
+<span class="fc" id="L344">                String[] detailVoteArray = new String[GlobalVariables.nQuestions];</span>
+<span class="fc" id="L345">                int i = 0;</span>
+<span class="fc bfc" id="L346" title="All 2 branches covered.">                for (JsonNode singleAnswer : detailVote) {</span>
+<span class="fc" id="L347">                    detailVoteArray[i] = singleAnswer.asText();</span>
+<span class="fc" id="L348">                    i++;</span>
+<span class="fc bfc" id="L349" title="All 2 branches covered.">                    if (i &gt;= GlobalVariables.nQuestions) {</span>
+<span class="fc" id="L350">                        break;</span>
                     }
-<span class="fc" id="L334">                }</span>
-<span class="fc bfc" id="L335" title="All 2 branches covered.">                if (i &lt; GlobalVariables.nQuestions) {</span>
-<span class="fc bfc" id="L336" title="All 2 branches covered.">                    for (int j = i; j &lt; GlobalVariables.nQuestions; j++) {</span>
-<span class="fc" id="L337">                        detailVoteArray[j] = null;</span>
+<span class="fc" id="L352">                }</span>
+<span class="fc bfc" id="L353" title="All 2 branches covered.">                if (i &lt; GlobalVariables.nQuestions) {</span>
+<span class="fc bfc" id="L354" title="All 2 branches covered.">                    for (int j = i; j &lt; GlobalVariables.nQuestions; j++) {</span>
+<span class="fc" id="L355">                        detailVoteArray[j] = null;</span>
                     }
                 }
-<span class="fc" id="L340">                app.setDetailVote(detailVoteArray);</span>
+<span class="fc" id="L358">                app.setDetailVote(detailVoteArray);</span>
             }
         }
 
-<span class="fc bfc" id="L344" title="All 2 branches covered.">        if (node.has(&quot;optionalAnswers&quot;)) {</span>
-<span class="fc" id="L345">            JsonNode optionalAnswers = node.get(&quot;optionalAnswers&quot;);</span>
-<span class="fc bfc" id="L346" title="All 2 branches covered.">            if (optionalAnswers.isArray()) {</span>
-<span class="fc" id="L347">                Hashtable&lt;Integer, String&gt; optionalAnswersHash = new Hashtable&lt;&gt;();</span>
-<span class="fc" id="L348">                int i = 0;</span>
-<span class="fc bfc" id="L349" title="All 2 branches covered.">                for (JsonNode singleAnswer : optionalAnswers) {</span>
-<span class="fc" id="L350">                    optionalAnswersHash.put(i, singleAnswer.asText());</span>
-<span class="fc" id="L351">                    i++;</span>
-<span class="fc bfc" id="L352" title="All 2 branches covered.">                    if (i &gt;= GlobalVariables.nQuestions) {</span>
-<span class="fc" id="L353">                        break;</span>
+<span class="fc bfc" id="L362" title="All 2 branches covered.">        if (node.has(&quot;optionalAnswers&quot;)) {</span>
+<span class="fc" id="L363">            JsonNode optionalAnswers = node.get(&quot;optionalAnswers&quot;);</span>
+<span class="fc bfc" id="L364" title="All 2 branches covered.">            if (optionalAnswers.isArray()) {</span>
+<span class="fc" id="L365">                Hashtable&lt;Integer, String&gt; optionalAnswersHash = new Hashtable&lt;&gt;();</span>
+<span class="fc" id="L366">                int i = 0;</span>
+<span class="fc bfc" id="L367" title="All 2 branches covered.">                for (JsonNode singleAnswer : optionalAnswers) {</span>
+<span class="fc" id="L368">                    optionalAnswersHash.put(i, singleAnswer.asText());</span>
+<span class="fc" id="L369">                    i++;</span>
+<span class="fc bfc" id="L370" title="All 2 branches covered.">                    if (i &gt;= GlobalVariables.nQuestions) {</span>
+<span class="fc" id="L371">                        break;</span>
                     }
-<span class="fc" id="L355">                }</span>
-<span class="fc bfc" id="L356" title="All 2 branches covered.">                if (i &lt; GlobalVariables.nQuestions) {</span>
-<span class="pc bpc" id="L357" title="1 of 2 branches missed.">                    for (int j = i; j &lt; GlobalVariables.nQuestions; j++) {</span>
-<span class="nc" id="L358">                        optionalAnswersHash.put(i, null);</span>
-                    }
-                }
-<span class="fc" id="L361">                app.setOptionalAnswers(optionalAnswersHash);</span>
+<span class="fc" id="L373">                }</span>
+<span class="fc" id="L374">                app.setOptionalAnswers(optionalAnswersHash);</span>
             }
         }
-<span class="fc" id="L364">        return app;</span>
+<span class="fc" id="L377">        return app;</span>
     }
 
     // User
@@ -373,21 +386,21 @@ import java.util.UUID;
      * @throws IllegalArgumentException If User object has not an ID, name, role or password
      */
     public ObjectNode createJsonFromUser(User user) throws IllegalArgumentException {
-<span class="fc" id="L376">        ObjectNode userJson = mapper.createObjectNode();</span>
+<span class="fc" id="L389">        ObjectNode userJson = mapper.createObjectNode();</span>
 
-<span class="pc bpc" id="L378" title="1 of 10 branches missed.">        if (user == null || user.getId() == null || user.getName() == null || user.getHashedPassword() == null || user.getRole() == null) {</span>
-<span class="fc" id="L379">            throw new IllegalArgumentException(&quot;invalid user&quot;);</span>
+<span class="pc bpc" id="L391" title="1 of 10 branches missed.">        if (user == null || user.getId() == null || user.getName() == null || user.getHashedPassword() == null || user.getRole() == null) {</span>
+<span class="fc" id="L392">            throw new IllegalArgumentException(&quot;invalid user&quot;);</span>
         }
-<span class="fc" id="L381">        userJson.put(&quot;id&quot;, user.getId().toString());</span>
-<span class="fc" id="L382">        userJson.put(&quot;name&quot;, user.getName());</span>
-<span class="fc" id="L383">        userJson.put(&quot;role&quot;, user.getRole().toString());</span>
-<span class="fc" id="L384">        userJson.put(&quot;hashedPassword&quot;, user.getHashedPassword());</span>
+<span class="fc" id="L394">        userJson.put(&quot;id&quot;, user.getId().toString());</span>
+<span class="fc" id="L395">        userJson.put(&quot;name&quot;, user.getName());</span>
+<span class="fc" id="L396">        userJson.put(&quot;role&quot;, user.getRole().toString());</span>
+<span class="fc" id="L397">        userJson.put(&quot;hashedPassword&quot;, user.getHashedPassword());</span>
 
-<span class="fc bfc" id="L386" title="All 2 branches covered.">        if (user.getMail() != null) {</span>
-<span class="fc" id="L387">            userJson.put(&quot;mail&quot;, user.getMail());</span>
+<span class="fc bfc" id="L399" title="All 2 branches covered.">        if (user.getMail() != null) {</span>
+<span class="fc" id="L400">            userJson.put(&quot;mail&quot;, user.getMail());</span>
         }
 
-<span class="fc" id="L390">        return userJson;</span>
+<span class="fc" id="L403">        return userJson;</span>
     }
 
     /**
@@ -400,10 +413,10 @@ import java.util.UUID;
      */
     public User getUserFromJsonString(boolean parametersMandatory, String body) throws IllegalArgumentException, IOException {
         try {
-<span class="fc" id="L403">            JsonNode rootNode = mapper.readTree(new StringReader(body));</span>
-<span class="fc" id="L404">            return getUserFromJsonNode(parametersMandatory, rootNode);</span>
-<span class="fc" id="L405">        } catch (IOException e){</span>
-<span class="fc" id="L406">            throw new IOException(&quot;invalid JSON&quot;);</span>
+<span class="fc" id="L416">            JsonNode rootNode = mapper.readTree(new StringReader(body));</span>
+<span class="fc" id="L417">            return getUserFromJsonNode(parametersMandatory, rootNode);</span>
+<span class="fc" id="L418">        } catch (IOException e){</span>
+<span class="fc" id="L419">            throw new IOException(&quot;invalid JSON&quot;);</span>
         }
     }
 
@@ -415,45 +428,45 @@ import java.util.UUID;
      * @throws IllegalArgumentException If the indicated ID is an invalid UUID
      */
     public User getUserFromJsonNode(boolean parametersMandatory, JsonNode node) throws IllegalArgumentException {
-<span class="fc" id="L418">        User user = new User();</span>
+<span class="fc" id="L431">        User user = new User();</span>
 
-<span class="fc bfc" id="L420" title="All 2 branches covered.">        if (node.has(&quot;name&quot;)) {</span>
-<span class="fc" id="L421">            user.setName(node.get(&quot;name&quot;).asText());</span>
-<span class="fc bfc" id="L422" title="All 2 branches covered.">        } else if (parametersMandatory) {</span>
-<span class="fc" id="L423">            throw new IllegalArgumentException(&quot;JSON incomplete&quot;);</span>
+<span class="fc bfc" id="L433" title="All 2 branches covered.">        if (node.has(&quot;name&quot;)) {</span>
+<span class="fc" id="L434">            user.setName(node.get(&quot;name&quot;).asText());</span>
+<span class="fc bfc" id="L435" title="All 2 branches covered.">        } else if (parametersMandatory) {</span>
+<span class="fc" id="L436">            throw new IllegalArgumentException(&quot;JSON incomplete&quot;);</span>
         }
 
-<span class="fc bfc" id="L426" title="All 2 branches covered.">        if (node.has(&quot;password&quot;)) {</span>
-<span class="fc" id="L427">            user.setHashedPassword(userDetailsServiceImpl.hashPass(node.get(&quot;password&quot;).asText()));</span>
-<span class="fc bfc" id="L428" title="All 2 branches covered.">        } else if (parametersMandatory) {</span>
-<span class="fc" id="L429">            throw new IllegalArgumentException(&quot;JSON incomplete&quot;);</span>
+<span class="fc bfc" id="L439" title="All 2 branches covered.">        if (node.has(&quot;password&quot;)) {</span>
+<span class="fc" id="L440">            user.setHashedPassword(userDetailsServiceImpl.hashPass(node.get(&quot;password&quot;).asText()));</span>
+<span class="fc bfc" id="L441" title="All 2 branches covered.">        } else if (parametersMandatory) {</span>
+<span class="fc" id="L442">            throw new IllegalArgumentException(&quot;JSON incomplete&quot;);</span>
         }
 
-<span class="fc bfc" id="L432" title="All 2 branches covered.">        if (node.has(&quot;role&quot;)) {</span>
-<span class="pc bpc" id="L433" title="1 of 4 branches missed.">            switch (node.get(&quot;role&quot;).asText()) {</span>
+<span class="fc bfc" id="L445" title="All 2 branches covered.">        if (node.has(&quot;role&quot;)) {</span>
+<span class="pc bpc" id="L446" title="1 of 4 branches missed.">            switch (node.get(&quot;role&quot;).asText()) {</span>
                 case &quot;SUBJECT&quot;:
-<span class="fc" id="L435">                    user.setRole(Role.SUBJECT);</span>
-<span class="fc" id="L436">                    break;</span>
+<span class="fc" id="L448">                    user.setRole(Role.SUBJECT);</span>
+<span class="fc" id="L449">                    break;</span>
                 case &quot;CONTROLLER&quot;:
-<span class="fc" id="L438">                    user.setRole(Role.CONTROLLER);</span>
-<span class="fc" id="L439">                    break;</span>
+<span class="fc" id="L451">                    user.setRole(Role.CONTROLLER);</span>
+<span class="fc" id="L452">                    break;</span>
                 case &quot;DPO&quot;:
-<span class="fc" id="L441">                    user.setRole(Role.DPO);</span>
+<span class="fc" id="L454">                    user.setRole(Role.DPO);</span>
                     break;
-<span class="fc" id="L443">            }</span>
-<span class="fc bfc" id="L444" title="All 2 branches covered.">        } else if (parametersMandatory) {</span>
-<span class="fc" id="L445">            throw new IllegalArgumentException(&quot;JSON incomplete&quot;);</span>
+<span class="fc" id="L456">            }</span>
+<span class="fc bfc" id="L457" title="All 2 branches covered.">        } else if (parametersMandatory) {</span>
+<span class="fc" id="L458">            throw new IllegalArgumentException(&quot;JSON incomplete&quot;);</span>
         }
 
-<span class="fc bfc" id="L448" title="All 2 branches covered.">        if (node.has(&quot;id&quot;)) {</span>
-<span class="fc" id="L449">            user.setId(UUID.fromString(node.get(&quot;id&quot;).asText()));</span>
+<span class="fc bfc" id="L461" title="All 2 branches covered.">        if (node.has(&quot;id&quot;)) {</span>
+<span class="fc" id="L462">            user.setId(UUID.fromString(node.get(&quot;id&quot;).asText()));</span>
         }
 
-<span class="fc bfc" id="L452" title="All 2 branches covered.">        if (node.has(&quot;mail&quot;)) {</span>
-<span class="fc" id="L453">            user.setMail(node.get(&quot;mail&quot;).asText());</span>
+<span class="fc bfc" id="L465" title="All 2 branches covered.">        if (node.has(&quot;mail&quot;)) {</span>
+<span class="fc" id="L466">            user.setMail(node.get(&quot;mail&quot;).asText());</span>
         }
 
-<span class="fc" id="L456">        return user;</span>
+<span class="fc" id="L469">        return user;</span>
     }
 
     // UserAppRelation
@@ -464,26 +477,26 @@ import java.util.UUID;
      * @throws IllegalArgumentException if invalid object
      */
     public ObjectNode createJsonFromUserAppRelation(UserAppRelation userAppRelation) throws IllegalArgumentException {
-<span class="fc" id="L467">        ObjectNode userAppRelationJson = mapper.createObjectNode();</span>
+<span class="fc" id="L480">        ObjectNode userAppRelationJson = mapper.createObjectNode();</span>
 
-<span class="pc bpc" id="L469" title="1 of 8 branches missed.">        if (userAppRelation == null || userAppRelation.getId() == null || userAppRelation.getUser() == null || userAppRelation.getApp() == null) {</span>
-<span class="fc" id="L470">            throw new IllegalArgumentException(&quot;UserAppRelation invalid&quot;);</span>
+<span class="pc bpc" id="L482" title="1 of 8 branches missed.">        if (userAppRelation == null || userAppRelation.getId() == null || userAppRelation.getUser() == null || userAppRelation.getApp() == null) {</span>
+<span class="fc" id="L483">            throw new IllegalArgumentException(&quot;UserAppRelation invalid&quot;);</span>
         }
-<span class="fc" id="L472">        userAppRelationJson.put(&quot;id&quot;, userAppRelation.getId().toString());</span>
-<span class="fc" id="L473">        userAppRelationJson.put(&quot;userName&quot;, userAppRelation.getApp().getName());</span>
-<span class="fc" id="L474">        userAppRelationJson.put(&quot;userId&quot;, userAppRelation.getUser().getId().toString());</span>
-<span class="fc" id="L475">        userAppRelationJson.put(&quot;appName&quot;, userAppRelation.getUser().getName());</span>
-<span class="fc" id="L476">        userAppRelationJson.put(&quot;appId&quot;, userAppRelation.getApp().getId().toString());</span>
+<span class="fc" id="L485">        userAppRelationJson.put(&quot;id&quot;, userAppRelation.getId().toString());</span>
+<span class="fc" id="L486">        userAppRelationJson.put(&quot;userName&quot;, userAppRelation.getUser().getName());</span>
+<span class="fc" id="L487">        userAppRelationJson.put(&quot;userId&quot;, userAppRelation.getUser().getId().toString());</span>
+<span class="fc" id="L488">        userAppRelationJson.put(&quot;appName&quot;, userAppRelation.getApp().getName());</span>
+<span class="fc" id="L489">        userAppRelationJson.put(&quot;appId&quot;, userAppRelation.getApp().getId().toString());</span>
 
-<span class="fc" id="L478">        String[] consenses = userAppRelation.getConsenses();</span>
-<span class="fc bfc" id="L479" title="All 2 branches covered.">        if (consenses != null) {</span>
-<span class="fc" id="L480">            ArrayNode consensesArray = mapper.createArrayNode();</span>
-<span class="fc bfc" id="L481" title="All 2 branches covered.">            for (String consens : consenses) {</span>
-<span class="fc" id="L482">                consensesArray.add(consens);</span>
+<span class="fc" id="L491">        String[] consenses = userAppRelation.getConsenses();</span>
+<span class="fc bfc" id="L492" title="All 2 branches covered.">        if (consenses != null) {</span>
+<span class="fc" id="L493">            ArrayNode consensesArray = mapper.createArrayNode();</span>
+<span class="fc bfc" id="L494" title="All 2 branches covered.">            for (String consens : consenses) {</span>
+<span class="fc" id="L495">                consensesArray.add(consens);</span>
             }
-<span class="fc" id="L484">            userAppRelationJson.set(&quot;consenses&quot;, consensesArray);</span>
+<span class="fc" id="L497">            userAppRelationJson.set(&quot;consenses&quot;, consensesArray);</span>
         }
-<span class="fc" id="L486">        return userAppRelationJson;</span>
+<span class="fc" id="L499">        return userAppRelationJson;</span>
     }
 
     // Message
@@ -494,19 +507,20 @@ import java.util.UUID;
      * @throws IllegalArgumentException if invalid object
      */
     public ObjectNode createJsonFromMessage(Message message) throws IllegalArgumentException {
-<span class="fc" id="L497">        ObjectNode messageJson = mapper.createObjectNode();</span>
-
-<span class="pc bpc" id="L499" title="1 of 8 branches missed.">        if (message == null || message.getId() == null || message.getReceiver() == null || message.getSender() == null) {</span>
-<span class="fc" id="L500">            throw new IllegalArgumentException(&quot;Message invalid&quot;);</span>
+<span class="fc" id="L510">        ObjectNode messageJson = mapper.createObjectNode();</span>
+        try{
+<span class="fc" id="L512">            messageJson.put(&quot;id&quot;, message.getId().toString());</span>
+<span class="fc" id="L513">            messageJson.put(&quot;senderId&quot;, message.getSender().getId().toString());</span>
+<span class="fc" id="L514">            messageJson.put(&quot;senderName&quot;, message.getSender().getName());</span>
+<span class="fc" id="L515">            messageJson.put(&quot;receiverId&quot;, message.getReceiver().getId().toString());</span>
+<span class="fc" id="L516">            messageJson.put(&quot;receiverName&quot;, message.getReceiver().getName());</span>
+<span class="fc" id="L517">            messageJson.put(&quot;text&quot;, message.getMessage());</span>
+<span class="fc" id="L518">            messageJson.put(&quot;time&quot;, message.getTime().toString());</span>
+<span class="fc" id="L519">            return messageJson;</span>
         }
-<span class="fc" id="L502">        messageJson.put(&quot;id&quot;, message.getId().toString());</span>
-<span class="fc" id="L503">        messageJson.put(&quot;senderId&quot;, message.getSender().getId().toString());</span>
-<span class="fc" id="L504">        messageJson.put(&quot;senderName&quot;, message.getSender().getName());</span>
-<span class="fc" id="L505">        messageJson.put(&quot;receiverId&quot;, message.getReceiver().getId().toString());</span>
-<span class="fc" id="L506">        messageJson.put(&quot;receiverName&quot;, message.getReceiver().getName());</span>
-<span class="fc" id="L507">        messageJson.put(&quot;text&quot;, message.getMessage());</span>
-<span class="fc" id="L508">        messageJson.put(&quot;time&quot;, message.getTime().toString());</span>
-<span class="fc" id="L509">        return messageJson;</span>
+<span class="fc" id="L521">        catch(Exception e){</span>
+<span class="fc" id="L522">            throw new IllegalArgumentException(&quot;Message invalid&quot;);</span>
+        }
     }
 
     /**
@@ -519,14 +533,14 @@ import java.util.UUID;
      */
     public Message getMessageFromJsonString(String body) throws IllegalArgumentException, IOException, DateTimeParseException {
         try {
-<span class="fc" id="L522">            JsonNode rootNode = mapper.readTree(new StringReader(body));</span>
-<span class="fc" id="L523">            return getMessageFromJsonNode(rootNode);</span>
-<span class="fc" id="L524">        } catch (IOException e){</span>
-<span class="fc" id="L525">            throw new IOException(&quot;invalid JSON&quot;);</span>
-<span class="fc" id="L526">        } catch (DateTimeParseException e){</span>
-<span class="fc" id="L527">            throw new IllegalArgumentException(&quot;invalid date&quot;);</span>
-<span class="fc" id="L528">        } catch (IllegalArgumentException e){</span>
-<span class="fc" id="L529">            throw new IllegalArgumentException(&quot;invalid JSON parameters&quot;);</span>
+<span class="fc" id="L536">            JsonNode rootNode = mapper.readTree(new StringReader(body));</span>
+<span class="fc" id="L537">            return getMessageFromJsonNode(rootNode);</span>
+<span class="fc" id="L538">        } catch (IOException e){</span>
+<span class="fc" id="L539">            throw new IOException(&quot;invalid JSON&quot;);</span>
+<span class="fc" id="L540">        } catch (DateTimeParseException e){</span>
+<span class="fc" id="L541">            throw e;</span>
+<span class="fc" id="L542">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L543">            throw new IllegalArgumentException(&quot;invalid JSON parameters&quot;);</span>
         }
     }
 
@@ -538,33 +552,33 @@ import java.util.UUID;
      * @throws DateTimeParseException   If time is invalid
      */
     public Message getMessageFromJsonNode(JsonNode node) throws IllegalArgumentException, DateTimeParseException {
-<span class="fc" id="L541">        Message message = new Message();</span>
-<span class="fc bfc" id="L542" title="All 6 branches covered.">        if (!node.has(&quot;senderId&quot;) || !node.has(&quot;receiverId&quot;) || !node.has(&quot;text&quot;)) {</span>
-<span class="fc" id="L543">            throw new IllegalArgumentException(&quot;JSON incomplete&quot;);</span>
+<span class="fc" id="L555">        Message message = new Message();</span>
+<span class="fc bfc" id="L556" title="All 6 branches covered.">        if (!node.has(&quot;senderId&quot;) || !node.has(&quot;receiverId&quot;) || !node.has(&quot;text&quot;)) {</span>
+<span class="fc" id="L557">            throw new IllegalArgumentException(&quot;JSON incomplete&quot;);</span>
         }
 
-<span class="fc bfc" id="L546" title="All 2 branches covered.">        if (node.has(&quot;id&quot;)) {</span>
-<span class="fc" id="L547">            message.setId(UUID.fromString(node.get(&quot;id&quot;).asText()));</span>
+<span class="fc bfc" id="L560" title="All 2 branches covered.">        if (node.has(&quot;id&quot;)) {</span>
+<span class="fc" id="L561">            message.setId(UUID.fromString(node.get(&quot;id&quot;).asText()));</span>
         }
 
-<span class="fc bfc" id="L550" title="All 2 branches covered.">        if (node.has(&quot;time&quot;)) {</span>
-<span class="fc" id="L551">            message.setTime(LocalDateTime.parse(node.get(&quot;time&quot;).asText()));</span>
+<span class="fc bfc" id="L564" title="All 2 branches covered.">        if (node.has(&quot;time&quot;)) {</span>
+<span class="fc" id="L565">            message.setTime(LocalDateTime.parse(node.get(&quot;time&quot;).asText()));</span>
         }
 
-<span class="fc" id="L554">        message.setMessage(node.get(&quot;text&quot;).asText());</span>
+<span class="fc" id="L568">        message.setMessage(node.get(&quot;text&quot;).asText());</span>
 
-<span class="fc" id="L556">        Optional&lt;User&gt; sender = dataBaseService.getUser(UUID.fromString(node.get(&quot;senderId&quot;).asText()));</span>
-<span class="fc bfc" id="L557" title="All 2 branches covered.">        if (sender.isEmpty()) {</span>
-<span class="fc" id="L558">            throw new IllegalArgumentException(&quot;sender does not exist&quot;);</span>
+<span class="fc" id="L570">        Optional&lt;User&gt; sender = dataBaseService.getUser(UUID.fromString(node.get(&quot;senderId&quot;).asText()));</span>
+<span class="fc bfc" id="L571" title="All 2 branches covered.">        if (sender.isEmpty()) {</span>
+<span class="fc" id="L572">            throw new IllegalArgumentException(&quot;sender does not exist&quot;);</span>
         }
-<span class="fc" id="L560">        message.setSender(sender.get());</span>
+<span class="fc" id="L574">        message.setSender(sender.get());</span>
 
-<span class="fc" id="L562">        Optional&lt;User&gt; receiver = dataBaseService.getUser(UUID.fromString(node.get(&quot;receiverId&quot;).asText()));</span>
-<span class="fc bfc" id="L563" title="All 2 branches covered.">        if (receiver.isEmpty()) {</span>
-<span class="fc" id="L564">            throw new IllegalArgumentException(&quot;receiver does not exist&quot;);</span>
+<span class="fc" id="L576">        Optional&lt;User&gt; receiver = dataBaseService.getUser(UUID.fromString(node.get(&quot;receiverId&quot;).asText()));</span>
+<span class="fc bfc" id="L577" title="All 2 branches covered.">        if (receiver.isEmpty()) {</span>
+<span class="fc" id="L578">            throw new IllegalArgumentException(&quot;receiver does not exist&quot;);</span>
         }
-<span class="fc" id="L566">        message.setReceiver(receiver.get());</span>
-<span class="fc" id="L567">        return message;</span>
+<span class="fc" id="L580">        message.setReceiver(receiver.get());</span>
+<span class="fc" id="L581">        return message;</span>
     }
 
     // Privacy Notice
@@ -575,15 +589,15 @@ import java.util.UUID;
      * @throws IllegalArgumentException if PrivacyNotice has not id, app or text
      */
     public JsonNode createJsonFromPrivacyNotice(PrivacyNotice privacyNotice) throws IllegalArgumentException {
-<span class="fc" id="L578">        ObjectNode privacyNoticeJson = mapper.createObjectNode();</span>
-<span class="fc bfc" id="L579" title="All 6 branches covered.">        if (privacyNotice.getId() == null || privacyNotice.getText() == null || privacyNotice.getApp() == null) {</span>
-<span class="fc" id="L580">            throw new IllegalArgumentException(&quot;invalid privacy notice&quot;);</span>
+<span class="fc" id="L592">        ObjectNode privacyNoticeJson = mapper.createObjectNode();</span>
+<span class="fc bfc" id="L593" title="All 6 branches covered.">        if (privacyNotice.getId() == null || privacyNotice.getText() == null || privacyNotice.getApp() == null) {</span>
+<span class="fc" id="L594">            throw new IllegalArgumentException(&quot;invalid privacy notice&quot;);</span>
         }
-<span class="fc" id="L582">        privacyNoticeJson.put(&quot;id&quot;, privacyNotice.getId().toString());</span>
-<span class="fc" id="L583">        privacyNoticeJson.put(&quot;appname&quot;, privacyNotice.getApp().getName());</span>
-<span class="fc" id="L584">        privacyNoticeJson.put(&quot;appId&quot;, privacyNotice.getApp().getId().toString());</span>
-<span class="fc" id="L585">        privacyNoticeJson.put(&quot;text&quot;, privacyNotice.getText());</span>
-<span class="fc" id="L586">        return privacyNoticeJson;</span>
+<span class="fc" id="L596">        privacyNoticeJson.put(&quot;id&quot;, privacyNotice.getId().toString());</span>
+<span class="fc" id="L597">        privacyNoticeJson.put(&quot;appname&quot;, privacyNotice.getApp().getName());</span>
+<span class="fc" id="L598">        privacyNoticeJson.put(&quot;appId&quot;, privacyNotice.getApp().getId().toString());</span>
+<span class="fc" id="L599">        privacyNoticeJson.put(&quot;text&quot;, privacyNotice.getText());</span>
+<span class="fc" id="L600">        return privacyNoticeJson;</span>
     }
 
     /**
@@ -595,10 +609,10 @@ import java.util.UUID;
      */
     public PrivacyNotice getPrivacyNoticeFromJsonString(boolean mandatoryParameters, String body) throws IllegalArgumentException, IOException {
         try {
-<span class="fc" id="L598">            JsonNode rootNode = mapper.readTree(new StringReader(body));</span>
-<span class="fc" id="L599">            return getPrivacyNoticeFromJsonNode(mandatoryParameters, rootNode);</span>
-<span class="fc" id="L600">        } catch (IOException e){</span>
-<span class="fc" id="L601">            throw new IOException(&quot;invalid JSON&quot;);</span>
+<span class="fc" id="L612">            JsonNode rootNode = mapper.readTree(new StringReader(body));</span>
+<span class="fc" id="L613">            return getPrivacyNoticeFromJsonNode(mandatoryParameters, rootNode);</span>
+<span class="fc" id="L614">        } catch (IOException e){</span>
+<span class="fc" id="L615">            throw new IOException(&quot;invalid JSON&quot;);</span>
         }
     }
 
@@ -609,19 +623,19 @@ import java.util.UUID;
      * @throws IllegalArgumentException if invalid app does not exist, invalid JSON
      */
     public PrivacyNotice getPrivacyNoticeFromJsonNode(boolean mandatoryParameters, JsonNode node) throws IllegalArgumentException {
-<span class="fc" id="L612">        PrivacyNotice privacyNotice = new PrivacyNotice();</span>
-<span class="fc bfc" id="L613" title="All 2 branches covered.">        if (node.has(&quot;appId&quot;)) {</span>
-<span class="fc" id="L614">            privacyNotice.setApp(getAppFromId(node.get(&quot;appId&quot;).asText()));</span>
-<span class="fc bfc" id="L615" title="All 2 branches covered.">        } else if (mandatoryParameters) {</span>
-<span class="fc" id="L616">            throw new IllegalArgumentException(&quot;missing appId&quot;);</span>
+<span class="fc" id="L626">        PrivacyNotice privacyNotice = new PrivacyNotice();</span>
+<span class="fc bfc" id="L627" title="All 2 branches covered.">        if (node.has(&quot;appId&quot;)) {</span>
+<span class="fc" id="L628">            privacyNotice.setApp(getAppFromId(node.get(&quot;appId&quot;).asText()));</span>
+<span class="fc bfc" id="L629" title="All 2 branches covered.">        } else if (mandatoryParameters) {</span>
+<span class="fc" id="L630">            throw new IllegalArgumentException(&quot;missing appId&quot;);</span>
         }
 
-<span class="fc bfc" id="L619" title="All 2 branches covered.">        if (node.has(&quot;text&quot;)) {</span>
-<span class="fc" id="L620">            privacyNotice.setText(node.get(&quot;text&quot;).asText());</span>
-<span class="fc bfc" id="L621" title="All 2 branches covered.">        } else if (mandatoryParameters) {</span>
-<span class="fc" id="L622">            throw new IllegalArgumentException(&quot;missing appId&quot;);</span>
+<span class="fc bfc" id="L633" title="All 2 branches covered.">        if (node.has(&quot;text&quot;)) {</span>
+<span class="fc" id="L634">            privacyNotice.setText(node.get(&quot;text&quot;).asText());</span>
+<span class="fc bfc" id="L635" title="All 2 branches covered.">        } else if (mandatoryParameters) {</span>
+<span class="fc" id="L636">            throw new IllegalArgumentException(&quot;missing appId&quot;);</span>
         }
-<span class="fc" id="L624">        return privacyNotice;</span>
+<span class="fc" id="L638">        return privacyNotice;</span>
     }
 
     // Notification
@@ -632,26 +646,26 @@ import java.util.UUID;
      * @throws IllegalArgumentException if Notification has not id, senderId, receiverId, type, objectId
      */
     public JsonNode createJsonFromNotification(Notification notification) throws IllegalArgumentException {
-<span class="fc" id="L635">        ObjectNode notificationJson = mapper.createObjectNode();</span>
-<span class="fc bfc" id="L636" title="All 10 branches covered.">        if (notification.getId() == null || notification.getReceiver() == null || notification.getSender() == null || notification.getType()==null || notification.getObjectId()==null) {</span>
-<span class="fc" id="L637">            throw new IllegalArgumentException(&quot;invalid notification&quot;);</span>
+<span class="fc" id="L649">        ObjectNode notificationJson = mapper.createObjectNode();</span>
+<span class="fc bfc" id="L650" title="All 10 branches covered.">        if (notification.getId() == null || notification.getReceiver() == null || notification.getSender() == null || notification.getType()==null || notification.getObjectId()==null) {</span>
+<span class="fc" id="L651">            throw new IllegalArgumentException(&quot;invalid notification&quot;);</span>
         }
-<span class="fc" id="L639">        notificationJson.put(&quot;id&quot;, notification.getId().toString());</span>
-<span class="fc" id="L640">        notificationJson.put(&quot;senderId&quot;, notification.getSender().getId().toString());</span>
-<span class="fc" id="L641">        notificationJson.put(&quot;senderName&quot;, notification.getSender().getName());</span>
-<span class="fc" id="L642">        notificationJson.put(&quot;receiverId&quot;, notification.getReceiver().getId().toString());</span>
-<span class="fc" id="L643">        notificationJson.put(&quot;receiverName&quot;, notification.getReceiver().getName());</span>
-<span class="fc" id="L644">        notificationJson.put(&quot;description&quot;, notification.getDescription());</span>
-<span class="fc" id="L645">        notificationJson.put(&quot;type&quot;, notification.getType());</span>
-<span class="fc" id="L646">        notificationJson.put(&quot;objectId&quot;, notification.getObjectId().toString());</span>
+<span class="fc" id="L653">        notificationJson.put(&quot;id&quot;, notification.getId().toString());</span>
+<span class="fc" id="L654">        notificationJson.put(&quot;senderId&quot;, notification.getSender().getId().toString());</span>
+<span class="fc" id="L655">        notificationJson.put(&quot;senderName&quot;, notification.getSender().getName());</span>
+<span class="fc" id="L656">        notificationJson.put(&quot;receiverId&quot;, notification.getReceiver().getId().toString());</span>
+<span class="fc" id="L657">        notificationJson.put(&quot;receiverName&quot;, notification.getReceiver().getName());</span>
+<span class="fc" id="L658">        notificationJson.put(&quot;description&quot;, notification.getDescription());</span>
+<span class="fc" id="L659">        notificationJson.put(&quot;type&quot;, notification.getType());</span>
+<span class="fc" id="L660">        notificationJson.put(&quot;objectId&quot;, notification.getObjectId().toString());</span>
 
-<span class="fc bfc" id="L648" title="All 2 branches covered.">        if(notification.getTime()!=null){</span>
-<span class="fc" id="L649">            notificationJson.put(&quot;time&quot;, notification.getTime().toString());</span>
+<span class="fc bfc" id="L662" title="All 2 branches covered.">        if(notification.getTime()!=null){</span>
+<span class="fc" id="L663">            notificationJson.put(&quot;time&quot;, notification.getTime().toString());</span>
         }
-<span class="fc bfc" id="L651" title="All 2 branches covered.">        if(notification.getRead()!=null){</span>
-<span class="fc" id="L652">            notificationJson.put(&quot;isRead&quot;, notification.getRead());</span>
+<span class="fc bfc" id="L665" title="All 2 branches covered.">        if(notification.getRead()!=null){</span>
+<span class="fc" id="L666">            notificationJson.put(&quot;isRead&quot;, notification.getRead());</span>
         }
-<span class="fc" id="L654">        return notificationJson;</span>
+<span class="fc" id="L668">        return notificationJson;</span>
     }
 
     /**
@@ -662,22 +676,22 @@ import java.util.UUID;
      */
     public ArrayNode createJsonNotificationsFromUser(User user, boolean all, boolean isRead){
         List&lt;Notification&gt; notificationList;
-<span class="fc bfc" id="L665" title="All 2 branches covered.">        if(all){</span>
-<span class="fc" id="L666">            notificationList= dataBaseService.getNotificationsFromUser(user);</span>
+<span class="fc bfc" id="L679" title="All 2 branches covered.">        if(all){</span>
+<span class="fc" id="L680">            notificationList= dataBaseService.getNotificationsFromUser(user);</span>
         }
         else{
-<span class="fc bfc" id="L669" title="All 2 branches covered.">            if(isRead){</span>
-<span class="fc" id="L670">                notificationList= dataBaseService.getOldNotificationsFromUser(user);</span>
+<span class="fc bfc" id="L683" title="All 2 branches covered.">            if(isRead){</span>
+<span class="fc" id="L684">                notificationList= dataBaseService.getOldNotificationsFromUser(user);</span>
             }
             else{
-<span class="fc" id="L673">                notificationList= dataBaseService.getNewNotificationsFromUser(user);</span>
+<span class="fc" id="L687">                notificationList= dataBaseService.getNewNotificationsFromUser(user);</span>
             }
         }
-<span class="fc" id="L676">        ArrayNode notificationArray = mapper.createArrayNode();</span>
-<span class="fc bfc" id="L677" title="All 2 branches covered.">        for(Notification notification : notificationList){</span>
-<span class="fc" id="L678">            notificationArray.add(createJsonFromNotification(notification));</span>
-<span class="fc" id="L679">        }</span>
-<span class="fc" id="L680">        return notificationArray;</span>
+<span class="fc" id="L690">        ArrayNode notificationArray = mapper.createArrayNode();</span>
+<span class="fc bfc" id="L691" title="All 2 branches covered.">        for(Notification notification : notificationList){</span>
+<span class="fc" id="L692">            notificationArray.add(createJsonFromNotification(notification));</span>
+<span class="fc" id="L693">        }</span>
+<span class="fc" id="L694">        return notificationArray;</span>
     }
 
     /**
@@ -689,10 +703,10 @@ import java.util.UUID;
      */
     public Notification getNotificationFromJsonString(String body) throws IllegalArgumentException, IOException{
         try {
-<span class="fc" id="L692">            JsonNode rootNode = mapper.readTree(new StringReader(body));</span>
-<span class="fc" id="L693">            return getNotificationFromJsonNode(rootNode);</span>
-<span class="fc" id="L694">        } catch (IOException e){</span>
-<span class="fc" id="L695">            throw new IOException(&quot;invalid JSON&quot;);</span>
+<span class="fc" id="L706">            JsonNode rootNode = mapper.readTree(new StringReader(body));</span>
+<span class="fc" id="L707">            return getNotificationFromJsonNode(rootNode);</span>
+<span class="fc" id="L708">        } catch (IOException e){</span>
+<span class="fc" id="L709">            throw new IOException(&quot;invalid JSON&quot;);</span>
         }
     }
 
@@ -702,44 +716,44 @@ import java.util.UUID;
      * @throws IllegalArgumentException if JSONObject has not senderId, receiverId, type, objectId. If object does not exist or is wrong type
      */
     public Notification getNotificationFromJsonNode(JsonNode node) throws IllegalArgumentException {
-<span class="fc" id="L705">        Notification notification= new Notification();</span>
-<span class="fc bfc" id="L706" title="All 8 branches covered.">        if(!node.has(&quot;senderId&quot;) || !node.has(&quot;receiverId&quot;) || !node.has(&quot;type&quot;) || !node.has(&quot;objectId&quot;)){</span>
-<span class="fc" id="L707">            throw new IllegalArgumentException(&quot;missing mandatory parameters in the JSON object&quot;);</span>
+<span class="fc" id="L719">        Notification notification= new Notification();</span>
+<span class="fc bfc" id="L720" title="All 8 branches covered.">        if(!node.has(&quot;senderId&quot;) || !node.has(&quot;receiverId&quot;) || !node.has(&quot;type&quot;) || !node.has(&quot;objectId&quot;)){</span>
+<span class="fc" id="L721">            throw new IllegalArgumentException(&quot;missing mandatory parameters in the JSON object&quot;);</span>
         }
-<span class="fc" id="L709">        notification.setSender(getUserFromId(node.get(&quot;senderId&quot;).asText()));</span>
-<span class="fc" id="L710">        notification.setReceiver(getUserFromId(node.get(&quot;receiverId&quot;).asText()));</span>
+<span class="fc" id="L723">        notification.setSender(getUserFromId(node.get(&quot;senderId&quot;).asText()));</span>
+<span class="fc" id="L724">        notification.setReceiver(getUserFromId(node.get(&quot;receiverId&quot;).asText()));</span>
 
         // check if type is correct for the objectId
-<span class="fc" id="L713">        String type=node.get(&quot;type&quot;).asText();</span>
-<span class="fc bfc" id="L714" title="All 2 branches covered.">        if(GlobalVariables.notificationType.contains(type)){</span>
-<span class="pc bpc" id="L715" title="1 of 4 branches missed.">            switch (type){</span>
+<span class="fc" id="L727">        String type=node.get(&quot;type&quot;).asText();</span>
+<span class="fc bfc" id="L728" title="All 2 branches covered.">        if(GlobalVariables.notificationType.contains(type)){</span>
+<span class="pc bpc" id="L729" title="1 of 4 branches missed.">            switch (type){</span>
                 case &quot;Message&quot;:
-<span class="fc" id="L717">                    Message message= getMessageFromId(node.get(&quot;objectId&quot;).asText()); break;</span>
+<span class="fc" id="L731">                    Message message= getMessageFromId(node.get(&quot;objectId&quot;).asText()); break;</span>
                 case &quot;Request&quot;:
-<span class="fc" id="L719">                    RightRequest request= getRequestFromId(node.get(&quot;objectId&quot;).asText()); break;</span>
+<span class="fc" id="L733">                    RightRequest request= getRequestFromId(node.get(&quot;objectId&quot;).asText()); break;</span>
                 case &quot;PrivacyNotice&quot;:
-<span class="fc" id="L721">                    PrivacyNotice privacyNotice= getPrivacyNoticeFromId(node.get(&quot;objectId&quot;).asText()); break;</span>
+<span class="fc" id="L735">                    PrivacyNotice privacyNotice= getPrivacyNoticeFromId(node.get(&quot;objectId&quot;).asText()); break;</span>
             }
         }
-<span class="fc" id="L724">        notification.setType(type);</span>
+<span class="fc" id="L738">        notification.setType(type);</span>
         try {
-<span class="fc" id="L726">            notification.setObjectId(UUID.fromString(node.get(&quot;objectId&quot;).asText()));</span>
-<span class="fc" id="L727">        } catch (IllegalArgumentException e){</span>
-<span class="fc" id="L728">            throw new IllegalArgumentException(&quot;invalid object ID&quot;);</span>
-<span class="fc" id="L729">        }</span>
+<span class="fc" id="L740">            notification.setObjectId(UUID.fromString(node.get(&quot;objectId&quot;).asText()));</span>
+<span class="fc" id="L741">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L742">            throw new IllegalArgumentException(&quot;invalid object ID&quot;);</span>
+<span class="fc" id="L743">        }</span>
 
-<span class="fc bfc" id="L731" title="All 2 branches covered.">        if(node.has(&quot;description&quot;)){</span>
-<span class="fc" id="L732">            notification.setDescription(node.get(&quot;description&quot;).asText());</span>
+<span class="fc bfc" id="L745" title="All 2 branches covered.">        if(node.has(&quot;description&quot;)){</span>
+<span class="fc" id="L746">            notification.setDescription(node.get(&quot;description&quot;).asText());</span>
         }
 
-<span class="fc bfc" id="L735" title="All 2 branches covered.">        if(node.has(&quot;isRead&quot;)){</span>
-<span class="fc" id="L736">            notification.setRead(node.get(&quot;isRead&quot;).asBoolean());</span>
+<span class="fc bfc" id="L749" title="All 2 branches covered.">        if(node.has(&quot;isRead&quot;)){</span>
+<span class="fc" id="L750">            notification.setRead(node.get(&quot;isRead&quot;).asBoolean());</span>
         }
 
-<span class="fc bfc" id="L739" title="All 2 branches covered.">        if(node.has(&quot;time&quot;)){</span>
-<span class="fc" id="L740">            notification.setTime(LocalDateTime.parse(node.get(&quot;time&quot;).asText()));</span>
+<span class="fc bfc" id="L753" title="All 2 branches covered.">        if(node.has(&quot;time&quot;)){</span>
+<span class="fc" id="L754">            notification.setTime(LocalDateTime.parse(node.get(&quot;time&quot;).asText()));</span>
         }
-<span class="fc" id="L742">        return notification;</span>
+<span class="fc" id="L756">        return notification;</span>
     }
 
     //  RightRequest
@@ -750,63 +764,63 @@ import java.util.UUID;
      * @throws IllegalArgumentException if request does not exist or is invalid
      */
     public JsonNode createJsonFromRequest(RightRequest request) throws IllegalArgumentException{
-<span class="fc" id="L753">        ObjectNode requestJson = mapper.createObjectNode();</span>
-<span class="fc bfc" id="L754" title="All 8 branches covered.">        if(request.getId()==null || request.getSender()==null || request.getReceiver()==null || request.getRightType()==null){</span>
-<span class="fc" id="L755">            throw new IllegalArgumentException(&quot;invalid right request&quot;);</span>
+<span class="fc" id="L767">        ObjectNode requestJson = mapper.createObjectNode();</span>
+<span class="fc bfc" id="L768" title="All 8 branches covered.">        if(request.getId()==null || request.getSender()==null || request.getReceiver()==null || request.getRightType()==null){</span>
+<span class="fc" id="L769">            throw new IllegalArgumentException(&quot;invalid right request&quot;);</span>
         }
 
-<span class="fc" id="L758">        requestJson.put(&quot;id&quot;, request.getId().toString());</span>
-<span class="fc" id="L759">        requestJson.put(&quot;senderName&quot;, request.getSender().getName());</span>
-<span class="fc" id="L760">        requestJson.put(&quot;senderId&quot;, request.getSender().getId().toString());</span>
-<span class="fc" id="L761">        requestJson.put(&quot;receiverName&quot;, request.getReceiver().getName());</span>
-<span class="fc" id="L762">        requestJson.put(&quot;receiverId&quot;, request.getReceiver().getId().toString());</span>
-<span class="fc bfc" id="L763" title="All 2 branches covered.">        if(request.getTime()!=null){</span>
-<span class="fc" id="L764">            requestJson.put(&quot;time&quot;, request.getTime().toString());</span>
+<span class="fc" id="L772">        requestJson.put(&quot;id&quot;, request.getId().toString());</span>
+<span class="fc" id="L773">        requestJson.put(&quot;senderName&quot;, request.getSender().getName());</span>
+<span class="fc" id="L774">        requestJson.put(&quot;senderId&quot;, request.getSender().getId().toString());</span>
+<span class="fc" id="L775">        requestJson.put(&quot;receiverName&quot;, request.getReceiver().getName());</span>
+<span class="fc" id="L776">        requestJson.put(&quot;receiverId&quot;, request.getReceiver().getId().toString());</span>
+<span class="fc bfc" id="L777" title="All 2 branches covered.">        if(request.getTime()!=null){</span>
+<span class="fc" id="L778">            requestJson.put(&quot;time&quot;, request.getTime().toString());</span>
         }
-<span class="fc bfc" id="L766" title="All 2 branches covered.">        if(request.getApp()!=null){</span>
-<span class="fc" id="L767">            requestJson.put(&quot;appId&quot;, request.getApp().getId().toString());</span>
-<span class="fc" id="L768">            requestJson.put(&quot;appName&quot;, request.getApp().getName());</span>
+<span class="fc bfc" id="L780" title="All 2 branches covered.">        if(request.getApp()!=null){</span>
+<span class="fc" id="L781">            requestJson.put(&quot;appId&quot;, request.getApp().getId().toString());</span>
+<span class="fc" id="L782">            requestJson.put(&quot;appName&quot;, request.getApp().getName());</span>
         }
-<span class="fc" id="L770">        requestJson.put(&quot;rightType&quot;, request.getRightType().toString());</span>
-<span class="fc bfc" id="L771" title="All 2 branches covered.">        if(request.getOther()!=null){</span>
-<span class="fc" id="L772">            requestJson.put(&quot;other&quot;, request.getOther());</span>
+<span class="fc" id="L784">        requestJson.put(&quot;rightType&quot;, request.getRightType().toString());</span>
+<span class="fc bfc" id="L785" title="All 2 branches covered.">        if(request.getOther()!=null){</span>
+<span class="fc" id="L786">            requestJson.put(&quot;other&quot;, request.getOther());</span>
         }
-<span class="fc bfc" id="L774" title="All 2 branches covered.">        if(request.getHandled()!=null){</span>
-<span class="fc" id="L775">            requestJson.put(&quot;handled&quot;, request.getHandled());</span>
+<span class="fc bfc" id="L788" title="All 2 branches covered.">        if(request.getHandled()!=null){</span>
+<span class="fc" id="L789">            requestJson.put(&quot;handled&quot;, request.getHandled());</span>
         }
-<span class="fc bfc" id="L777" title="All 2 branches covered.">        if(request.getDetails()!=null){</span>
-<span class="fc" id="L778">            requestJson.put(&quot;details&quot;, request.getDetails());</span>
+<span class="fc bfc" id="L791" title="All 2 branches covered.">        if(request.getDetails()!=null){</span>
+<span class="fc" id="L792">            requestJson.put(&quot;details&quot;, request.getDetails());</span>
         }
-<span class="fc bfc" id="L780" title="All 2 branches covered.">        if(request.getResponse()!=null){</span>
-<span class="fc" id="L781">            requestJson.put(&quot;response&quot;, request.getResponse());</span>
+<span class="fc bfc" id="L794" title="All 2 branches covered.">        if(request.getResponse()!=null){</span>
+<span class="fc" id="L795">            requestJson.put(&quot;response&quot;, request.getResponse());</span>
         }
-<span class="fc" id="L783">        return requestJson;</span>
+<span class="fc" id="L797">        return requestJson;</span>
     }
 
     /**
      * @return JSON representing the requests in the request list that have the sender or the receiver equals to the parameter user
      */
     public ArrayNode createJsonRequestCheckAuthorizedUser(List&lt;RightRequest&gt; requestList, User user){
-<span class="fc" id="L790">        ArrayNode requestArray = mapper.createArrayNode();</span>
-<span class="fc bfc" id="L791" title="All 2 branches covered.">        for(RightRequest request : requestList){</span>
-<span class="fc bfc" id="L792" title="All 4 branches covered.">            if(request.getSender().equals(user) || request.getReceiver().equals(user)){</span>
-<span class="fc" id="L793">                requestArray.add(createJsonFromRequest(request));</span>
+<span class="fc" id="L804">        ArrayNode requestArray = mapper.createArrayNode();</span>
+<span class="fc bfc" id="L805" title="All 2 branches covered.">        for(RightRequest request : requestList){</span>
+<span class="fc bfc" id="L806" title="All 4 branches covered.">            if(request.getSender().equals(user) || request.getReceiver().equals(user)){</span>
+<span class="fc" id="L807">                requestArray.add(createJsonFromRequest(request));</span>
             }
-<span class="fc" id="L795">        }</span>
-<span class="fc" id="L796">        return requestArray;</span>
+<span class="fc" id="L809">        }</span>
+<span class="fc" id="L810">        return requestArray;</span>
     }
 
     /**
      * @return JSON representing the requests in the request list that have the app equals to the parameter app
      */
     public ArrayNode createJsonRequestOfApp(List&lt;RightRequest&gt; requestList, IoTApp app){
-<span class="fc" id="L803">        ArrayNode requestArray = mapper.createArrayNode();</span>
-<span class="fc bfc" id="L804" title="All 2 branches covered.">        for(RightRequest request : requestList){</span>
-<span class="fc bfc" id="L805" title="All 2 branches covered.">            if(request.getApp().equals(app)){</span>
-<span class="fc" id="L806">                requestArray.add(createJsonFromRequest(request));</span>
+<span class="fc" id="L817">        ArrayNode requestArray = mapper.createArrayNode();</span>
+<span class="fc bfc" id="L818" title="All 2 branches covered.">        for(RightRequest request : requestList){</span>
+<span class="fc bfc" id="L819" title="All 2 branches covered.">            if(request.getApp().equals(app)){</span>
+<span class="fc" id="L820">                requestArray.add(createJsonFromRequest(request));</span>
             }
-<span class="fc" id="L808">        }</span>
-<span class="fc" id="L809">        return requestArray;</span>
+<span class="fc" id="L822">        }</span>
+<span class="fc" id="L823">        return requestArray;</span>
     }
 
     /**
@@ -815,17 +829,17 @@ import java.util.UUID;
     public ArrayNode createJsonRequestOfRightType(List&lt;RightRequest&gt; requestList, String rightTypeString) throws IllegalArgumentException{
         RightType rightType;
         try {
-<span class="fc" id="L818">            rightType = RightType.valueOf(rightTypeString.toUpperCase());</span>
-<span class="fc" id="L819">        } catch (IllegalArgumentException e){</span>
-<span class="fc" id="L820">            throw new IllegalArgumentException(&quot;invalid Right Type&quot;);</span>
-<span class="fc" id="L821">        }</span>
-<span class="fc" id="L822">        ArrayNode requestArray = mapper.createArrayNode();</span>
-<span class="fc bfc" id="L823" title="All 2 branches covered.">        for(RightRequest request : requestList){</span>
-<span class="fc bfc" id="L824" title="All 2 branches covered.">            if(request.getRightType().equals(rightType)){</span>
-<span class="fc" id="L825">                requestArray.add(createJsonFromRequest(request));</span>
+<span class="fc" id="L832">            rightType = RightType.valueOf(rightTypeString.toUpperCase());</span>
+<span class="fc" id="L833">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L834">            throw new IllegalArgumentException(&quot;invalid Right Type&quot;);</span>
+<span class="fc" id="L835">        }</span>
+<span class="fc" id="L836">        ArrayNode requestArray = mapper.createArrayNode();</span>
+<span class="fc bfc" id="L837" title="All 2 branches covered.">        for(RightRequest request : requestList){</span>
+<span class="fc bfc" id="L838" title="All 2 branches covered.">            if(request.getRightType().equals(rightType)){</span>
+<span class="fc" id="L839">                requestArray.add(createJsonFromRequest(request));</span>
             }
-<span class="fc" id="L827">        }</span>
-<span class="fc" id="L828">        return requestArray;</span>
+<span class="fc" id="L841">        }</span>
+<span class="fc" id="L842">        return requestArray;</span>
     }
 
     /**
@@ -837,10 +851,10 @@ import java.util.UUID;
      */
     public RightRequest getRequestFromJsonString(String body, boolean mandatoryParameters) throws IllegalArgumentException, IOException{
         try {
-<span class="fc" id="L840">            JsonNode rootNode = mapper.readTree(new StringReader(body));</span>
-<span class="fc" id="L841">            return getRequestFromJsonNode(rootNode, mandatoryParameters);</span>
-<span class="fc" id="L842">        } catch (IOException e){</span>
-<span class="fc" id="L843">            throw new IOException(&quot;invalid JSON&quot;);</span>
+<span class="fc" id="L854">            JsonNode rootNode = mapper.readTree(new StringReader(body));</span>
+<span class="fc" id="L855">            return getRequestFromJsonNode(rootNode, mandatoryParameters);</span>
+<span class="fc" id="L856">        } catch (IOException e){</span>
+<span class="fc" id="L857">            throw new IOException(&quot;invalid JSON&quot;);</span>
         }
     }
 
@@ -851,54 +865,54 @@ import java.util.UUID;
      * @throws IllegalArgumentException if JSONObject has not senderId, receiverId, rightType. If object does not exist or is wrong type
      */
     public RightRequest getRequestFromJsonNode(JsonNode node, boolean mandatoryParameters) throws IllegalArgumentException {
-<span class="fc" id="L854">        RightRequest request = new RightRequest();</span>
-<span class="fc bfc" id="L855" title="All 2 branches covered.">        if(node.has(&quot;senderId&quot;)){</span>
-<span class="fc" id="L856">            request.setSender(getUserFromId(node.get(&quot;senderId&quot;).asText()));</span>
+<span class="fc" id="L868">        RightRequest request = new RightRequest();</span>
+<span class="fc bfc" id="L869" title="All 2 branches covered.">        if(node.has(&quot;senderId&quot;)){</span>
+<span class="fc" id="L870">            request.setSender(getUserFromId(node.get(&quot;senderId&quot;).asText()));</span>
         }
-<span class="fc bfc" id="L858" title="All 2 branches covered.">        else if(mandatoryParameters){</span>
-<span class="fc" id="L859">            throw new IllegalArgumentException(&quot;senderId value missing&quot;);</span>
-        }
-
-<span class="fc bfc" id="L862" title="All 2 branches covered.">        if(node.has(&quot;appId&quot;)){</span>
-<span class="fc" id="L863">            request.setApp(getAppFromId(node.get(&quot;appId&quot;).asText()));</span>
-        }
-<span class="fc bfc" id="L865" title="All 2 branches covered.">        else if(mandatoryParameters ){</span>
-<span class="fc" id="L866">            throw new IllegalArgumentException(&quot;appId value missing&quot;);</span>
+<span class="fc bfc" id="L872" title="All 2 branches covered.">        else if(mandatoryParameters){</span>
+<span class="fc" id="L873">            throw new IllegalArgumentException(&quot;senderId value missing&quot;);</span>
         }
 
-<span class="fc bfc" id="L869" title="All 2 branches covered.">        if(node.has(&quot;receiverId&quot;)){</span>
-<span class="fc" id="L870">            request.setReceiver(getUserFromId(node.get(&quot;receiverId&quot;).asText()));</span>
+<span class="fc bfc" id="L876" title="All 2 branches covered.">        if(node.has(&quot;appId&quot;)){</span>
+<span class="fc" id="L877">            request.setApp(getAppFromId(node.get(&quot;appId&quot;).asText()));</span>
+        }
+<span class="fc bfc" id="L879" title="All 2 branches covered.">        else if(mandatoryParameters ){</span>
+<span class="fc" id="L880">            throw new IllegalArgumentException(&quot;appId value missing&quot;);</span>
         }
 
-<span class="fc bfc" id="L873" title="All 2 branches covered.">        if(node.has(&quot;rightType&quot;)){</span>
-<span class="fc" id="L874">            request.setRightType(RightType.valueOf(node.get(&quot;rightType&quot;).asText()));</span>
-        }
-<span class="fc bfc" id="L876" title="All 2 branches covered.">        else if(mandatoryParameters){</span>
-<span class="fc" id="L877">            throw new IllegalArgumentException(&quot;rightType value missing&quot;);</span>
+<span class="fc bfc" id="L883" title="All 2 branches covered.">        if(node.has(&quot;receiverId&quot;)){</span>
+<span class="fc" id="L884">            request.setReceiver(getUserFromId(node.get(&quot;receiverId&quot;).asText()));</span>
         }
 
-<span class="fc bfc" id="L880" title="All 2 branches covered.">        if(node.has(&quot;time&quot;)){</span>
+<span class="fc bfc" id="L887" title="All 2 branches covered.">        if(node.has(&quot;rightType&quot;)){</span>
+<span class="fc" id="L888">            request.setRightType(RightType.valueOf(node.get(&quot;rightType&quot;).asText()));</span>
+        }
+<span class="fc bfc" id="L890" title="All 2 branches covered.">        else if(mandatoryParameters){</span>
+<span class="fc" id="L891">            throw new IllegalArgumentException(&quot;rightType value missing&quot;);</span>
+        }
+
+<span class="fc bfc" id="L894" title="All 2 branches covered.">        if(node.has(&quot;time&quot;)){</span>
             try{
-<span class="fc" id="L882">                request.setTime(LocalDateTime.parse(node.get(&quot;time&quot;).asText()));</span>
-<span class="fc" id="L883">            } catch (DateTimeParseException e){</span>
-<span class="fc" id="L884">                throw new IllegalArgumentException(&quot;invalid date&quot;);</span>
-<span class="fc" id="L885">            }</span>
+<span class="fc" id="L896">                request.setTime(LocalDateTime.parse(node.get(&quot;time&quot;).asText()));</span>
+<span class="fc" id="L897">            } catch (DateTimeParseException e){</span>
+<span class="fc" id="L898">                throw new IllegalArgumentException(&quot;invalid date&quot;);</span>
+<span class="fc" id="L899">            }</span>
         }
-<span class="fc bfc" id="L887" title="All 2 branches covered.">        if(node.has(&quot;other&quot;)){</span>
-<span class="fc" id="L888">            request.setOther(node.get(&quot;other&quot;).asText());</span>
+<span class="fc bfc" id="L901" title="All 2 branches covered.">        if(node.has(&quot;other&quot;)){</span>
+<span class="fc" id="L902">            request.setOther(node.get(&quot;other&quot;).asText());</span>
         }
-<span class="fc bfc" id="L890" title="All 2 branches covered.">        if(node.has(&quot;details&quot;)){</span>
-<span class="fc" id="L891">            request.setDetails(node.get(&quot;details&quot;).asText());</span>
+<span class="fc bfc" id="L904" title="All 2 branches covered.">        if(node.has(&quot;details&quot;)){</span>
+<span class="fc" id="L905">            request.setDetails(node.get(&quot;details&quot;).asText());</span>
         }
-<span class="fc bfc" id="L893" title="All 2 branches covered.">        if(node.has(&quot;response&quot;)){</span>
-<span class="fc" id="L894">            request.setDetails(node.get(&quot;response&quot;).asText());</span>
+<span class="fc bfc" id="L907" title="All 2 branches covered.">        if(node.has(&quot;response&quot;)){</span>
+<span class="fc" id="L908">            request.setResponse(node.get(&quot;response&quot;).asText());</span>
         }
-<span class="fc bfc" id="L896" title="All 2 branches covered.">        if(node.has(&quot;handled&quot;)){</span>
-<span class="fc bfc" id="L897" title="All 4 branches covered.">            if(node.get(&quot;handled&quot;).asText().equalsIgnoreCase(&quot;true&quot;) || node.get(&quot;handled&quot;).asText().equalsIgnoreCase(&quot;false&quot;)){</span>
-<span class="fc" id="L898">                request.setHandled(node.get(&quot;handled&quot;).asBoolean());</span>
+<span class="fc bfc" id="L910" title="All 2 branches covered.">        if(node.has(&quot;handled&quot;)){</span>
+<span class="fc bfc" id="L911" title="All 4 branches covered.">            if(node.get(&quot;handled&quot;).asText().equalsIgnoreCase(&quot;true&quot;) || node.get(&quot;handled&quot;).asText().equalsIgnoreCase(&quot;false&quot;)){</span>
+<span class="fc" id="L912">                request.setHandled(node.get(&quot;handled&quot;).asBoolean());</span>
             }
         }
-<span class="fc" id="L901">        return request;</span>
+<span class="fc" id="L915">        return request;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

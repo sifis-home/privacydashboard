@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 @RestController
-<span class="nc" id="L16">public class ApiNotificationController {</span>
+<span class="fc" id="L16">public class ApiNotificationController {</span>
     @Autowired
     private DataBaseService dataBaseService;
     @Autowired
@@ -31,13 +31,13 @@ import java.util.Optional;
     @RequestMapping(&quot;api/notification/get&quot;)
     public ResponseEntity&lt;?&gt; get(@RequestParam() String notificationId){
         try{
-<span class="nc" id="L34">            Notification notification= apiGeneralController.getNotificationFromId(notificationId);</span>
-<span class="nc bnc" id="L35" title="All 2 branches missed.">            if(!isSenderOrReceiver(notification, apiGeneralController.getAuthenicatedUser())){</span>
-<span class="nc" id="L36">                return ResponseEntity.badRequest().body(&quot;you MUST be the sender or the receiver of the notification&quot;);</span>
+<span class="fc" id="L34">            Notification notification= apiGeneralController.getNotificationFromId(notificationId);</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">            if(!isSenderOrReceiver(notification, apiGeneralController.getAuthenicatedUser())){</span>
+<span class="fc" id="L36">                return ResponseEntity.badRequest().body(&quot;you MUST be the sender or the receiver of the notification&quot;);</span>
             }
-<span class="nc" id="L38">            return ResponseEntity.ok(apiGeneralController.createJsonFromNotification(notification));</span>
-<span class="nc" id="L39">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L40">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L38">            return ResponseEntity.ok(apiGeneralController.createJsonFromNotification(notification));</span>
+<span class="fc" id="L39">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L40">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -51,13 +51,13 @@ import java.util.Optional;
     @RequestMapping(&quot;api/notification/getAllFromUser&quot;)
     public ResponseEntity&lt;?&gt; getAllFromUser(@RequestParam() String userId){
         try{
-<span class="nc" id="L54">            User user= apiGeneralController.getUserFromId(userId);</span>
-<span class="nc bnc" id="L55" title="All 2 branches missed.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
-<span class="nc" id="L56">                return ResponseEntity.badRequest().body(&quot;you MUST be the user identified by the userId&quot;);</span>
+<span class="fc" id="L54">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
+<span class="fc" id="L56">                return ResponseEntity.badRequest().body(&quot;you MUST be the user identified by the userId&quot;);</span>
             }
-<span class="nc" id="L58">            return ResponseEntity.ok(apiGeneralController.createJsonNotificationsFromUser(user, true, true));</span>
-<span class="nc" id="L59">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L60">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L58">            return ResponseEntity.ok(apiGeneralController.createJsonNotificationsFromUser(user, true, true));</span>
+<span class="fc" id="L59">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L60">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -71,13 +71,13 @@ import java.util.Optional;
     @RequestMapping(&quot;api/notification/getReadFromUser&quot;)
     public ResponseEntity&lt;?&gt; getReadFromUser(@RequestParam() String userId){
         try{
-<span class="nc" id="L74">            User user= apiGeneralController.getUserFromId(userId);</span>
-<span class="nc bnc" id="L75" title="All 2 branches missed.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
-<span class="nc" id="L76">                return ResponseEntity.badRequest().body(&quot;you MUST be the user identified by the userId&quot;);</span>
+<span class="fc" id="L74">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
+<span class="fc" id="L76">                return ResponseEntity.badRequest().body(&quot;you MUST be the user identified by the userId&quot;);</span>
             }
-<span class="nc" id="L78">            return ResponseEntity.ok(apiGeneralController.createJsonNotificationsFromUser(user, false, true));</span>
-<span class="nc" id="L79">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L80">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L78">            return ResponseEntity.ok(apiGeneralController.createJsonNotificationsFromUser(user, false, true));</span>
+<span class="fc" id="L79">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L80">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -91,13 +91,13 @@ import java.util.Optional;
     @RequestMapping(&quot;api/notification/getNotReadFromUser&quot;)
     public ResponseEntity&lt;?&gt; getNotReadFromUser(@RequestParam() String userId){
         try{
-<span class="nc" id="L94">            User user= apiGeneralController.getUserFromId(userId);</span>
-<span class="nc bnc" id="L95" title="All 2 branches missed.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
-<span class="nc" id="L96">                return ResponseEntity.badRequest().body(&quot;you MUST be the user identified by the userId&quot;);</span>
+<span class="fc" id="L94">            User user= apiGeneralController.getUserFromId(userId);</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            if(!apiGeneralController.isAuthenticatedUserId(userId)){</span>
+<span class="fc" id="L96">                return ResponseEntity.badRequest().body(&quot;you MUST be the user identified by the userId&quot;);</span>
             }
-<span class="nc" id="L98">            return ResponseEntity.ok(apiGeneralController.createJsonNotificationsFromUser(user, false, false));</span>
-<span class="nc" id="L99">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L100">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L98">            return ResponseEntity.ok(apiGeneralController.createJsonNotificationsFromUser(user, false, false));</span>
+<span class="fc" id="L99">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L100">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -111,30 +111,30 @@ import java.util.Optional;
     @RequestMapping(&quot;api/notification/getObjectOfNotification&quot;)
     public ResponseEntity&lt;?&gt; getObjectOfNotification(@RequestParam() String notificationId){
         try{
-<span class="nc" id="L114">            Notification notification= apiGeneralController.getNotificationFromId(notificationId);</span>
-<span class="nc bnc" id="L115" title="All 2 branches missed.">            if(!isSenderOrReceiver(notification, apiGeneralController.getAuthenicatedUser())){</span>
-<span class="nc" id="L116">                return ResponseEntity.badRequest().body(&quot;you MUST be the sender or the receiver of the notification&quot;);</span>
+<span class="fc" id="L114">            Notification notification= apiGeneralController.getNotificationFromId(notificationId);</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">            if(!isSenderOrReceiver(notification, apiGeneralController.getAuthenicatedUser())){</span>
+<span class="fc" id="L116">                return ResponseEntity.badRequest().body(&quot;you MUST be the sender or the receiver of the notification&quot;);</span>
             }
             JsonNode objectNode;
-<span class="nc bnc" id="L119" title="All 4 branches missed.">            switch (notification.getType()){</span>
+<span class="fc bfc" id="L119" title="All 4 branches covered.">            switch (notification.getType()){</span>
                 case &quot;Message&quot;:
-<span class="nc" id="L121">                    Message message= apiGeneralController.getMessageFromId(notification.getObjectId().toString());</span>
-<span class="nc" id="L122">                    objectNode= apiGeneralController.createJsonFromMessage(message);</span>
-<span class="nc" id="L123">                    break;</span>
+<span class="fc" id="L121">                    Message message= apiGeneralController.getMessageFromId(notification.getObjectId().toString());</span>
+<span class="fc" id="L122">                    objectNode= apiGeneralController.createJsonFromMessage(message);</span>
+<span class="fc" id="L123">                    break;</span>
                 case &quot;Request&quot;:
-<span class="nc" id="L125">                    RightRequest request= apiGeneralController.getRequestFromId(notification.getObjectId().toString());</span>
-<span class="nc" id="L126">                    objectNode= apiGeneralController.createJsonFromRequest(request);</span>
-<span class="nc" id="L127">                    break;</span>
+<span class="fc" id="L125">                    RightRequest request= apiGeneralController.getRequestFromId(notification.getObjectId().toString());</span>
+<span class="fc" id="L126">                    objectNode= apiGeneralController.createJsonFromRequest(request);</span>
+<span class="fc" id="L127">                    break;</span>
                 case &quot;PrivacyNotice&quot;:
-<span class="nc" id="L129">                    PrivacyNotice privacyNotice= apiGeneralController.getPrivacyNoticeFromId(notification.getObjectId().toString());</span>
-<span class="nc" id="L130">                    objectNode= apiGeneralController.createJsonFromPrivacyNotice(privacyNotice);</span>
-<span class="nc" id="L131">                    break;</span>
+<span class="fc" id="L129">                    PrivacyNotice privacyNotice= apiGeneralController.getPrivacyNoticeFromId(notification.getObjectId().toString());</span>
+<span class="fc" id="L130">                    objectNode= apiGeneralController.createJsonFromPrivacyNotice(privacyNotice);</span>
+<span class="fc" id="L131">                    break;</span>
                 default:
-<span class="nc" id="L133">                    return ResponseEntity.badRequest().body(&quot;object associated with notification does not exist&quot;);</span>
+<span class="fc" id="L133">                    return ResponseEntity.badRequest().body(&quot;object associated with notification does not exist&quot;);</span>
             }
-<span class="nc" id="L135">            return ResponseEntity.ok(objectNode);</span>
-<span class="nc" id="L136">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L137">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L135">            return ResponseEntity.ok(objectNode);</span>
+<span class="fc" id="L136">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L137">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -148,27 +148,27 @@ import java.util.Optional;
     @RequestMapping(&quot;api/notification/add&quot;)
     public ResponseEntity&lt;?&gt; add(@RequestBody() String body){
         try{
-<span class="nc" id="L151">            Notification notification= apiGeneralController.getNotificationFromJsonString(body);</span>
-<span class="nc bnc" id="L152" title="All 2 branches missed.">            if(!apiGeneralController.getAuthenicatedUser().equals(notification.getSender())){</span>
-<span class="nc" id="L153">                return ResponseEntity.badRequest().body(&quot;you MUST be the sender of the notification&quot;);</span>
+<span class="fc" id="L151">            Notification notification= apiGeneralController.getNotificationFromJsonString(body);</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">            if(!apiGeneralController.getAuthenicatedUser().equals(notification.getSender())){</span>
+<span class="fc" id="L153">                return ResponseEntity.badRequest().body(&quot;you MUST be the sender of the notification&quot;);</span>
             }
-<span class="nc bnc" id="L155" title="All 2 branches missed.">            if(notification.getRead()==null){</span>
-<span class="nc" id="L156">                notification.setRead(false);</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">            if(notification.getRead()==null){</span>
+<span class="fc" id="L156">                notification.setRead(false);</span>
             }
-<span class="nc bnc" id="L158" title="All 2 branches missed.">            if(!isObjectAssociatedWithUser(notification)){</span>
-<span class="nc" id="L159">                return ResponseEntity.badRequest().body(&quot;Object is not associated with receiver&quot;);</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">            if(!isObjectAssociatedWithUser(notification)){</span>
+<span class="fc" id="L159">                return ResponseEntity.badRequest().body(&quot;Object is not associated with receiver&quot;);</span>
             }
-<span class="nc bnc" id="L161" title="All 2 branches missed.">            if(notification.getTime()==null){</span>
-<span class="nc" id="L162">                dataBaseService.addNowNotification(notification);</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">            if(notification.getTime()==null){</span>
+<span class="fc" id="L162">                dataBaseService.addNowNotification(notification);</span>
             }
             else{
-<span class="nc" id="L165">                dataBaseService.addNotification(notification);</span>
+<span class="fc" id="L165">                dataBaseService.addNotification(notification);</span>
             }
-<span class="nc" id="L167">            return ResponseEntity.ok(&quot;Notification added successfully&quot;);</span>
-<span class="nc" id="L168">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L169">            return ResponseEntity.badRequest().body(e.getMessage());</span>
-<span class="nc" id="L170">        } catch (IOException e){</span>
-<span class="nc" id="L171">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
+<span class="fc" id="L167">            return ResponseEntity.ok(&quot;Notification added successfully&quot;);</span>
+<span class="fc" id="L168">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L169">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L170">        } catch (IOException e){</span>
+<span class="fc" id="L171">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
         }
     }
 
@@ -182,14 +182,14 @@ import java.util.Optional;
     @RequestMapping(&quot;api/notification/delete&quot;)
     public ResponseEntity&lt;?&gt; delete(@RequestParam() String notificationId){
         try{
-<span class="nc" id="L185">            Notification notification= apiGeneralController.getNotificationFromId(notificationId);</span>
-<span class="nc bnc" id="L186" title="All 2 branches missed.">            if(!notification.getReceiver().equals(apiGeneralController.getAuthenicatedUser())){</span>
-<span class="nc" id="L187">                return ResponseEntity.badRequest().body(&quot;You MUST be the receiver of the notification&quot;);</span>
+<span class="fc" id="L185">            Notification notification= apiGeneralController.getNotificationFromId(notificationId);</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">            if(!notification.getReceiver().equals(apiGeneralController.getAuthenicatedUser())){</span>
+<span class="fc" id="L187">                return ResponseEntity.badRequest().body(&quot;You MUST be the receiver of the notification&quot;);</span>
             }
-<span class="nc" id="L189">            dataBaseService.deleteNotification(notification);</span>
-<span class="nc" id="L190">            return ResponseEntity.ok(&quot;Notification deleted successfully&quot;);</span>
-<span class="nc" id="L191">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L192">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L189">            dataBaseService.deleteNotification(notification);</span>
+<span class="fc" id="L190">            return ResponseEntity.ok(&quot;Notification deleted successfully&quot;);</span>
+<span class="fc" id="L191">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L192">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -204,50 +204,50 @@ import java.util.Optional;
     @RequestMapping(&quot;api/notification/changeIsRead&quot;)
     public ResponseEntity&lt;?&gt; changeIsRead(@RequestParam() String notificationId, @RequestParam() String isReadString){
         try {
-<span class="nc" id="L207">            Notification notification= apiGeneralController.getNotificationFromId(notificationId);</span>
-<span class="nc bnc" id="L208" title="All 4 branches missed.">            if(!isReadString.equalsIgnoreCase(&quot;true&quot;) &amp;&amp; !isReadString.equalsIgnoreCase(&quot;false&quot;)){</span>
-<span class="nc" id="L209">                return ResponseEntity.badRequest().body(&quot;Invalid isReadString value. MUST be true or false&quot;);</span>
+<span class="fc" id="L207">            Notification notification= apiGeneralController.getNotificationFromId(notificationId);</span>
+<span class="fc bfc" id="L208" title="All 4 branches covered.">            if(!isReadString.equalsIgnoreCase(&quot;true&quot;) &amp;&amp; !isReadString.equalsIgnoreCase(&quot;false&quot;)){</span>
+<span class="fc" id="L209">                return ResponseEntity.badRequest().body(&quot;Invalid isReadString value. MUST be true or false&quot;);</span>
             }
-<span class="nc" id="L211">            boolean isRead=Boolean.parseBoolean(isReadString);</span>
-<span class="nc bnc" id="L212" title="All 2 branches missed.">            if(!notification.getReceiver().equals(apiGeneralController.getAuthenicatedUser())){</span>
-<span class="nc" id="L213">                return ResponseEntity.badRequest().body(&quot;You MUST be the receiver of the notification&quot;);</span>
+<span class="fc" id="L211">            boolean isRead=Boolean.parseBoolean(isReadString);</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">            if(!notification.getReceiver().equals(apiGeneralController.getAuthenicatedUser())){</span>
+<span class="fc" id="L213">                return ResponseEntity.badRequest().body(&quot;You MUST be the receiver of the notification&quot;);</span>
             }
-<span class="nc" id="L215">            dataBaseService.changeIsReadNotification(notification, isRead);</span>
-<span class="nc" id="L216">            return ResponseEntity.ok(&quot;Notification value changed successfully&quot;);</span>
-<span class="nc" id="L217">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L218">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L215">            dataBaseService.changeIsReadNotification(notification, isRead);</span>
+<span class="fc" id="L216">            return ResponseEntity.ok(&quot;Notification value changed successfully&quot;);</span>
+<span class="fc" id="L217">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L218">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
 
     }
 
     private boolean isSenderOrReceiver(Notification notification, User user){
-<span class="nc bnc" id="L224" title="All 4 branches missed.">        return notification.getSender().equals(user) || notification.getReceiver().equals(user);</span>
+<span class="fc bfc" id="L224" title="All 4 branches covered.">        return notification.getSender().equals(user) || notification.getReceiver().equals(user);</span>
     }
 
     private boolean isObjectAssociatedWithUser(Notification notification){
-<span class="nc bnc" id="L228" title="All 4 branches missed.">        switch (notification.getType()){</span>
+<span class="pc bpc" id="L228" title="1 of 4 branches missed.">        switch (notification.getType()){</span>
             case &quot;Message&quot;:
-<span class="nc" id="L230">                Optional&lt;Message&gt; message= dataBaseService.getMessageFromID(notification.getObjectId());</span>
-<span class="nc bnc" id="L231" title="All 4 branches missed.">                if(message.isPresent() &amp;&amp; message.get().getReceiver().equals(notification.getReceiver())){</span>
-<span class="nc" id="L232">                    return true;</span>
+<span class="fc" id="L230">                Optional&lt;Message&gt; message= dataBaseService.getMessageFromID(notification.getObjectId());</span>
+<span class="pc bpc" id="L231" title="1 of 4 branches missed.">                if(message.isPresent() &amp;&amp; message.get().getReceiver().equals(notification.getReceiver())){</span>
+<span class="fc" id="L232">                    return true;</span>
                 }
                 break;
             case &quot;Request&quot;:
-<span class="nc" id="L236">                RightRequest request= dataBaseService.getRequestFromId(notification.getObjectId());</span>
-<span class="nc bnc" id="L237" title="All 4 branches missed.">                if(request.getReceiver().equals(notification.getReceiver()) || request.getSender().equals(notification.getReceiver())){</span>
-<span class="nc bnc" id="L238" title="All 4 branches missed.">                    if(request.getReceiver().equals(notification.getSender()) || request.getSender().equals(notification.getSender())){</span>
-<span class="nc" id="L239">                        return true;</span>
+<span class="fc" id="L236">                RightRequest request= dataBaseService.getRequestFromId(notification.getObjectId());</span>
+<span class="pc bpc" id="L237" title="3 of 4 branches missed.">                if(request.getReceiver().equals(notification.getReceiver()) || request.getSender().equals(notification.getReceiver())){</span>
+<span class="pc bpc" id="L238" title="2 of 4 branches missed.">                    if(request.getReceiver().equals(notification.getSender()) || request.getSender().equals(notification.getSender())){</span>
+<span class="fc" id="L239">                        return true;</span>
                     }
                 }
                 break;
             case &quot;PrivacyNotice&quot;:
-<span class="nc" id="L244">                Optional&lt;PrivacyNotice&gt; privacyNotice= dataBaseService.getPrivacyNoticeFromId(notification.getObjectId());</span>
-<span class="nc" id="L245">                IoTApp app= privacyNotice.map(PrivacyNotice::getApp).orElse(null);</span>
-<span class="nc bnc" id="L246" title="All 4 branches missed.">                if(dataBaseService.userHasApp(notification.getReceiver(), app) &amp;&amp; dataBaseService.userHasApp(notification.getSender(), app)){</span>
-<span class="nc" id="L247">                    return true;</span>
+<span class="fc" id="L244">                Optional&lt;PrivacyNotice&gt; privacyNotice= dataBaseService.getPrivacyNoticeFromId(notification.getObjectId());</span>
+<span class="fc" id="L245">                IoTApp app= privacyNotice.map(PrivacyNotice::getApp).orElse(null);</span>
+<span class="pc bpc" id="L246" title="2 of 4 branches missed.">                if(dataBaseService.userHasApp(notification.getReceiver(), app) &amp;&amp; dataBaseService.userHasApp(notification.getSender(), app)){</span>
+<span class="fc" id="L247">                    return true;</span>
                 }
         }
-<span class="nc" id="L250">        return false;</span>
+<span class="fc" id="L250">        return false;</span>
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)

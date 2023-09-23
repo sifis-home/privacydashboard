@@ -165,36 +165,36 @@ import java.util.List;
     @RequestMapping(&quot;api/rightrequest/add&quot;)
     public ResponseEntity&lt;?&gt; add(@RequestBody() String body){
         try{
-<span class="nc" id="L168">            RightRequest request= apiGeneralController.getRequestFromJsonString(body, true);</span>
-<span class="nc bnc" id="L169" title="All 2 branches missed.">            if(!apiGeneralController.getAuthenicatedUser().equals(request.getSender())){</span>
-<span class="nc" id="L170">                return ResponseEntity.badRequest().body(&quot;you MUST be the sender of the request&quot;);</span>
+<span class="fc" id="L168">            RightRequest request= apiGeneralController.getRequestFromJsonString(body, true);</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">            if(!apiGeneralController.getAuthenicatedUser().equals(request.getSender())){</span>
+<span class="fc" id="L170">                return ResponseEntity.badRequest().body(&quot;you MUST be the sender of the request&quot;);</span>
             }
-<span class="nc bnc" id="L172" title="All 2 branches missed.">            if(!apiGeneralController.userHasApp(request.getSender(), request.getApp())){</span>
-<span class="nc" id="L173">                return ResponseEntity.badRequest().body(&quot;you MUST have the associated app&quot;);</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">            if(!apiGeneralController.userHasApp(request.getSender(), request.getApp())){</span>
+<span class="fc" id="L173">                return ResponseEntity.badRequest().body(&quot;you MUST have the associated app&quot;);</span>
             }
-<span class="nc bnc" id="L175" title="All 4 branches missed.">            if(request.getId()!=null &amp;&amp; dataBaseService.getRequestFromId(request.getId())!=null){</span>
-<span class="nc" id="L176">                return ResponseEntity.badRequest().body(&quot;there is already a Request with that ID&quot;);</span>
+<span class="pc bpc" id="L175" title="1 of 4 branches missed.">            if(request.getId()!=null &amp;&amp; dataBaseService.getRequestFromId(request.getId())!=null){</span>
+<span class="fc" id="L176">                return ResponseEntity.badRequest().body(&quot;there is already a Request with that ID&quot;);</span>
             }
-<span class="nc bnc" id="L178" title="All 4 branches missed.">            if(request.getReceiver()!=null &amp;&amp; !apiGeneralController.userHasApp(request.getReceiver(), request.getApp())){</span>
-<span class="nc" id="L179">                return ResponseEntity.badRequest().body(&quot;receiver of the request MUST have that app&quot;);</span>
+<span class="fc bfc" id="L178" title="All 4 branches covered.">            if(request.getReceiver()!=null &amp;&amp; !apiGeneralController.userHasApp(request.getReceiver(), request.getApp())){</span>
+<span class="fc" id="L179">                return ResponseEntity.badRequest().body(&quot;receiver of the request MUST have that app&quot;);</span>
             }
-<span class="nc bnc" id="L181" title="All 2 branches missed.">            if(request.getReceiver()==null){</span>
-<span class="nc" id="L182">                request.setReceiver(dataBaseService.getControllersFromApp(request.getApp()).get(0));</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">            if(request.getReceiver()==null){</span>
+<span class="fc" id="L182">                request.setReceiver(dataBaseService.getControllersFromApp(request.getApp()).get(0));</span>
             }
-<span class="nc bnc" id="L184" title="All 2 branches missed.">            if(request.getHandled()==null){</span>
-<span class="nc" id="L185">                request.setHandled(false);</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">            if(request.getHandled()==null){</span>
+<span class="fc" id="L185">                request.setHandled(false);</span>
             }
-<span class="nc bnc" id="L187" title="All 2 branches missed.">            if(request.getTime()==null){</span>
-<span class="nc" id="L188">                dataBaseService.addNowRequest(request);</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">            if(request.getTime()==null){</span>
+<span class="fc" id="L188">                dataBaseService.addNowRequest(request);</span>
             }
             else{
-<span class="nc" id="L191">                dataBaseService.addRequest(request);</span>
+<span class="fc" id="L191">                dataBaseService.addRequest(request);</span>
             }
-<span class="nc" id="L193">            return ResponseEntity.ok(&quot;request added successfully&quot;);</span>
+<span class="fc" id="L193">            return ResponseEntity.ok(&quot;request added successfully&quot;);</span>
 <span class="nc" id="L194">        } catch (IllegalArgumentException e){</span>
 <span class="nc" id="L195">            return ResponseEntity.badRequest().body(e.getMessage());</span>
-<span class="nc" id="L196">        } catch (IOException e){</span>
-<span class="nc" id="L197">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
+<span class="fc" id="L196">        } catch (IOException e){</span>
+<span class="fc" id="L197">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
         }
     }
 
@@ -208,17 +208,17 @@ import java.util.List;
     @RequestMapping(&quot;api/rightrequest /delete&quot;)
     public ResponseEntity&lt;?&gt; delete(@RequestParam() String requestId){
         try{
-<span class="nc" id="L211">            User user= apiGeneralController.getAuthenicatedUser();</span>
-<span class="nc" id="L212">            RightRequest request= apiGeneralController.getRequestFromId(requestId);</span>
-<span class="nc bnc" id="L213" title="All 2 branches missed.">            if(request.getSender().equals(user)){</span>
-<span class="nc" id="L214">                dataBaseService.deleteRequest(request);</span>
-<span class="nc" id="L215">                return ResponseEntity.ok(&quot;Request successfully deleted&quot;);</span>
+<span class="fc" id="L211">            User user= apiGeneralController.getAuthenicatedUser();</span>
+<span class="fc" id="L212">            RightRequest request= apiGeneralController.getRequestFromId(requestId);</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">            if(request.getSender().equals(user)){</span>
+<span class="fc" id="L214">                dataBaseService.deleteRequest(request);</span>
+<span class="fc" id="L215">                return ResponseEntity.ok(&quot;Request successfully deleted&quot;);</span>
             }
             else{
-<span class="nc" id="L218">                return ResponseEntity.badRequest().body(&quot;You MUST be the sender of the request&quot;);</span>
+<span class="fc" id="L218">                return ResponseEntity.badRequest().body(&quot;You MUST be the sender of the request&quot;);</span>
             }
-<span class="nc" id="L220">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L221">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L220">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L221">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -232,29 +232,29 @@ import java.util.List;
     @RequestMapping(&quot;api/rightrequest/addResponse&quot;)
     public ResponseEntity&lt;?&gt; addResponse(@RequestParam() String requestId, @RequestBody() String body){
         try{
-<span class="nc" id="L235">            User user= apiGeneralController.getAuthenicatedUser();</span>
-<span class="nc" id="L236">            RightRequest request= apiGeneralController.getRequestFromId(requestId);</span>
-<span class="nc bnc" id="L237" title="All 2 branches missed.">            if(!request.getReceiver().equals(user)){</span>
-<span class="nc" id="L238">                return ResponseEntity.badRequest().body(&quot;You MUST be the receiver of the request&quot;);</span>
+<span class="fc" id="L235">            User user= apiGeneralController.getAuthenicatedUser();</span>
+<span class="fc" id="L236">            RightRequest request= apiGeneralController.getRequestFromId(requestId);</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">            if(!request.getReceiver().equals(user)){</span>
+<span class="fc" id="L238">                return ResponseEntity.badRequest().body(&quot;You MUST be the receiver of the request&quot;);</span>
             }
-<span class="nc bnc" id="L240" title="All 2 branches missed.">            if(!apiGeneralController.userHasApp(user, request.getApp())){</span>
-<span class="nc" id="L241">                return ResponseEntity.badRequest().body(&quot;You MUST have the app of the request&quot;);</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">            if(!apiGeneralController.userHasApp(user, request.getApp())){</span>
+<span class="fc" id="L241">                return ResponseEntity.badRequest().body(&quot;You MUST have the app of the request&quot;);</span>
             }
-<span class="nc bnc" id="L243" title="All 2 branches missed.">            if(user.getRole().equals(Role.SUBJECT)){</span>
-<span class="nc" id="L244">                return ResponseEntity.badRequest().body(&quot;You MUST be a controller or DPO&quot;);</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">            if(user.getRole().equals(Role.SUBJECT)){</span>
+<span class="fc" id="L244">                return ResponseEntity.badRequest().body(&quot;You MUST be a controller or DPO&quot;);</span>
             }
 
-<span class="nc" id="L247">            JsonNode rootNode = new ObjectMapper().readTree(new StringReader(body));</span>
-<span class="nc bnc" id="L248" title="All 2 branches missed.">            if(!rootNode.has(&quot;response&quot;)){</span>
-<span class="nc" id="L249">                return ResponseEntity.badRequest().body(&quot;JSON invalid: must include response value&quot;);</span>
+<span class="fc" id="L247">            JsonNode rootNode = new ObjectMapper().readTree(new StringReader(body));</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">            if(!rootNode.has(&quot;response&quot;)){</span>
+<span class="fc" id="L249">                return ResponseEntity.badRequest().body(&quot;JSON invalid: must include response value&quot;);</span>
             }
-<span class="nc" id="L251">            request.setResponse(rootNode.get(&quot;response&quot;).asText());</span>
-<span class="nc" id="L252">            dataBaseService.changeRightRequest(request);</span>
-<span class="nc" id="L253">            return ResponseEntity.ok(&quot;Response added successfully&quot;);</span>
-<span class="nc" id="L254">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L255">            return ResponseEntity.badRequest().body(e.getMessage());</span>
-<span class="nc" id="L256">        } catch (IOException e){</span>
-<span class="nc" id="L257">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
+<span class="fc" id="L251">            request.setResponse(rootNode.get(&quot;response&quot;).asText());</span>
+<span class="fc" id="L252">            dataBaseService.changeRightRequest(request);</span>
+<span class="fc" id="L253">            return ResponseEntity.ok(&quot;Response added successfully&quot;);</span>
+<span class="fc" id="L254">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L255">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L256">        } catch (IOException e){</span>
+<span class="fc" id="L257">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
         }
     }
 
@@ -268,26 +268,26 @@ import java.util.List;
     @RequestMapping(&quot;api/rightrequest/changeHandled&quot;)
     public ResponseEntity&lt;?&gt; changeHandled(@RequestParam() String requestId, @RequestParam() String isHandled){
         try{
-<span class="nc" id="L271">            User user= apiGeneralController.getAuthenicatedUser();</span>
-<span class="nc" id="L272">            RightRequest request= apiGeneralController.getRequestFromId(requestId);</span>
-<span class="nc bnc" id="L273" title="All 2 branches missed.">            if(!request.getReceiver().equals(user)){</span>
-<span class="nc" id="L274">                return ResponseEntity.badRequest().body(&quot;You MUST be the receiver of the request&quot;);</span>
+<span class="fc" id="L271">            User user= apiGeneralController.getAuthenicatedUser();</span>
+<span class="fc" id="L272">            RightRequest request= apiGeneralController.getRequestFromId(requestId);</span>
+<span class="fc bfc" id="L273" title="All 2 branches covered.">            if(!request.getReceiver().equals(user)){</span>
+<span class="fc" id="L274">                return ResponseEntity.badRequest().body(&quot;You MUST be the receiver of the request&quot;);</span>
             }
-<span class="nc bnc" id="L276" title="All 2 branches missed.">            if(!apiGeneralController.userHasApp(user, request.getApp())){</span>
-<span class="nc" id="L277">                return ResponseEntity.badRequest().body(&quot;You MUST have the app of the request&quot;);</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">            if(!apiGeneralController.userHasApp(user, request.getApp())){</span>
+<span class="fc" id="L277">                return ResponseEntity.badRequest().body(&quot;You MUST have the app of the request&quot;);</span>
             }
-<span class="nc bnc" id="L279" title="All 2 branches missed.">            if(user.getRole().equals(Role.SUBJECT)){</span>
-<span class="nc" id="L280">                return ResponseEntity.badRequest().body(&quot;You MUST be a controller or DPO&quot;);</span>
+<span class="fc bfc" id="L279" title="All 2 branches covered.">            if(user.getRole().equals(Role.SUBJECT)){</span>
+<span class="fc" id="L280">                return ResponseEntity.badRequest().body(&quot;You MUST be a controller or DPO&quot;);</span>
             }
 
-<span class="nc bnc" id="L283" title="All 4 branches missed.">            if(!isHandled.equalsIgnoreCase(&quot;true&quot;) &amp;&amp; !isHandled.equalsIgnoreCase(&quot;false&quot;)){</span>
-<span class="nc" id="L284">                return ResponseEntity.badRequest().body(&quot;handled parameter invalid: must be true or false&quot;);</span>
+<span class="fc bfc" id="L283" title="All 4 branches covered.">            if(!isHandled.equalsIgnoreCase(&quot;true&quot;) &amp;&amp; !isHandled.equalsIgnoreCase(&quot;false&quot;)){</span>
+<span class="fc" id="L284">                return ResponseEntity.badRequest().body(&quot;handled parameter invalid: must be true or false&quot;);</span>
             }
-<span class="nc" id="L286">            request.setHandled(Boolean.parseBoolean(isHandled));</span>
-<span class="nc" id="L287">            dataBaseService.changeRightRequest(request);</span>
-<span class="nc" id="L288">            return ResponseEntity.ok(&quot;Handled parameter successfully changed&quot;);</span>
-<span class="nc" id="L289">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L290">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L286">            request.setHandled(Boolean.parseBoolean(isHandled));</span>
+<span class="fc" id="L287">            dataBaseService.changeRightRequest(request);</span>
+<span class="fc" id="L288">            return ResponseEntity.ok(&quot;Handled parameter successfully changed&quot;);</span>
+<span class="fc" id="L289">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L290">            return ResponseEntity.badRequest().body(e.getMessage());</span>
         }
     }
 
@@ -301,31 +301,31 @@ import java.util.List;
     @RequestMapping(&quot;api/rightrequest/update&quot;)
     public ResponseEntity&lt;?&gt; update(@RequestParam() String requestId, @RequestBody() String body){
         try{
-<span class="nc" id="L304">            User user= apiGeneralController.getAuthenicatedUser();</span>
-<span class="nc" id="L305">            RightRequest request= apiGeneralController.getRequestFromId(requestId);</span>
-<span class="nc bnc" id="L306" title="All 2 branches missed.">            if(!request.getSender().equals(user)){</span>
-<span class="nc" id="L307">                return ResponseEntity.badRequest().body(&quot;You MUST be the sender of the request&quot;);</span>
+<span class="fc" id="L304">            User user= apiGeneralController.getAuthenicatedUser();</span>
+<span class="fc" id="L305">            RightRequest request= apiGeneralController.getRequestFromId(requestId);</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">            if(!request.getSender().equals(user)){</span>
+<span class="fc" id="L307">                return ResponseEntity.badRequest().body(&quot;You MUST be the sender of the request&quot;);</span>
             }
-<span class="nc bnc" id="L309" title="All 2 branches missed.">            if(!apiGeneralController.userHasApp(user, request.getApp())){</span>
-<span class="nc" id="L310">                return ResponseEntity.badRequest().body(&quot;You MUST have the app of the request&quot;);</span>
+<span class="fc bfc" id="L309" title="All 2 branches covered.">            if(!apiGeneralController.userHasApp(user, request.getApp())){</span>
+<span class="fc" id="L310">                return ResponseEntity.badRequest().body(&quot;You MUST have the app of the request&quot;);</span>
             }
 
-<span class="nc" id="L313">            JsonNode rootNode = new ObjectMapper().readTree(new StringReader(body));</span>
-<span class="nc bnc" id="L314" title="All 4 branches missed.">            if(!rootNode.has(&quot;other&quot;) &amp;&amp; !rootNode.has(&quot;details&quot;)){</span>
-<span class="nc" id="L315">                return ResponseEntity.badRequest().body(&quot;JSON invalid: must include other and/or details value&quot;);</span>
+<span class="fc" id="L313">            JsonNode rootNode = new ObjectMapper().readTree(new StringReader(body));</span>
+<span class="pc bpc" id="L314" title="1 of 4 branches missed.">            if(!rootNode.has(&quot;other&quot;) &amp;&amp; !rootNode.has(&quot;details&quot;)){</span>
+<span class="fc" id="L315">                return ResponseEntity.badRequest().body(&quot;JSON invalid: must include other and/or details value&quot;);</span>
             }
-<span class="nc bnc" id="L317" title="All 2 branches missed.">            if(rootNode.has(&quot;other&quot;)){</span>
-<span class="nc" id="L318">                request.setOther(rootNode.get(&quot;other&quot;).asText());</span>
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">            if(rootNode.has(&quot;other&quot;)){</span>
+<span class="fc" id="L318">                request.setOther(rootNode.get(&quot;other&quot;).asText());</span>
             }
-<span class="nc bnc" id="L320" title="All 2 branches missed.">            if(rootNode.has(&quot;details&quot;)){</span>
-<span class="nc" id="L321">                request.setDetails(rootNode.get(&quot;details&quot;).asText());</span>
+<span class="pc bpc" id="L320" title="1 of 2 branches missed.">            if(rootNode.has(&quot;details&quot;)){</span>
+<span class="fc" id="L321">                request.setDetails(rootNode.get(&quot;details&quot;).asText());</span>
             }
-<span class="nc" id="L323">            dataBaseService.changeValuesOfRightRequest(request);</span>
-<span class="nc" id="L324">            return ResponseEntity.ok(&quot;Response added successfully&quot;);</span>
-<span class="nc" id="L325">        } catch (IllegalArgumentException e){</span>
-<span class="nc" id="L326">            return ResponseEntity.badRequest().body(e.getMessage());</span>
-<span class="nc" id="L327">        } catch (IOException e){</span>
-<span class="nc" id="L328">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
+<span class="fc" id="L323">            dataBaseService.changeValuesOfRightRequest(request);</span>
+<span class="fc" id="L324">            return ResponseEntity.ok(&quot;Response added successfully&quot;);</span>
+<span class="fc" id="L325">        } catch (IllegalArgumentException e){</span>
+<span class="fc" id="L326">            return ResponseEntity.badRequest().body(e.getMessage());</span>
+<span class="fc" id="L327">        } catch (IOException e){</span>
+<span class="fc" id="L328">            return ResponseEntity.badRequest().body(&quot;invalid JSON&quot;);</span>
         }
     }
 

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JWTAuthenticationFilter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Privacy Dashboard</a> &gt; <a href="index.source.html" class="el_package">com.privacydashboard.application.security</a> &gt; <span class="el_source">JWTAuthenticationFilter.java</span></div><h1>JWTAuthenticationFilter.java</h1><pre class="source lang-java linenums">package com.privacydashboard.application.security;
+
+import com.privacydashboard.application.data.GlobalVariables;
+import com.privacydashboard.application.data.entity.User;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+<span class="nc" id="L29">public class JWTAuthenticationFilter extends OncePerRequestFilter {</span>
+
+
+    @Autowired UserDetailsServiceImpl userProvider;
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
+        try {
+<span class="nc" id="L37">            String pk = &quot;MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAppmHi3xnw7JbWiAiXj8wnFe3S0V1O0YLfvC17De4TvdePiOSsDa3j0egvu/QjXvBHyKbgmMacrD4Y74h30k1OSm5ttqa9kWLkyR6ilmxDnB97VKS183cJmXUIqBs6QiLwqs5Vjrhk6oye/OvYCvNbbJmxcsHtpWynDD/R/erW354GQlSxfMp0tHG+KSrI78/eRssOa51cxRI2ylvEGGcElUyZYM7HBAQwbVNjVOsyodH9GHZCFQzBcNeSsga93TK24nMAF0J7lm76Uf+XYjgzxdcSdoFkZ2YShYW8LPKGgpQF2WDd5brBELnifVOA57hlb2Xj1TeWKSKPajJnRdDtQIDAQAB&quot;;</span>
+<span class="nc" id="L38">            String jwtToken = getJwtFromRequest(request);</span>
+<span class="nc" id="L39">            byte[] publicKeyBytes = Base64.getDecoder().decode(pk);</span>
+<span class="nc" id="L40">            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);</span>
+<span class="nc" id="L41">            KeyFactory keyFactory = KeyFactory.getInstance(&quot;RSA&quot;);</span>
+<span class="nc" id="L42">            PublicKey publicKey = keyFactory.generatePublic(keySpec);</span>
+            String userID;
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            if (jwtToken != null ) {</span>
+<span class="nc" id="L45">                Claims claims = Jwts.parserBuilder()</span>
+<span class="nc" id="L46">                        .setSigningKey(publicKey)</span>
+<span class="nc" id="L47">                        .build()</span>
+<span class="nc" id="L48">                        .parseClaimsJws(jwtToken)</span>
+<span class="nc" id="L49">                        .getBody();</span>
+<span class="nc" id="L50">                userID = claims.get(&quot;email&quot;, String.class);</span>
+
+<span class="nc" id="L52">                User user = null;</span>
+
+                try {
+<span class="nc" id="L55">                    user = userProvider.loadUser(userID);</span>
+<span class="nc" id="L56">                } catch (UsernameNotFoundException e) {</span>
+<span class="nc" id="L57">                    user = new User();</span>
+<span class="nc" id="L58">                    user.setMail(userID);</span>
+<span class="nc" id="L59">                    user.setRole(GlobalVariables.Role.SUBJECT);</span>
+<span class="nc" id="L60">                    user.setName(userID);</span>
+<span class="nc" id="L61">                    userProvider.registerUser(user);</span>
+<span class="nc" id="L62">                }</span>
+
+
+<span class="nc" id="L65">                Authentication auth = new UsernamePasswordAuthenticationToken(userID, null, userProvider.getAuthoritiesByUser(userProvider.loadUser(userID)));</span>
+<span class="nc" id="L66">                SecurityContextHolder.getContext().setAuthentication(auth);</span>
+
+<span class="nc" id="L68">                Authentication authCheck = SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="nc" id="L69">                System.out.println(&quot;Is Authenticated after set: &quot; + authCheck.isAuthenticated());</span>
+            }
+<span class="nc" id="L71">        } catch (Exception ex) {</span>
+            // In caso di fallimento dell'autenticazione, pulisci il contesto di sicurezza
+<span class="nc" id="L73">            SecurityContextHolder.clearContext();</span>
+<span class="nc" id="L74">        }</span>
+
+<span class="nc" id="L76">        chain.doFilter(request, response);</span>
+<span class="nc" id="L77">    }</span>
+
+    private String getJwtFromRequest(HttpServletRequest request) {
+<span class="nc" id="L80">        String bearerToken = request.getHeader(&quot;Authorization&quot;);</span>
+<span class="nc bnc" id="L81" title="All 4 branches missed.">        if (bearerToken != null &amp;&amp; bearerToken.startsWith(&quot;Bearer &quot;)) {</span>
+<span class="nc" id="L82">            return bearerToken.substring(7);</span>
+        }
+<span class="nc" id="L84">        return null;</span>
+    }
+
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
