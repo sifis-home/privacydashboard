@@ -96,7 +96,7 @@ public class ApiUserAppRelationController {
         try{
             IoTApp app= apiGeneralController.getAppFromId(appId);
             if(!apiGeneralController.isControllerOrDpo(true, null)){
-                ResponseEntity.badRequest().body("You must be a controller/DPO");
+                return ResponseEntity.badRequest().body("You must be a controller/DPO");
             }
             if(!apiGeneralController.userHasApp(apiGeneralController.getAuthenicatedUser(), app)){
                 return ResponseEntity.badRequest().body("you must be connected with the app");
@@ -162,7 +162,7 @@ public class ApiUserAppRelationController {
         try{
             IoTApp app= apiGeneralController.getAppFromId(appId);
             if(!apiGeneralController.isControllerOrDpo(true, null)){
-                ResponseEntity.badRequest().body("You must be a controller/DPO");
+                return ResponseEntity.badRequest().body("You must be a controller/DPO");
             }
             if(!apiGeneralController.userHasApp(apiGeneralController.getAuthenicatedUser(), app)){
                 return ResponseEntity.badRequest().body("you must be connected with the app");
@@ -199,7 +199,7 @@ public class ApiUserAppRelationController {
         try{
             IoTApp app= apiGeneralController.getAppFromId(appId);
             if(!apiGeneralController.isControllerOrDpo(true, null)){
-                ResponseEntity.badRequest().body("You must be a controller/DPO");
+                return ResponseEntity.badRequest().body("You must be a controller/DPO");
             }
             if(!apiGeneralController.userHasApp(apiGeneralController.getAuthenicatedUser(), app)){
                 return ResponseEntity.badRequest().body("you must be connected with the app");

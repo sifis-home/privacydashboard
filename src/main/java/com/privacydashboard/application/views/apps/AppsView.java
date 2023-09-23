@@ -152,7 +152,6 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         int responseCode = connection.getResponseCode();
-        System.out.println("GET response code: "+responseCode);
 
         if(responseCode == HttpsURLConnection.HTTP_OK){
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -167,7 +166,6 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
 
             responseString = response.toString().substring(response.toString().indexOf("[")+1, response.toString().lastIndexOf("]"));               
 
-            System.out.println(response.toString()+"\n");
         }
         else{
             System.out.println("GET Request failed");
@@ -178,13 +176,11 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
         json = json.get("value");
         int size = json.get("containers").size();
         IoTApp[] appArray = new IoTApp[size];
-        System.out.println(json.get("containers").elements().next().asText());
 
         for(int i = 0; i < size; i++){
             IoTApp app = new IoTApp();
             app.setName(json.get("containers").elements().next().asText());
             app.setId(new UUID(0, app.getName().hashCode()));
-            System.out.println("App: "+app.getName());
             appArray[i] = app;
         }
         /*
@@ -193,10 +189,6 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
             appArray[size] = app;
          */
         List<IoTApp> apps = List.of(appArray);
-        for(IoTApp app1 : apps){
-            System.out.println("App "+apps.indexOf(app1)+": "+app1.getName());
-        }
-        
         return apps;
     }
     catch(Exception e){

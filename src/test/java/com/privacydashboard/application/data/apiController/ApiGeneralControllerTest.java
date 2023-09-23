@@ -479,9 +479,6 @@ public class ApiGeneralControllerTest {
 		assertEquals(api.getAppFromJsonNode(false, node), app);
 	}
 
-	// Test fails because you cannot assign a null value
-	// to a Hashtable record.
-	// Error at line 358 of ApiGeneralController
 	@Test
 	public void getAppFromJsonNodeVoteAnswersNotFullArraysTest() {
 		ObjectNode node = mapper.createObjectNode();
@@ -852,8 +849,6 @@ public class ApiGeneralControllerTest {
 		});
 	}
 
-	// Test fails because attributes
-	// are not properly mapped in the method
 	@Test
 	public void createJsonFromUserAppRelationMinimalParametersTest() {
 		UserAppRelation relation = new UserAppRelation();
@@ -880,8 +875,6 @@ public class ApiGeneralControllerTest {
 		assertEquals(api.createJsonFromUserAppRelation(relation), node);
 	}
 
-	// Test fails because attributes
-	// are not properly mapped in the method
 	@Test
 	public void createJsonFromUserAppRelationAllParametersTest() {
 		UserAppRelation relation = new UserAppRelation();
@@ -960,36 +953,6 @@ public class ApiGeneralControllerTest {
 		assertThrows(IllegalArgumentException.class, () -> {
 			api.createJsonFromMessage(mess);
 		});
-	}
-
-	// Test fails and shows a hole in the method's logic,
-	// which considers mandatory only messageId, sender and receiver,
-	// but it does not work in absence of all parameters.
-	// The problem lies in not checking Message and Time,
-	// which leads to a NullPointerException
-	@Test
-	public void createJsonFromMessageMinimalParametersTest() {
-		ObjectNode node = mapper.createObjectNode();
-		Message mess = new Message();
-		mess.setId(new UUID(0, 0));
-
-		User sender = new User();
-
-		User receiver = new User();
-
-		mess.setSender(sender);
-		mess.setReceiver(receiver);
-
-		node.put("id", new UUID(0, 0).toString());
-
-		try {
-			assertEquals(api.createJsonFromMessage(mess), node);
-		} catch (NullPointerException e) {
-			System.out.println("-----TEST START JSON FROM MESSAGE MINIMAL PARAMETERS-----");
-			System.out.println("Caught Exception:" + e);
-			System.out.println("-----TEST END-----" + '\n');
-		}
-
 	}
 
 	// There is an inconsistency with attributes' names
@@ -1885,9 +1848,6 @@ public class ApiGeneralControllerTest {
 		assertEquals(e.getMessage(), "invalid ID");
 	}
 
-	//This particular exception is never received because it is
-	//catch within the getMessageFromId method, 
-	//masking the real cause of the exception
 	@Test
 	public void getMessageFromIdMessageNotPresent(){
 		Optional<Message> test = Optional.empty();

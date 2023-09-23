@@ -564,7 +564,7 @@ public class ApiRightRequestContollerTest {
         when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
         when(apiGeneralController.userHasApp(req.getSender(), req.getApp())).thenReturn(true);
         when(dataBaseService.getRequestFromId(any())).thenReturn(null);
-        when(dataBaseService.userHasApp(req.getReceiver(), req.getApp())).thenReturn(true);
+        when(apiGeneralController.userHasApp(req.getReceiver(), req.getApp())).thenReturn(true);
         when(dataBaseService.getControllersFromApp(req.getApp())).thenReturn(List.of(createUser(Role.CONTROLLER)));
 
         ResponseEntity res = api.add("Body");
@@ -588,7 +588,7 @@ public class ApiRightRequestContollerTest {
         when(apiGeneralController.getAuthenicatedUser()).thenReturn(createUser(Role.SUBJECT));
         when(apiGeneralController.userHasApp(req.getSender(), req.getApp())).thenReturn(true);
         when(dataBaseService.getRequestFromId(any())).thenReturn(null);
-        when(dataBaseService.userHasApp(req.getReceiver(), req.getApp())).thenReturn(true);
+        when(apiGeneralController.userHasApp(req.getReceiver(), req.getApp())).thenReturn(true);
         when(dataBaseService.getControllersFromApp(req.getApp())).thenReturn(List.of(createUser(Role.CONTROLLER)));
 
         ResponseEntity res = api.add("Body");

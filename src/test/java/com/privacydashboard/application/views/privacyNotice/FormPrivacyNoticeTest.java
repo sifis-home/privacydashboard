@@ -48,9 +48,6 @@ public class FormPrivacyNoticeTest {
         
         form = new FormPrivacyNotice(createNotice(), dataBaseService);
 
-        System.out.println(form.getElement()+"\n");
-        System.out.println(form.getElement().getChild(1).getOuterHTML());
-
         assertEquals(form.getElement().getTag(), "vaadin-vertical-layout");
         assertEquals(form.getElement().getAttribute("class"), "privacy_notice-view");
 

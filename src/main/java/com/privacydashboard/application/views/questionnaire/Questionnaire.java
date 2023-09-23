@@ -81,10 +81,10 @@ public class Questionnaire extends Div implements AfterNavigationObserver{
                 name.addClassName("greenName");
             }
             else if(app.getQuestionnaireVote().equals(QuestionnaireVote.ORANGE)){
-                card.addClassName("orangeName");
+                name.addClassName("orangeName");
             }
             else{
-                card.addClassName("redName");
+                name.addClassName("redName");
             }
         }
         return card;

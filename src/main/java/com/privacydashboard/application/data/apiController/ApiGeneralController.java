@@ -90,7 +90,10 @@ public class ApiGeneralController {
                 throw new IllegalArgumentException("user does not exist");
             }
         } catch (IllegalArgumentException e){
-            throw new IllegalArgumentException("invalid ID");
+            if(e.getMessage().equals("user does not exist"))
+                throw e;
+            else
+                throw new IllegalArgumentException("invalid ID");
         }
     }
 
@@ -109,7 +112,10 @@ public class ApiGeneralController {
                 throw new IllegalArgumentException("app does not exist");
             }
         } catch (IllegalArgumentException e){
-            throw new IllegalArgumentException("invalid ID");
+            if(e.getMessage().equals("app does not exist"))
+                throw e;
+            else
+                throw new IllegalArgumentException("invalid ID");
         }
     }
 
@@ -122,7 +128,10 @@ public class ApiGeneralController {
                 throw new IllegalArgumentException("message does not exist");
             }
         } catch (IllegalArgumentException e){
-            throw new IllegalArgumentException("invalid ID");
+            if(e.getMessage().equals("message does not exist"))
+                throw e;
+            else
+                throw new IllegalArgumentException("invalid ID");
         }
     }
 
@@ -156,7 +165,10 @@ public class ApiGeneralController {
                 throw new IllegalArgumentException("privacy notice does not exist");
             }
         } catch (IllegalArgumentException e){
-            throw new IllegalArgumentException("invalid ID");
+            if(e.getMessage().equals("privacy notice does not exist"))
+                throw e;
+            else
+                throw new IllegalArgumentException("invalid ID");
         }
     }
 
@@ -188,7 +200,10 @@ public class ApiGeneralController {
                 throw new IllegalArgumentException("notification does not exist");
             }
         } catch (IllegalArgumentException e){
-            throw new IllegalArgumentException("invalid ID");
+            if(e.getMessage().equals("notification does not exist"))
+                throw e;
+            else
+                throw new IllegalArgumentException("invalid ID");
         }
     }
 
@@ -206,7 +221,10 @@ public class ApiGeneralController {
                 return request;
             }
         } catch (IllegalArgumentException e){
-            throw new IllegalArgumentException("invalid ID");
+            if(e.getMessage().equals("Right Request does not exist"))
+                throw e;
+            else
+                throw new IllegalArgumentException("invalid ID");
         }
     }
 
@@ -353,11 +371,6 @@ public class ApiGeneralController {
                         break;
                     }
                 }
-                if (i < GlobalVariables.nQuestions) {
-                    for (int j = i; j < GlobalVariables.nQuestions; j++) {
-                        optionalAnswersHash.put(i, null);
-                    }
-                }
                 app.setOptionalAnswers(optionalAnswersHash);
             }
         }
@@ -470,9 +483,9 @@ public class ApiGeneralController {
             throw new IllegalArgumentException("UserAppRelation invalid");
         }
         userAppRelationJson.put("id", userAppRelation.getId().toString());
-        userAppRelationJson.put("userName", userAppRelation.getApp().getName());
+        userAppRelationJson.put("userName", userAppRelation.getUser().getName());
         userAppRelationJson.put("userId", userAppRelation.getUser().getId().toString());
-        userAppRelationJson.put("appName", userAppRelation.getUser().getName());
+        userAppRelationJson.put("appName", userAppRelation.getApp().getName());
         userAppRelationJson.put("appId", userAppRelation.getApp().getId().toString());
 
         String[] consenses = userAppRelation.getConsenses();
@@ -495,18 +508,19 @@ public class ApiGeneralController {
      */
     public ObjectNode createJsonFromMessage(Message message) throws IllegalArgumentException {
         ObjectNode messageJson = mapper.createObjectNode();
-
-        if (message == null || message.getId() == null || message.getReceiver() == null || message.getSender() == null) {
+        try{
+            messageJson.put("id", message.getId().toString());
+            messageJson.put("senderId", message.getSender().getId().toString());
+            messageJson.put("senderName", message.getSender().getName());
+            messageJson.put("receiverId", message.getReceiver().getId().toString());
+            messageJson.put("receiverName", message.getReceiver().getName());
+            messageJson.put("text", message.getMessage());
+            messageJson.put("time", message.getTime().toString());
+            return messageJson;
+        }
+        catch(Exception e){
             throw new IllegalArgumentException("Message invalid");
         }
-        messageJson.put("id", message.getId().toString());
-        messageJson.put("senderId", message.getSender().getId().toString());
-        messageJson.put("senderName", message.getSender().getName());
-        messageJson.put("receiverId", message.getReceiver().getId().toString());
-        messageJson.put("receiverName", message.getReceiver().getName());
-        messageJson.put("text", message.getMessage());
-        messageJson.put("time", message.getTime().toString());
-        return messageJson;
     }
 
     /**
@@ -524,7 +538,7 @@ public class ApiGeneralController {
         } catch (IOException e){
             throw new IOException("invalid JSON");
         } catch (DateTimeParseException e){
-            throw new IllegalArgumentException("invalid date");
+            throw e;
         } catch (IllegalArgumentException e){
             throw new IllegalArgumentException("invalid JSON parameters");
         }
@@ -891,7 +905,7 @@ public class ApiGeneralController {
             request.setDetails(node.get("details").asText());
         }
         if(node.has("response")){
-            request.setDetails(node.get("response").asText());
+            request.setResponse(node.get("response").asText());
         }
         if(node.has("handled")){
             if(node.get("handled").asText().equalsIgnoreCase("true") || node.get("handled").asText().equalsIgnoreCase("false")){
