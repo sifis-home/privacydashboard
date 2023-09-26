@@ -85,45 +85,9 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
     private final Grid<IoTApp> grid= new Grid<>();
 
     private IoTApp priorityApp;
-/*
-    private String getJsonAppsFromUrl(){
-        HttpURLConnection connection = null;
-        System.err.println("Entered getJsonAppsFromUrl()\n");
 
-        try{
-            URL url = new URL("https://yggio.sifis-home.eu:3000/dht-insecure/topic_name/SIFIS:container_list");
-            System.err.println("About to open the connection\n");
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            int resCode = connection.getResponseCode();
 
-            if(resCode == HttpURLConnection.HTTP_OK){
-                BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                StringBuffer res = new StringBuffer();
-                String line;
-                while((line = rd.readLine()) != null){
-                    System.err.print(line);
-                    res.append(line);
-                }
-                rd.close();
-                return res.toString();
-            }
-            else{
-                return null;
-            }
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            return null;
-        }
-        finally{
-            if(connection != null)
-                connection.disconnect();
-        }
-    }
-  */  
-
-  private List<IoTApp> getJsonAppsFromUrl(){
+    private List<IoTApp> getJsonAppsFromUrl(){
 
     TrustManager[] dummyTrustManager = new TrustManager[] { new X509TrustManager() {
 
@@ -197,6 +161,16 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
     return null;      
 }
 
+    private String cleanAppName(String name){
+        String newName = name.split("3pa-")[1].split("-")[0];
+        return newName;
+    }
+
+    private String getAppProcessor(String name){
+        String newName = name.split("3pa-")[1].split("-")[1];
+        return newName;
+    }
+
     @Override
     public void beforeEnter(BeforeEnterEvent event){
         priorityApp=communicationService.getApp();
@@ -269,15 +243,17 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
     }
 
     private VerticalLayout createApp(IoTApp app){
-        Avatar avatar = new Avatar(app.getName());
-        Span name = new Span(app.getName());
+        Avatar avatar = new Avatar(cleanAppName(app.getName()));
+        Span name = new Span(cleanAppName(app.getName()));
         name.addClassName("name");
+        Span processor = new Span(getAppProcessor(app.getName()));
+        processor.setClassName("bold");
         Details details = new Details(new Span("More"), initializeApp(app));
         VerticalLayout card = new VerticalLayout();
         card.addClassName("card");
         card.addClassName("canOpen");
         card.setSpacing(false);
-        card.add(new HorizontalLayout(avatar , name) , details);
+        card.add(new HorizontalLayout(avatar , name), processor, details);
         card.addClickListener(e-> {
             if(card.hasClassName("canOpen")){
                 details.setOpened(true);

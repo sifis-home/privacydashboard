@@ -2,16 +2,6 @@
 
 [![coverage](https://raw.githubusercontent.com/sifis-home/privacydashboard/gh-pages/reports/jacoco.svg 'Code Coverage')](https://sifis-home.github.io/privacydashboard/reports/index.html)
 
-## Running the application
-
-The project is a standard Maven project. To run it from the command line,
-type `mvnw` (Windows), or `./mvnw` (Mac & Linux), then open
-http://localhost:8080 in your browser.
-
-You can also import the project to your IDE of choice as you would with any
-Maven project. Read more on [how to import Vaadin projects to different 
-IDEs](https://vaadin.com/docs/latest/flow/guide/step-by-step/importing) (Eclipse, IntelliJ IDEA, NetBeans, and VS Code).
-
 ## Log in the app
 
 To enter the application as a Data Subject: user=subject<number_between_0-49> password=subject<same_number> (e.g. user=subject25 password=subject25)
@@ -85,17 +75,30 @@ To run the test suite, run the command `mvn clean test`. You can run all the tes
 
 To create a coverage report, run the command `mvn jacoco:report`
 
-## Deploying to Production
+## Compiling, Deploying and Running
 
-To create a production build, call `mvnw clean package -Pproduction` (Windows),
-or `./mvnw clean package -Pproduction` (Mac & Linux).
-This will build a JAR file with all the dependencies and front-end resources,
-ready to be deployed. The file can be found in the `target` folder after the build completes.
+To create a production build use the following command: 
+
+```
+mvn clean package -Pproduction
+```
+
+If you want to use privacy-dashboard as a dependency for other Maven applications in the local repository, use the following command:
+
+```
+mvn install -Pproduction
+```
+
+To build the project without being interrupted by eventual test failures, add the flag `-DskipTests`.
+The commands will create the JAR file and place it, together with the dependencies and front-end resources, in the `target` folder after the build completes.
 
 Once the JAR file is built, you can run it using
-`java -jar target/privacydashboard-1.0-SNAPSHOT.jar`
 
-To build the project without being interrupted by eventual test failures, add the flag `-DskipTests`
+```
+java -jar target/privacydashboard-1.0-SNAPSHOT.jar
+```
+
+You can also run the program by typing in the IDE terminal the `mvn` command.
 
 ## Project structure
 
