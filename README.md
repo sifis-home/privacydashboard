@@ -119,6 +119,7 @@ Once the application is running, it can be found at the url `localhost:8080`.
 
 ## Useful links
 
+- Read the SIFIS-Home project document at [SIFIS-Home](https://www.sifis-home.eu/wp-content/uploads/2023/03/D2.7-Final-Report-on-Legal-and-Ethical-Aspects.pdf)
 - Read the documentation at [vaadin.com/docs](https://vaadin.com/docs).
 - Follow the tutorials at [vaadin.com/tutorials](https://vaadin.com/tutorials).
 - Watch training videos and get certified at [vaadin.com/learn/training](https://vaadin.com/learn/training).
