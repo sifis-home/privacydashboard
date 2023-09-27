@@ -100,6 +100,8 @@ java -jar target/privacydashboard-1.0-SNAPSHOT.jar
 
 You can also run the program by typing in the IDE terminal the `mvn` command.
 
+Once the application is running, it can be found at the url `localhost:8080`.
+
 ## Project structure
 
 - `MainLayout.java` in `src/main/java` contains the navigation setup (i.e., the

@@ -87,79 +87,75 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
     private IoTApp priorityApp;
 
 
-    private List<IoTApp> getJsonAppsFromUrl(){
+    private List<IoTApp> getJsonAppsFromUrl() throws NullPointerException {
 
-    TrustManager[] dummyTrustManager = new TrustManager[] { new X509TrustManager() {
+        TrustManager[] dummyTrustManager = new TrustManager[] { new X509TrustManager() {
 
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                return null;
-            }
-    
-            public void checkClientTrusted(X509Certificate[] certs, String authType) {
-            }
-    
-            public void checkServerTrusted(X509Certificate[] certs, String authType) {
-            }
-        }
-
-    };
-
-    String responseString = "";
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
         
-    try{
-        SSLContext sc = SSLContext.getInstance("SSL");
-        sc.init(null, dummyTrustManager, new java.security.SecureRandom());        
-        URL url = new URL("https://yggio.sifis-home.eu:3000/dht-insecure/topic_name/SIFIS:container_list");
+                public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                }
+        
+                public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                }
+            }
 
-        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        };
 
-        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        int responseCode = connection.getResponseCode();
-
-        if(responseCode == HttpsURLConnection.HTTP_OK){
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
+        String responseString = "";
             
+        try{
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, dummyTrustManager, new java.security.SecureRandom());        
+            URL url = new URL("https://yggio.sifis-home.eu:3000/dht-insecure/topic_name/SIFIS:container_list");
 
-            while((inputLine = in.readLine()) != null){
-                response.append(inputLine);
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            int responseCode = connection.getResponseCode();
+
+            if(responseCode == HttpsURLConnection.HTTP_OK){
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                
+
+                while((inputLine = in.readLine()) != null){
+                    response.append(inputLine);
+                }
+                in.close();
+
+                responseString = response.toString().substring(response.toString().indexOf("[")+1, response.toString().lastIndexOf("]"));               
+
             }
-            in.close();
+            else{
+                System.out.println("GET Request failed");
+            }
 
-            responseString = response.toString().substring(response.toString().indexOf("[")+1, response.toString().lastIndexOf("]"));               
+            
+            JsonNode json = new ObjectMapper().readTree(new StringReader(responseString));
+            json = json.get("value");
+            int size = json.get("containers").size();
+            IoTApp[] appArray = new IoTApp[size];
 
+            for(int i = 0; i < size; i++){
+                IoTApp app = new IoTApp();
+                app.setName(json.get("containers").elements().next().asText());
+                app.setId(new UUID(0, app.getName().hashCode()));
+                appArray[i] = app;
+            }
+
+            List<IoTApp> apps = List.of(appArray);
+            return apps;
         }
-        else{
-            System.out.println("GET Request failed");
-        }
-
-        
-        JsonNode json = new ObjectMapper().readTree(new StringReader(responseString));
-        json = json.get("value");
-        int size = json.get("containers").size();
-        IoTApp[] appArray = new IoTApp[size];
-
-        for(int i = 0; i < size; i++){
-            IoTApp app = new IoTApp();
-            app.setName(json.get("containers").elements().next().asText());
-            app.setId(new UUID(0, app.getName().hashCode()));
-            appArray[i] = app;
-        }
-        /*
-            IoTApp app = new IoTApp();
-            app.setName("TestApp");
-            appArray[size] = app;
-         */
-        List<IoTApp> apps = List.of(appArray);
-        return apps;
+        catch(Exception e){
+            System.out.println("JsonFromUrl Exception: "+e.getMessage());
+            throw new NullPointerException(e.getMessage());
+        }          
     }
-    catch(Exception e){
-        System.out.println("JsonFromUrl Exception: "+e.getMessage());
-    }       
-    return null;      
-}
 
     private String cleanAppName(String name){
         String newName = name.split("3pa-")[1].split("-")[0];
@@ -185,13 +181,18 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
         initializeSearchText();
         initializeGrid();
         
-        VerticalLayout appLayout = new VerticalLayout();
-        List<IoTApp> apps = getJsonAppsFromUrl();
-        for (IoTApp app : apps) {
-            appLayout.add(createApp(app));
+        try{
+            VerticalLayout appLayout = new VerticalLayout();
+            List<IoTApp> apps = getJsonAppsFromUrl();
+            for (IoTApp app : apps) {
+                appLayout.add(createApp(app));
+            }
+    
+            add(summaryEvaluation, searchText, appLayout, grid);
         }
-
-        add(summaryEvaluation, searchText, appLayout, grid);
+        catch(Exception e){
+            add(summaryEvaluation, searchText, grid);
+        }
     }
 
     private void initilizeInfrastuctureEvaluation(){
