@@ -141,11 +141,11 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
 <span class="fc" id="L141">            int size = json.get(&quot;containers&quot;).size();</span>
 <span class="fc" id="L142">            IoTApp[] appArray = new IoTApp[size];</span>
 
-<span class="fc bfc" id="L144" title="All 2 branches covered.">            for(int i = 0; i &lt; size; i++){</span>
-<span class="fc" id="L145">                IoTApp app = new IoTApp();</span>
-<span class="fc" id="L146">                app.setName(json.get(&quot;containers&quot;).elements().next().asText());</span>
-<span class="fc" id="L147">                app.setId(new UUID(0, app.getName().hashCode()));</span>
-<span class="fc" id="L148">                appArray[i] = app;</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">            for(int i = 0; i &lt; size; i++){</span>
+<span class="nc" id="L145">                IoTApp app = new IoTApp();</span>
+<span class="nc" id="L146">                app.setName(json.get(&quot;containers&quot;).elements().next().asText());</span>
+<span class="nc" id="L147">                app.setId(new UUID(0, app.getName().hashCode()));</span>
+<span class="nc" id="L148">                appArray[i] = app;</span>
             }
 
 <span class="fc" id="L151">            List&lt;IoTApp&gt; apps = List.of(appArray);</span>
@@ -184,9 +184,9 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
         try{
 <span class="fc" id="L185">            VerticalLayout appLayout = new VerticalLayout();</span>
 <span class="fc" id="L186">            List&lt;IoTApp&gt; apps = getJsonAppsFromUrl();</span>
-<span class="fc bfc" id="L187" title="All 2 branches covered.">            for (IoTApp app : apps) {</span>
-<span class="fc" id="L188">                appLayout.add(createApp(app));</span>
-<span class="fc" id="L189">            }</span>
+<span class="pc bpc" id="L187" title="1 of 2 branches missed.">            for (IoTApp app : apps) {</span>
+<span class="nc" id="L188">                appLayout.add(createApp(app));</span>
+<span class="nc" id="L189">            }</span>
     
 <span class="fc" id="L191">            add(summaryEvaluation, searchText, appLayout, grid);</span>
         }
@@ -383,8 +383,8 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
 
     private VerticalLayout getConsenses(IoTApp i){
 <span class="fc" id="L385">        VerticalLayout layout=new VerticalLayout();</span>
-<span class="fc bfc" id="L386" title="All 2 branches covered.">        if(i.getConsenses() == null){</span>
-<span class="fc" id="L387">            return layout;</span>
+<span class="pc bpc" id="L386" title="1 of 2 branches missed.">        if(i.getConsenses() == null){</span>
+<span class="nc" id="L387">            return layout;</span>
         }
 <span class="fc" id="L389">        String[] appConsenses= i.getConsenses();</span>
 <span class="fc" id="L390">        String[] userConsenses=dataBaseService.getConsensesFromUserAndApp(authenticatedUser.getUser(), i);</span>
