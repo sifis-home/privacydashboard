@@ -16,6 +16,7 @@ import com.privacydashboard.application.views.privacyNotice.PrivacyNoticeView;
 import com.privacydashboard.application.views.questionnaire.Questionnaire;
 import com.privacydashboard.application.views.rights.ControllerDPORightsView;
 import com.privacydashboard.application.views.rights.SubjectRightsView;
+import com.privacydashboard.application.views.apps.AvailableAppsView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -151,6 +152,8 @@ public class MainLayout extends AppLayout {
                 new MenuItemInfo("Rights", "las la-school", SubjectRightsView.class),  //ONLY FOR SUBJECTS
 
                 new MenuItemInfo("Rights", "las la-school", ControllerDPORightsView.class),  //ONLY FOR CONTROLLERS AND DPOS
+
+                new MenuItemInfo("AvailableApps", "la la-list", AvailableAppsView.class), //
 
                 new MenuItemInfo("Apps", "la la-list", AppsView.class), //
 

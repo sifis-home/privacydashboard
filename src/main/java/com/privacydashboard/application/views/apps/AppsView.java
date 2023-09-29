@@ -60,6 +60,7 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.StringReader;
 import java.util.UUID;
+import java.util.Arrays;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -69,6 +70,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 @PageTitle("Apps")
@@ -141,14 +143,16 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
             int size = json.get("containers").size();
             IoTApp[] appArray = new IoTApp[size];
 
+            Iterator<JsonNode> iterator = json.get("containers").elements();
+
             for(int i = 0; i < size; i++){
                 IoTApp app = new IoTApp();
-                app.setName(json.get("containers").elements().next().asText());
+                app.setName(cleanAppName(iterator.next().asText()));
                 app.setId(new UUID(0, app.getName().hashCode()));
                 appArray[i] = app;
             }
 
-            List<IoTApp> apps = List.of(appArray);
+            List<IoTApp> apps = removeDuplicates(Arrays.asList(appArray));
             return apps;
         }
         catch(Exception e){
@@ -157,13 +161,20 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
         }          
     }
 
-    private String cleanAppName(String name){
-        String newName = name.split("3pa-")[1].split("-")[0];
-        return newName;
+    private ArrayList<IoTApp> removeDuplicates(List<IoTApp> list){
+        ArrayList<IoTApp> newList = new ArrayList<>();
+
+        for(IoTApp app : list){
+            if(!newList.contains(app))
+                newList.add(app);
+        }
+
+        return newList;
     }
 
-    private String getAppProcessor(String name){
-        String newName = name.split("3pa-")[1].split("-")[1];
+
+    private String cleanAppName(String name){
+        String newName = name.split("3pa-")[1].split("-")[0];
         return newName;
     }
 
@@ -244,17 +255,15 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
     }
 
     private VerticalLayout createApp(IoTApp app){
-        Avatar avatar = new Avatar(cleanAppName(app.getName()));
-        Span name = new Span(cleanAppName(app.getName()));
+        Avatar avatar = new Avatar(app.getName());
+        Span name = new Span(app.getName());
         name.addClassName("name");
-        Span processor = new Span(getAppProcessor(app.getName()));
-        processor.setClassName("bold");
         Details details = new Details(new Span("More"), initializeApp(app));
         VerticalLayout card = new VerticalLayout();
         card.addClassName("card");
         card.addClassName("canOpen");
         card.setSpacing(false);
-        card.add(new HorizontalLayout(avatar , name), processor, details);
+        card.add(new HorizontalLayout(avatar , name), details);
         card.addClickListener(e-> {
             if(card.hasClassName("canOpen")){
                 details.setOpened(true);
