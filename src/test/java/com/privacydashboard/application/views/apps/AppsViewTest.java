@@ -38,13 +38,13 @@ public class AppsViewTest {
         String[] consenses = {"Consensus 1", "Consensus 2"};
 
         IoTApp app1 = new IoTApp();
-        app1.setName("3pa-App1-amd64");
+        app1.setName("App1");
         app1.setQuestionnaireVote(QuestionnaireVote.GREEN);
         app1.setDescription("Description1");
         app1.setConsenses(consenses);
 
         IoTApp app2 = new IoTApp();
-        app2.setName("3pa-App2-arm64");
+        app2.setName("App2");
         app2.setQuestionnaireVote(QuestionnaireVote.RED);
         app2.setDescription("Description2");
         app2.setConsenses(consenses);
@@ -60,13 +60,13 @@ public class AppsViewTest {
         String[] consenses = {"Consensus 1", "Consensus 2"};
 
         IoTApp app1 = new IoTApp();
-        app1.setName("3pa-App1-amd64");
+        app1.setName("App1");
         app1.setQuestionnaireVote(QuestionnaireVote.GREEN);
         app1.setDescription("Description1");
         app1.setConsenses(consenses);
 
         IoTApp app2 = new IoTApp();
-        app2.setName("3pa-App2-arm64");
+        app2.setName("App2");
         app2.setQuestionnaireVote(QuestionnaireVote.GREEN);
         app2.setDescription("Description2");
         app2.setConsenses(consenses);
@@ -82,13 +82,13 @@ public class AppsViewTest {
         String[] consenses = {"Consensus 1", "Consensus 2"};
 
         IoTApp app1 = new IoTApp();
-        app1.setName("3pa-App1-amd64");
+        app1.setName("App1");
         app1.setQuestionnaireVote(QuestionnaireVote.RED);
         app1.setDescription("Description1");
         app1.setConsenses(consenses);
 
         IoTApp app2 = new IoTApp();
-        app2.setName("3pa-App2-arm64");
+        app2.setName("App2");
         app2.setQuestionnaireVote(QuestionnaireVote.RED);
         app2.setDescription("Description2");
         app2.setConsenses(consenses);
@@ -234,77 +234,73 @@ public class AppsViewTest {
         assertEquals(app.getElement().getChild(0).getChild(1).getAttribute("class"), "name");
         assertEquals(app.getElement().getChild(0).getChild(1).getText(), "App1");
 
-        assertEquals(app.getElement().getChild(1).getTag(), "span");
-        assertEquals(app.getElement().getChild(1).getAttribute("class"), "bold");
-        assertEquals(app.getElement().getChild(1).getText(), "amd64");
+        assertEquals(app.getElement().getChild(1).getTag(), "vaadin-details");
 
-        assertEquals(app.getElement().getChild(2).getTag(), "vaadin-details");
+        assertEquals(app.getElement().getChild(1).getChild(0).getTag(), "div");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getTag(), "div");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getTag(), "vaadin-vertical-layout");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getTag(), "vaadin-vertical-layout");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(0).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(0).getChild(0).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(0).getChild(0).getAttribute("class"), "bold");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(0).getChild(0).getText(), "Description:   ");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(0).getChild(1).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(0).getChild(1).getText(), "Description1");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(0).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(0).getChild(0).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(0).getChild(0).getAttribute("class"), "bold");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(0).getChild(0).getText(), "Description:   ");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(0).getChild(1).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(0).getChild(1).getText(), "Description1");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getTag(), "div");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(0).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(0).getAttribute("class"), "bold");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(0).getText(), "Evaluation: ");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(1).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(1).getAttribute("class"), "greenName");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(1).getText(), "GREEN ");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(2).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(2).getAttribute("class"), "las la-info-circle pointer");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getTag(), "div");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(0).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(0).getAttribute("class"), "bold");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(0).getText(), "Evaluation: ");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(1).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(1).getAttribute("class"), "greenName");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(1).getText(), "GREEN ");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(2).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(2).getAttribute("class"), "las la-info-circle pointer");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(2).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(2).getText(), "Privacy Notice");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(2).getAttribute("class"), "link");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(2).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(2).getText(), "Privacy Notice");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(2).getAttribute("class"), "link");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(3).getTag(), "vaadin-details");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(3).getTag(), "vaadin-details");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(3).getChild(0).getTag(), "div");        
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(3).getChild(0).getChild(0).getTag(), "vaadin-vertical-layout");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(3).getChild(0).getTag(), "div");        
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(3).getChild(0).getChild(0).getTag(), "vaadin-vertical-layout");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(3).getChild(1).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(3).getChild(1).getText(), "Data Controllers: ");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(3).getChild(1).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(3).getChild(1).getText(), "Data Controllers: ");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(4).getTag(), "vaadin-details");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(4).getTag(), "vaadin-details");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(4).getChild(0).getTag(), "div");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(4).getChild(0).getChild(0).getTag(), "vaadin-vertical-layout");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(4).getChild(1).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(4).getChild(1).getText(), "Data Protection Officer: ");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(4).getChild(0).getTag(), "div");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(4).getChild(0).getChild(0).getTag(), "vaadin-vertical-layout");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(4).getChild(1).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(4).getChild(1).getText(), "Data Protection Officer: ");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getTag(), "vaadin-details");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getTag(), "vaadin-details");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(0).getTag(), "div");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getTag(), "vaadin-vertical-layout");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(0).getTag(), "div");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getTag(), "vaadin-vertical-layout");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(0).getTag(), "vaadin-horizontal-layout");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(0).getChild(0).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(0).getChild(0).getText(), "Consensus 1");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(0).getChild(1).getTag(), "vaadin-button");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(0).getChild(1).getText(), "Accept consent");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(0).getTag(), "vaadin-horizontal-layout");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(0).getChild(0).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(0).getChild(0).getText(), "Consensus 1");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(0).getChild(1).getTag(), "vaadin-button");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(0).getChild(1).getText(), "Accept consent");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(1).getTag(), "vaadin-horizontal-layout");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(1).getChild(0).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(1).getChild(0).getText(), "Consensus 2");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(1).getChild(1).getTag(), "vaadin-button");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(1).getChild(1).getText(), "Accept consent");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(1).getTag(), "vaadin-horizontal-layout");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(1).getChild(0).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(1).getChild(0).getText(), "Consensus 2");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(1).getChild(1).getTag(), "vaadin-button");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(0).getChild(0).getChild(1).getChild(1).getText(), "Accept consent");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(1).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(1).getText(), "Consenses: ");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(1).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(1).getText(), "Consenses: ");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(6).getTag(), "vaadin-button");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(6).getText(), "Remove everything");
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(6).getTag(), "vaadin-button");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(6).getText(), "Remove everything");
-
-        assertEquals(app.getElement().getChild(2).getChild(1).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(1).getText(), "More");
+        assertEquals(app.getElement().getChild(1).getChild(1).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(1).getText(), "More");
     }
 
     @Test
@@ -325,15 +321,15 @@ public class AppsViewTest {
             System.out.println("Exception: "+e);
         }
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getTag(), "div");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(0).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(0).getAttribute("class"), "bold");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(0).getText(), "Evaluation: ");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(1).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(1).getAttribute("class"), "redName");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(1).getText(), "RED ");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(2).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(2).getAttribute("class"), "las la-info-circle pointer");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getTag(), "div");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(0).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(0).getAttribute("class"), "bold");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(0).getText(), "Evaluation: ");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(1).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(1).getAttribute("class"), "redName");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(1).getText(), "RED ");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(2).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(2).getAttribute("class"), "las la-info-circle pointer");
     }
 
     @Test
@@ -343,7 +339,7 @@ public class AppsViewTest {
 
         IoTApp app1 = new IoTApp();
         String[] consenses = {"Consensus 1", "Consensus 2"};
-        app1.setName("3pa-App1-arm64");
+        app1.setName("App1");
         app1.setQuestionnaireVote(QuestionnaireVote.ORANGE);
         app1.setDescription("Description1");
         app1.setConsenses(consenses);
@@ -361,15 +357,15 @@ public class AppsViewTest {
             System.out.println("Exception: "+e);
         }
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getTag(), "div");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(0).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(0).getAttribute("class"), "bold");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(0).getText(), "Evaluation: ");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(1).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(1).getAttribute("class"), "orangeName");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(1).getText(), "ORANGE ");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(2).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(2).getAttribute("class"), "las la-info-circle pointer");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getTag(), "div");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(0).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(0).getAttribute("class"), "bold");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(0).getText(), "Evaluation: ");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(1).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(1).getAttribute("class"), "orangeName");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(1).getText(), "ORANGE ");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(2).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(2).getAttribute("class"), "las la-info-circle pointer");
     }
 
     @Test
@@ -379,7 +375,7 @@ public class AppsViewTest {
 
         IoTApp app1 = new IoTApp();
         String[] consenses = {"Consensus 1", "Consensus 2"};
-        app1.setName("3pa-App1-arm64");
+        app1.setName("App1");
         app1.setDescription("Description1");
         app1.setConsenses(consenses);
 
@@ -396,15 +392,15 @@ public class AppsViewTest {
             System.out.println("Exception: "+e);
         }
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getTag(), "div");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(0).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(0).getAttribute("class"), "bold");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(0).getText(), "Evaluation: ");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(1).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(1).getAttribute("class"), "redName");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(1).getText(), "NO EVALUATION YET");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(2).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(1).getChild(2).getAttribute("class"), "las la-info-circle pointer");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getTag(), "div");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(0).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(0).getAttribute("class"), "bold");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(0).getText(), "Evaluation: ");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(1).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(1).getAttribute("class"), "redName");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(1).getText(), "NO EVALUATION YET");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(2).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(1).getChild(2).getAttribute("class"), "las la-info-circle pointer");
     }
 
     @Test
@@ -425,8 +421,8 @@ public class AppsViewTest {
             System.out.println("Exception: "+e);
         }
 
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(1).getTag(), "span");
-        assertEquals(app.getElement().getChild(2).getChild(0).getChild(0).getChild(5).getChild(1).getText(), "Data Subjects: ");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(1).getTag(), "span");
+        assertEquals(app.getElement().getChild(1).getChild(0).getChild(0).getChild(5).getChild(1).getText(), "Data Subjects: ");
     }
 
 }
