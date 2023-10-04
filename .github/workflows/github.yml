@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - change-port
+      - jwt-auth-2
 
 jobs:
 
