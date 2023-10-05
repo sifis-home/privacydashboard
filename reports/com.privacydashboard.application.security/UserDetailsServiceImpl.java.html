@@ -58,50 +58,43 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 <span class="nc" id="L58">        return list;</span>
     }
 
-
-    /*private static List&lt;GrantedAuthority&gt; getAuthorities(User user) {
-        return user.getRoles().stream().map(role -&gt; new SimpleGrantedAuthority(&quot;ROLE_&quot; + role))
-                .collect(Collectors.toList());
-
-    }*/
-
     // Per com'è fatto, c'è solo un elemento Authority (User può essere solo uno tra Subject, Controller e DPO)
     // springframework...User però vuole una lista
     private static List&lt;GrantedAuthority&gt; getAuthorities(User user) {
-<span class="fc" id="L71">        List&lt;GrantedAuthority&gt; list=new LinkedList&lt;&gt;();</span>
-<span class="fc" id="L72">        list.add(new SimpleGrantedAuthority(&quot;ROLE_&quot; + user.getRole()));</span>
-<span class="fc" id="L73">        return list;</span>
+<span class="fc" id="L64">        List&lt;GrantedAuthority&gt; list=new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L65">        list.add(new SimpleGrantedAuthority(&quot;ROLE_&quot; + user.getRole()));</span>
+<span class="fc" id="L66">        return list;</span>
 
     }
 
     public boolean registerUser(User user){
-<span class="nc" id="L78">        userRepository.save(user);</span>
-<span class="nc" id="L79">        return true;</span>
+<span class="nc" id="L71">        userRepository.save(user);</span>
+<span class="nc" id="L72">        return true;</span>
     }
 
     public void hashPassAndAddUser(User user){
-<span class="nc" id="L83">        user.setHashedPassword(passwordEncoder.encode(user.getHashedPassword()));</span>
-<span class="nc" id="L84">        registerUser(user);</span>
-<span class="nc" id="L85">    }</span>
+<span class="nc" id="L76">        user.setHashedPassword(passwordEncoder.encode(user.getHashedPassword()));</span>
+<span class="nc" id="L77">        registerUser(user);</span>
+<span class="nc" id="L78">    }</span>
 
     public String hashPass(String pass){
-<span class="nc" id="L88">        return passwordEncoder.encode(pass);</span>
+<span class="nc" id="L81">        return passwordEncoder.encode(pass);</span>
     }
 
     public boolean isAlreadyPresent(String name){
-<span class="fc bfc" id="L92" title="All 2 branches covered.">        return userRepository.findByName(name)!=null;</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        return userRepository.findByName(name)!=null;</span>
     }
 
     public void changeUserPassword(User user, String password){
-<span class="nc" id="L96">        userRepository.changePasswordByUserID(user.getId(), passwordEncoder.encode(password));</span>
-<span class="nc" id="L97">    }</span>
+<span class="nc" id="L89">        userRepository.changePasswordByUserID(user.getId(), passwordEncoder.encode(password));</span>
+<span class="nc" id="L90">    }</span>
 
     public void changeUserMail(User user, String mail){
-<span class="nc" id="L100">        userRepository.changeMailByUserID(user.getId(), mail);</span>
-<span class="nc" id="L101">    }</span>
+<span class="nc" id="L93">        userRepository.changeMailByUserID(user.getId(), mail);</span>
+<span class="nc" id="L94">    }</span>
 
     public boolean isSamePassword(String rawPass, String encodedPass){
-<span class="nc" id="L104">        return passwordEncoder.matches(rawPass, encodedPass);</span>
+<span class="nc" id="L97">        return passwordEncoder.matches(rawPass, encodedPass);</span>
     }
 
 }
