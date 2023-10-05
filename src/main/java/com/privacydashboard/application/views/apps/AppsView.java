@@ -191,19 +191,19 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
         initilizeInfrastuctureEvaluation();
         initializeSearchText();
         initializeGrid();
-        
+        VerticalLayout appLayout = new VerticalLayout();     
+
         try{
-            VerticalLayout appLayout = new VerticalLayout();
             List<IoTApp> apps = getJsonAppsFromUrl();
             for (IoTApp app : apps) {
                 appLayout.add(createApp(app));
-            }
-    
-            add(summaryEvaluation, searchText, appLayout, grid);
+            }            
         }
         catch(Exception e){
-            add(summaryEvaluation, searchText, grid);
+            System.out.println("Exception: "+e);
         }
+
+        add(summaryEvaluation, searchText, appLayout, grid);
     }
 
     private void initilizeInfrastuctureEvaluation(){
