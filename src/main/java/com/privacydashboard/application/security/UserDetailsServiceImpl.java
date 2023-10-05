@@ -58,13 +58,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return list;
     }
 
-
-    /*private static List<GrantedAuthority> getAuthorities(User user) {
-        return user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                .collect(Collectors.toList());
-
-    }*/
-
     // Per com'è fatto, c'è solo un elemento Authority (User può essere solo uno tra Subject, Controller e DPO)
     // springframework...User però vuole una lista
     private static List<GrantedAuthority> getAuthorities(User user) {
