@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - jwt-auth-2
 
 jobs:
 
