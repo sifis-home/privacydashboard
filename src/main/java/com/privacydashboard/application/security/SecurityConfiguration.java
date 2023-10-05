@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
@@ -29,19 +28,6 @@ public class SecurityConfiguration extends VaadinWebSecurityConfigurerAdapter {
     public JWTAuthenticationFilter jwtAuthenticationFilter() {
         return new JWTAuthenticationFilter();
     }
-//
-//    @Bean
-//    public MyAuthenticationSuccessHandler myAuthenticationSuccessHandler() {
-//        return new MyAuthenticationSuccessHandler();
-//    }
-//
-//    @Bean
-//    public AuthenticationEntryPoint customAuthenticationEntryPoint() {
-//        return (request, response, authException) -> {
-//            // Redirect unauthenticated users to the login page
-//            response.sendRedirect("/login");
-//        };
-//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
