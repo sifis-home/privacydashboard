@@ -37,9 +37,9 @@ public class HomeView extends VerticalLayout {
 
         initializeLayout();
         createSections();
-        for(int i=0;i<nRows;i++){
-            add(new HorizontalLayout(Arrays.copyOfRange(layouts, i*nSection/nRows, (i+1)*nSection/nRows)));
-        }
+        add(layouts);
+        /*for(int i=0;i<nSection;i++){
+        }*/
         //add(new Span("ID: " + authenticatedUser.getUser().getId().toString()));
     }
 

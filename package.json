@@ -122,7 +122,6 @@
     "lit": "2.1.4"
   },
   "devDependencies": {
-    "async": "3.2.2",
     "chokidar": "^3.5.0",
     "compression-webpack-plugin": "4.0.1",
     "css-loader": "5.2.7",
@@ -385,7 +384,6 @@
       "lit": "2.1.4"
     },
     "devDependencies": {
-      "async": "3.2.2",
       "chokidar": "^3.5.0",
       "compression-webpack-plugin": "4.0.1",
       "css-loader": "5.2.7",
@@ -407,6 +405,6 @@
       "workbox-precaching": "6.5.0",
       "workbox-webpack-plugin": "6.5.0"
     },
-    "hash": "48c21928de86ae4372de126c2e0cac0c63f0f4b73cb82c1c05e740d20b194724"
+    "hash": "3b16695e3f7bb085e675a9b14b37f92ee4989515e9410b15414cea9d123b8bf4"
   }
 }
