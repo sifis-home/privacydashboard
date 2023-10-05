@@ -23,7 +23,7 @@ public class HomeView extends VerticalLayout {
     private final AuthenticatedUser authenticatedUser;
     private final CommunicationService communicationService;
 
-    private final int nSection=6;
+    private final int nSection=7;
     private final int nRows=2;
     private final VerticalLayout[] layouts= new VerticalLayout[nSection];
     private final Span[] titles= new Span[nSection];
@@ -59,20 +59,21 @@ public class HomeView extends VerticalLayout {
     private void createSections(){
         createSingleSection(0, "Contacts", "contacts", "la-address-book");
         createSingleSection(1, "Messages", "messages", "la-comments");
-        createSingleSection(3, "Apps", "apps-view", "la-list");
-        createSingleSection(4, "Privacy Notice", "privacyNotice", "la-file");
+        createSingleSection(3, "Available Apps", "available_apps-view", "la-list");
+        createSingleSection(4, "Apps", "apps-view", "la-list");
+        createSingleSection(5, "Privacy Notice", "privacyNotice", "la-file");
         if(authenticatedUser.getUser().getRole().equals(Role.CONTROLLER) || authenticatedUser.getUser().getRole().equals(Role.DPO)){
             createSingleSection(2, "Rights", "rights_controller", "la-school");
-            createSingleSection(5, "Questionnaire", "questionnaire","la-archive");
+            createSingleSection(6, "Questionnaire", "questionnaire","la-archive");
         }
         else{
             createSingleSection(2, "Rights", "rights", "la-school");
-            titles[5].setText("Pending Requests");
-            layouts[5].addClickListener((e->{
+            titles[6].setText("Pending Requests");
+            layouts[6].addClickListener((e->{
                 communicationService.setOpenPendingRequests(true);
                 UI.getCurrent().navigate("rights");
             }));
-            icons[5].addClassName("la-archive");
+            icons[6].addClassName("la-archive");
         }
 
     }
