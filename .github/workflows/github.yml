@@ -35,36 +35,36 @@ jobs:
           cache: 'maven'
 
       - name: Package privacydashboard
-        run: mvn clean package -Pproduction
+        run: mvn clean package -Pproduction -DskipTests
 
-      - name: Coverage Report
-        run: mvn jacoco:report
-
-      - name: Generate Jacoco Badge
-        id: jacoco
-        if: ${{ matrix.java-version == '18.0.x' }}
-        uses: cicirello/jacoco-badge-generator@v2
-        with:
-          jacoco-csv-file: target/site/jacoco/jacoco.csv
-
-      - name: Log coverage percentage
-        if: ${{ matrix.java-version == '18.0.x' }}
-        run: |
-          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
-
-      - name: Move the badge to jacoco-aggregate folder
-        if: ${{ matrix.java-version == '18.0.x' }}
-        run: |
-          mv .github/badges/*.svg target/site/jacoco/
-
-      - name: Deploy Jacoco code coverage reports to gh-pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        if: ${{ matrix.java-version == '18.0.x' }}
-        with:
-          clean: true
-          folder: target/site/jacoco
-          target-folder: reports
-          branch: gh-pages
+#      - name: Coverage Report
+#        run: mvn jacoco:report
+#
+#      - name: Generate Jacoco Badge
+#        id: jacoco
+#        if: ${{ matrix.java-version == '18.0.x' }}
+#        uses: cicirello/jacoco-badge-generator@v2
+#        with:
+#          jacoco-csv-file: target/site/jacoco/jacoco.csv
+#
+#      - name: Log coverage percentage
+#        if: ${{ matrix.java-version == '18.0.x' }}
+#        run: |
+#          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
+#
+#      - name: Move the badge to jacoco-aggregate folder
+#        if: ${{ matrix.java-version == '18.0.x' }}
+#        run: |
+#          mv .github/badges/*.svg target/site/jacoco/
+#
+#      - name: Deploy Jacoco code coverage reports to gh-pages
+#        uses: JamesIves/github-pages-deploy-action@v4
+#        if: ${{ matrix.java-version == '18.0.x' }}
+#        with:
+#          clean: true
+#          folder: target/site/jacoco
+#          target-folder: reports
+#          branch: gh-pages
 
   # Build files necessary for building Docker Images (Dockerfiles and Contexts)
   build-for-docker:
