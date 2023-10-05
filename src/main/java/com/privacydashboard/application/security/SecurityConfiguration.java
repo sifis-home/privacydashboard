@@ -70,42 +70,14 @@ public class SecurityConfiguration extends VaadinWebSecurityConfigurerAdapter {
         return new JWTAuthenticationFilter();
     }
 
-    @Bean
-    public MyAuthenticationSuccessHandler myAuthenticationSuccessHandler() {
-        return new MyAuthenticationSuccessHandler();
-    }
-
-    @Bean
-    public AuthenticationEntryPoint customAuthenticationEntryPoint() {
-        return (request, response, authException) -> {
-            // Redirect unauthenticated users to the login page
-            response.sendRedirect("/login");
-        };
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable() // Disable CSRF protection
+        http.csrf().disable()
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // Add custom JWT filter before the UsernamePasswordAuthenticationFilter
-                .authorizeRequests()
-                    .antMatchers("/api/**").authenticated() // Require authentication for URLs under /api/**
-                    .antMatchers("/").authenticated() // Allow access to root URL ("/") only if authenticated
-                    .antMatchers("/login").permitAll() // Allow access to the login page without authentication
-                    .anyRequest().permitAll() // Allow access to all other URLs without authentication
-                .and()
-                    .httpBasic() // Use HTTP Basic Authentication
-                .and()
-                    .formLogin()
-                    .loginPage("/login") // Specify the login page URL
-                    .successHandler(myAuthenticationSuccessHandler())
-                    .permitAll() // Allow access to the login page without authentication
-                .and()
-                    .logout()
-                    .permitAll()
-                .and()
-                    .exceptionHandling() // Handle authentication exceptions
-                    .authenticationEntryPoint(customAuthenticationEntryPoint()); // Set the custom entry point
+                .authorizeRequests().antMatchers("/api/**").authenticated()
+                .and().httpBasic();
+        super.configure(http);
+        setLoginView(http, LoginView.class, LOGOUT_URL);
     }
 
     @Override
