@@ -35,7 +35,7 @@ jobs:
           cache: 'maven'
 
       - name: Package privacydashboard
-        run: mvn clean package -Pproduction -DskipTests
+        run: mvn clean package -Pproduction
 
       - name: Coverage Report
         run: mvn jacoco:report
