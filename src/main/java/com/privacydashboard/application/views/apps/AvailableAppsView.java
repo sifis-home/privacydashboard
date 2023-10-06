@@ -369,7 +369,13 @@ public class AvailableAppsView extends Div {
         }
         catch(Exception e){
             System.out.println("Exception: "+e);
-            Span exNotice = e.getMessage().equals("Size was 0") ? new Span("You do not have any apps.") : new Span("We could not retrieve your apps.");
+            Span exNotice = new Span();
+            if(e.getMessage() == "Size was 0"){
+                exNotice.add("There are no available apps.");
+            }
+            else{
+                exNotice.add("We could not retrieve the available apps.");
+            }
             exNotice.addClassName("bold");
             appLayout.add(exNotice);
         }

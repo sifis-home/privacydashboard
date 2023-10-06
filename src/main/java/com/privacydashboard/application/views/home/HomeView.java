@@ -59,7 +59,7 @@ public class HomeView extends VerticalLayout {
     private void createSections(){
         createSingleSection(0, "Contacts", "contacts", "la-address-book");
         createSingleSection(1, "Messages", "messages", "la-comments");
-        createSingleSection(3, "Available Apps", "available_apps-view", "la-list");
+        createSingleSection(3, "Available Apps", "available-apps-view", "la-list");
         createSingleSection(4, "Apps", "apps-view", "la-list");
         createSingleSection(5, "Privacy Notice", "privacyNotice", "la-file");
         if(authenticatedUser.getUser().getRole().equals(Role.CONTROLLER) || authenticatedUser.getUser().getRole().equals(Role.DPO)){

@@ -52,115 +52,138 @@ public class HomeViewTest {
 
     @Test
     public void HomeViewSubjectConstructorTest(){
+
         assertEquals(subjectView.getElement().getAttribute("class"), "home-view");
 
-        assertEquals(subjectView.getElement().getChild(0).getTag(), "vaadin-horizontal-layout");
+        assertEquals(subjectView.getElement().getChild(0).getTag(), "vaadin-vertical-layout");        
+        assertEquals(subjectView.getElement().getChild(0).getAttribute("class"), "section pointer");
 
-        assertEquals(subjectView.getElement().getChild(0).getChild(0).getTag(), "vaadin-vertical-layout");
-        assertEquals(subjectView.getElement().getChild(0).getChild(0).getAttribute("class"), "section pointer");
-        assertEquals(subjectView.getElement().getChild(0).getChild(0).getChild(0).getTag(), "span");
-        assertEquals(subjectView.getElement().getChild(0).getChild(0).getChild(0).getAttribute("class"), "title");
-        assertEquals(subjectView.getElement().getChild(0).getChild(0).getChild(0).getText(), "Contacts");
-        assertEquals(subjectView.getElement().getChild(0).getChild(0).getChild(1).getTag(), "div");
-        assertEquals(subjectView.getElement().getChild(0).getChild(0).getChild(1).getAttribute("class").contains("las la-10x icons la-address-book"), true);
+        assertEquals(subjectView.getElement().getChild(0).getChild(0).getTag(), "span");
+        assertEquals(subjectView.getElement().getChild(0).getChild(0).getAttribute("class"), "title");
+        assertEquals(subjectView.getElement().getChild(0).getChild(0).getText(), "Contacts");
+        assertEquals(subjectView.getElement().getChild(0).getChild(1).getTag(), "div");
+        assertEquals(subjectView.getElement().getChild(0).getChild(1).getAttribute("class").contains("las la-10x icons la-address-book"), true);
 
-        assertEquals(subjectView.getElement().getChild(0).getChild(1).getTag(), "vaadin-vertical-layout");
-        assertEquals(subjectView.getElement().getChild(0).getChild(1).getAttribute("class"), "section pointer");
-        assertEquals(subjectView.getElement().getChild(0).getChild(1).getChild(0).getTag(), "span");
-        assertEquals(subjectView.getElement().getChild(0).getChild(1).getChild(0).getAttribute("class"), "title");
-        assertEquals(subjectView.getElement().getChild(0).getChild(1).getChild(0).getText(), "Messages");
-        assertEquals(subjectView.getElement().getChild(0).getChild(1).getChild(1).getTag(), "div");
-        assertEquals(subjectView.getElement().getChild(0).getChild(1).getChild(1).getAttribute("class").contains("las la-10x icons la-comments"), true);
+        assertEquals(subjectView.getElement().getChild(1).getTag(), "vaadin-vertical-layout");        
+        assertEquals(subjectView.getElement().getChild(1).getAttribute("class"), "section pointer");
 
-        assertEquals(subjectView.getElement().getChild(0).getChild(2).getTag(), "vaadin-vertical-layout");
-        assertEquals(subjectView.getElement().getChild(0).getChild(2).getAttribute("class"), "section pointer");
-        assertEquals(subjectView.getElement().getChild(0).getChild(2).getChild(0).getTag(), "span");
-        assertEquals(subjectView.getElement().getChild(0).getChild(2).getChild(0).getAttribute("class"), "title");
-        assertEquals(subjectView.getElement().getChild(0).getChild(2).getChild(0).getText(), "Rights");
-        assertEquals(subjectView.getElement().getChild(0).getChild(2).getChild(1).getTag(), "div");
-        assertEquals(subjectView.getElement().getChild(0).getChild(2).getChild(1).getAttribute("class").contains("las la-10x icons la-school"), true);
+        assertEquals(subjectView.getElement().getChild(1).getChild(0).getTag(), "span");
+        assertEquals(subjectView.getElement().getChild(1).getChild(0).getAttribute("class"), "title");
+        assertEquals(subjectView.getElement().getChild(1).getChild(0).getText(), "Messages");
+        assertEquals(subjectView.getElement().getChild(1).getChild(1).getTag(), "div");
+        assertEquals(subjectView.getElement().getChild(1).getChild(1).getAttribute("class").contains("las la-10x icons la-comments"), true);
 
-        assertEquals(subjectView.getElement().getChild(1).getTag(), "vaadin-horizontal-layout");
+        assertEquals(subjectView.getElement().getChild(2).getTag(), "vaadin-vertical-layout");        
+        assertEquals(subjectView.getElement().getChild(2).getAttribute("class"), "section pointer");
 
-        assertEquals(subjectView.getElement().getChild(1).getChild(0).getTag(), "vaadin-vertical-layout");
-        assertEquals(subjectView.getElement().getChild(1).getChild(0).getAttribute("class"), "section pointer");
-        assertEquals(subjectView.getElement().getChild(1).getChild(0).getChild(0).getTag(), "span");
-        assertEquals(subjectView.getElement().getChild(1).getChild(0).getChild(0).getAttribute("class"), "title");
-        assertEquals(subjectView.getElement().getChild(1).getChild(0).getChild(0).getText(), "Apps");
-        assertEquals(subjectView.getElement().getChild(1).getChild(0).getChild(1).getTag(), "div");
-        assertEquals(subjectView.getElement().getChild(1).getChild(0).getChild(1).getAttribute("class").contains("las la-10x icons la-list"), true);
+        assertEquals(subjectView.getElement().getChild(2).getChild(0).getTag(), "span");
+        assertEquals(subjectView.getElement().getChild(2).getChild(0).getAttribute("class"), "title");
+        assertEquals(subjectView.getElement().getChild(2).getChild(0).getText(), "Rights");
+        assertEquals(subjectView.getElement().getChild(2).getChild(1).getTag(), "div");
+        assertEquals(subjectView.getElement().getChild(2).getChild(1).getAttribute("class").contains("las la-10x icons la-school"), true);
 
-        assertEquals(subjectView.getElement().getChild(1).getChild(1).getTag(), "vaadin-vertical-layout");
-        assertEquals(subjectView.getElement().getChild(1).getChild(1).getAttribute("class"), "section pointer");
-        assertEquals(subjectView.getElement().getChild(1).getChild(1).getChild(0).getTag(), "span");
-        assertEquals(subjectView.getElement().getChild(1).getChild(1).getChild(0).getAttribute("class"), "title");
-        assertEquals(subjectView.getElement().getChild(1).getChild(1).getChild(0).getText(), "Privacy Notice");
-        assertEquals(subjectView.getElement().getChild(1).getChild(1).getChild(1).getTag(), "div");
-        assertEquals(subjectView.getElement().getChild(1).getChild(1).getChild(1).getAttribute("class").contains("las la-10x icons la-file"), true);
+        assertEquals(subjectView.getElement().getChild(3).getTag(), "vaadin-vertical-layout");        
+        assertEquals(subjectView.getElement().getChild(3).getAttribute("class"), "section pointer");
 
-        assertEquals(subjectView.getElement().getChild(1).getChild(2).getTag(), "vaadin-vertical-layout");
-        assertEquals(subjectView.getElement().getChild(1).getChild(2).getAttribute("class"), "section pointer");
-        assertEquals(subjectView.getElement().getChild(1).getChild(2).getChild(0).getTag(), "span");
-        assertEquals(subjectView.getElement().getChild(1).getChild(2).getChild(0).getAttribute("class"), "title");
-        assertEquals(subjectView.getElement().getChild(1).getChild(2).getChild(0).getText(), "Pending Requests");
-        assertEquals(subjectView.getElement().getChild(1).getChild(2).getChild(1).getTag(), "div");
-        assertEquals(subjectView.getElement().getChild(1).getChild(2).getChild(1).getAttribute("class").contains("las la-10x icons la-archive"), true);
+        assertEquals(subjectView.getElement().getChild(3).getChild(0).getTag(), "span");
+        assertEquals(subjectView.getElement().getChild(3).getChild(0).getAttribute("class"), "title");
+        assertEquals(subjectView.getElement().getChild(3).getChild(0).getText(), "Available Apps");
+        assertEquals(subjectView.getElement().getChild(3).getChild(1).getTag(), "div");
+        assertEquals(subjectView.getElement().getChild(3).getChild(1).getAttribute("class").contains("las la-10x icons la-list"), true);
+
+        assertEquals(subjectView.getElement().getChild(4).getTag(), "vaadin-vertical-layout");        
+        assertEquals(subjectView.getElement().getChild(4).getAttribute("class"), "section pointer");
+
+        assertEquals(subjectView.getElement().getChild(4).getChild(0).getTag(), "span");
+        assertEquals(subjectView.getElement().getChild(4).getChild(0).getAttribute("class"), "title");
+        assertEquals(subjectView.getElement().getChild(4).getChild(0).getText(), "Apps");
+        assertEquals(subjectView.getElement().getChild(4).getChild(1).getTag(), "div");
+        assertEquals(subjectView.getElement().getChild(4).getChild(1).getAttribute("class").contains("las la-10x icons la-list"), true);
+
+        assertEquals(subjectView.getElement().getChild(5).getTag(), "vaadin-vertical-layout");        
+        assertEquals(subjectView.getElement().getChild(5).getAttribute("class"), "section pointer");
+
+        assertEquals(subjectView.getElement().getChild(5).getChild(0).getTag(), "span");
+        assertEquals(subjectView.getElement().getChild(5).getChild(0).getAttribute("class"), "title");
+        assertEquals(subjectView.getElement().getChild(5).getChild(0).getText(), "Privacy Notice");
+        assertEquals(subjectView.getElement().getChild(5).getChild(1).getTag(), "div");
+        assertEquals(subjectView.getElement().getChild(5).getChild(1).getAttribute("class").contains("las la-10x icons la-file"), true);
+
+        assertEquals(subjectView.getElement().getChild(6).getTag(), "vaadin-vertical-layout");        
+        assertEquals(subjectView.getElement().getChild(6).getAttribute("class"), "section pointer");
+
+        assertEquals(subjectView.getElement().getChild(6).getChild(0).getTag(), "span");
+        assertEquals(subjectView.getElement().getChild(6).getChild(0).getAttribute("class"), "title");
+        assertEquals(subjectView.getElement().getChild(6).getChild(0).getText(), "Pending Requests");
+        assertEquals(subjectView.getElement().getChild(6).getChild(1).getTag(), "div");
+        assertEquals(subjectView.getElement().getChild(6).getChild(1).getAttribute("class").contains("las la-10x icons la-archive"), true);
     }
 
     @Test
     public void HomeViewNotSubjectConstructorTest(){
         assertEquals(notSubjectView.getElement().getAttribute("class"), "home-view");
 
-        assertEquals(notSubjectView.getElement().getChild(0).getTag(), "vaadin-horizontal-layout");
+        assertEquals(notSubjectView.getElement().getChild(0).getTag(), "vaadin-vertical-layout");        
+        assertEquals(notSubjectView.getElement().getChild(0).getAttribute("class"), "section pointer");
 
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(0).getTag(), "vaadin-vertical-layout");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(0).getAttribute("class"), "section pointer");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(0).getChild(0).getTag(), "span");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(0).getChild(0).getAttribute("class"), "title");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(0).getChild(0).getText(), "Contacts");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(0).getChild(1).getTag(), "div");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(0).getChild(1).getAttribute("class").contains("las la-10x icons la-address-book"), true);
+        assertEquals(notSubjectView.getElement().getChild(0).getChild(0).getTag(), "span");
+        assertEquals(notSubjectView.getElement().getChild(0).getChild(0).getAttribute("class"), "title");
+        assertEquals(notSubjectView.getElement().getChild(0).getChild(0).getText(), "Contacts");
+        assertEquals(notSubjectView.getElement().getChild(0).getChild(1).getTag(), "div");
+        assertEquals(notSubjectView.getElement().getChild(0).getChild(1).getAttribute("class").contains("las la-10x icons la-address-book"), true);
 
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(1).getTag(), "vaadin-vertical-layout");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(1).getAttribute("class"), "section pointer");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(1).getChild(0).getTag(), "span");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(1).getChild(0).getAttribute("class"), "title");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(1).getChild(0).getText(), "Messages");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(1).getChild(1).getTag(), "div");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(1).getChild(1).getAttribute("class").contains("las la-10x icons la-comments"), true);
+        assertEquals(notSubjectView.getElement().getChild(1).getTag(), "vaadin-vertical-layout");        
+        assertEquals(notSubjectView.getElement().getChild(1).getAttribute("class"), "section pointer");
 
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(2).getTag(), "vaadin-vertical-layout");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(2).getAttribute("class"), "section pointer");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(2).getChild(0).getTag(), "span");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(2).getChild(0).getAttribute("class"), "title");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(2).getChild(0).getText(), "Rights");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(2).getChild(1).getTag(), "div");
-        assertEquals(notSubjectView.getElement().getChild(0).getChild(2).getChild(1).getAttribute("class").contains("las la-10x icons la-school"), true);
+        assertEquals(notSubjectView.getElement().getChild(1).getChild(0).getTag(), "span");
+        assertEquals(notSubjectView.getElement().getChild(1).getChild(0).getAttribute("class"), "title");
+        assertEquals(notSubjectView.getElement().getChild(1).getChild(0).getText(), "Messages");
+        assertEquals(notSubjectView.getElement().getChild(1).getChild(1).getTag(), "div");
+        assertEquals(notSubjectView.getElement().getChild(1).getChild(1).getAttribute("class").contains("las la-10x icons la-comments"), true);
 
-        assertEquals(notSubjectView.getElement().getChild(1).getTag(), "vaadin-horizontal-layout");
+        assertEquals(notSubjectView.getElement().getChild(2).getTag(), "vaadin-vertical-layout");        
+        assertEquals(notSubjectView.getElement().getChild(2).getAttribute("class"), "section pointer");
 
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(0).getTag(), "vaadin-vertical-layout");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(0).getAttribute("class"), "section pointer");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(0).getChild(0).getTag(), "span");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(0).getChild(0).getAttribute("class"), "title");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(0).getChild(0).getText(), "Apps");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(0).getChild(1).getTag(), "div");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(0).getChild(1).getAttribute("class").contains("las la-10x icons la-list"), true);
+        assertEquals(notSubjectView.getElement().getChild(2).getChild(0).getTag(), "span");
+        assertEquals(notSubjectView.getElement().getChild(2).getChild(0).getAttribute("class"), "title");
+        assertEquals(notSubjectView.getElement().getChild(2).getChild(0).getText(), "Rights");
+        assertEquals(notSubjectView.getElement().getChild(2).getChild(1).getTag(), "div");
+        assertEquals(notSubjectView.getElement().getChild(2).getChild(1).getAttribute("class").contains("las la-10x icons la-school"), true);
 
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(1).getTag(), "vaadin-vertical-layout");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(1).getAttribute("class"), "section pointer");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(1).getChild(0).getTag(), "span");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(1).getChild(0).getAttribute("class"), "title");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(1).getChild(0).getText(), "Privacy Notice");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(1).getChild(1).getTag(), "div");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(1).getChild(1).getAttribute("class").contains("las la-10x icons la-file"), true);
+        assertEquals(notSubjectView.getElement().getChild(3).getTag(), "vaadin-vertical-layout");        
+        assertEquals(notSubjectView.getElement().getChild(3).getAttribute("class"), "section pointer");
 
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(2).getTag(), "vaadin-vertical-layout");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(2).getAttribute("class"), "section pointer");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(2).getChild(0).getTag(), "span");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(2).getChild(0).getAttribute("class"), "title");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(2).getChild(0).getText(), "Questionnaire");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(2).getChild(1).getTag(), "div");
-        assertEquals(notSubjectView.getElement().getChild(1).getChild(2).getChild(1).getAttribute("class").contains("las la-10x icons la-archive"), true);
+        assertEquals(notSubjectView.getElement().getChild(3).getChild(0).getTag(), "span");
+        assertEquals(notSubjectView.getElement().getChild(3).getChild(0).getAttribute("class"), "title");
+        assertEquals(notSubjectView.getElement().getChild(3).getChild(0).getText(), "Available Apps");
+        assertEquals(notSubjectView.getElement().getChild(3).getChild(1).getTag(), "div");
+        assertEquals(notSubjectView.getElement().getChild(3).getChild(1).getAttribute("class").contains("las la-10x icons la-list"), true);
+
+        assertEquals(notSubjectView.getElement().getChild(4).getTag(), "vaadin-vertical-layout");        
+        assertEquals(notSubjectView.getElement().getChild(4).getAttribute("class"), "section pointer");
+
+        assertEquals(notSubjectView.getElement().getChild(4).getChild(0).getTag(), "span");
+        assertEquals(notSubjectView.getElement().getChild(4).getChild(0).getAttribute("class"), "title");
+        assertEquals(notSubjectView.getElement().getChild(4).getChild(0).getText(), "Apps");
+        assertEquals(notSubjectView.getElement().getChild(4).getChild(1).getTag(), "div");
+        assertEquals(notSubjectView.getElement().getChild(4).getChild(1).getAttribute("class").contains("las la-10x icons la-list"), true);
+
+        assertEquals(notSubjectView.getElement().getChild(5).getTag(), "vaadin-vertical-layout");        
+        assertEquals(notSubjectView.getElement().getChild(5).getAttribute("class"), "section pointer");
+
+        assertEquals(notSubjectView.getElement().getChild(5).getChild(0).getTag(), "span");
+        assertEquals(notSubjectView.getElement().getChild(5).getChild(0).getAttribute("class"), "title");
+        assertEquals(notSubjectView.getElement().getChild(5).getChild(0).getText(), "Privacy Notice");
+        assertEquals(notSubjectView.getElement().getChild(5).getChild(1).getTag(), "div");
+        assertEquals(notSubjectView.getElement().getChild(5).getChild(1).getAttribute("class").contains("las la-10x icons la-file"), true);
+
+        assertEquals(notSubjectView.getElement().getChild(6).getTag(), "vaadin-vertical-layout");        
+        assertEquals(notSubjectView.getElement().getChild(6).getAttribute("class"), "section pointer");
+
+        assertEquals(notSubjectView.getElement().getChild(6).getChild(0).getTag(), "span");
+        assertEquals(notSubjectView.getElement().getChild(6).getChild(0).getAttribute("class"), "title");
+        assertEquals(notSubjectView.getElement().getChild(6).getChild(0).getText(), "Questionnaire");
+        assertEquals(notSubjectView.getElement().getChild(6).getChild(1).getTag(), "div");
+        assertEquals(notSubjectView.getElement().getChild(6).getChild(1).getAttribute("class").contains("las la-10x icons la-archive"), true);
     }
 }
