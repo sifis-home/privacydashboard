@@ -120,299 +120,307 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
 <span class="fc" id="L120">            int responseCode = connection.getResponseCode();</span>
 
 <span class="pc bpc" id="L122" title="1 of 2 branches missed.">            if(responseCode == HttpsURLConnection.HTTP_OK){</span>
-<span class="nc" id="L123">                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));</span>
+<span class="fc" id="L123">                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));</span>
                 String inputLine;
-<span class="nc" id="L125">                StringBuffer response = new StringBuffer();</span>
+<span class="fc" id="L125">                StringBuffer response = new StringBuffer();</span>
                 
 
-<span class="nc bnc" id="L128" title="All 2 branches missed.">                while((inputLine = in.readLine()) != null){</span>
-<span class="nc" id="L129">                    response.append(inputLine);</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">                while((inputLine = in.readLine()) != null){</span>
+<span class="fc" id="L129">                    response.append(inputLine);</span>
                 }
-<span class="nc" id="L131">                in.close();</span>
+<span class="fc" id="L131">                in.close();</span>
 
-<span class="nc" id="L133">                responseString = response.toString().substring(response.toString().indexOf(&quot;[&quot;)+1, response.toString().lastIndexOf(&quot;]&quot;));               </span>
+<span class="fc" id="L133">                responseString = response.toString().substring(response.toString().indexOf(&quot;[&quot;)+1, response.toString().lastIndexOf(&quot;]&quot;));               </span>
 
-<span class="nc" id="L135">            }</span>
+<span class="fc" id="L135">            }</span>
             else{
-<span class="fc" id="L137">                System.out.println(&quot;GET Request failed&quot;);</span>
+<span class="nc" id="L137">                System.out.println(&quot;GET Request failed&quot;);</span>
             }
 
             
 <span class="fc" id="L141">            JsonNode json = new ObjectMapper().readTree(new StringReader(responseString));</span>
 <span class="fc" id="L142">            json = json.get(&quot;value&quot;);</span>
-<span class="nc" id="L143">            int size = json.get(&quot;containers&quot;).size();</span>
-<span class="nc" id="L144">            IoTApp[] appArray = new IoTApp[size];</span>
+<span class="fc" id="L143">            int size = json.get(&quot;containers&quot;).size();</span>
 
-<span class="nc" id="L146">            Iterator&lt;JsonNode&gt; iterator = json.get(&quot;containers&quot;).elements();</span>
-
-<span class="nc bnc" id="L148" title="All 2 branches missed.">            for(int i = 0; i &lt; size; i++){</span>
-<span class="nc" id="L149">                IoTApp app = new IoTApp();</span>
-<span class="nc" id="L150">                app.setName(cleanAppName(iterator.next().asText()));</span>
-<span class="nc" id="L151">                app.setId(new UUID(0, app.getName().hashCode()));</span>
-<span class="nc" id="L152">                appArray[i] = app;</span>
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">            if(size == 0){</span>
+<span class="fc" id="L146">                throw new NullPointerException(&quot;Size was 0&quot;);</span>
             }
 
-<span class="nc" id="L155">            List&lt;IoTApp&gt; apps = removeDuplicates(Arrays.asList(appArray));</span>
-<span class="nc" id="L156">            return apps;</span>
+<span class="nc" id="L149">            IoTApp[] appArray = new IoTApp[size];</span>
+
+<span class="nc" id="L151">            Iterator&lt;JsonNode&gt; iterator = json.get(&quot;containers&quot;).elements();</span>
+
+<span class="nc bnc" id="L153" title="All 2 branches missed.">            for(int i = 0; i &lt; size; i++){</span>
+<span class="nc" id="L154">                IoTApp app = new IoTApp();</span>
+<span class="nc" id="L155">                app.setName(cleanAppName(iterator.next().asText()));</span>
+<span class="nc" id="L156">                app.setId(new UUID(0, app.getName().hashCode()));</span>
+<span class="nc" id="L157">                appArray[i] = app;</span>
+            }
+
+<span class="nc" id="L160">            List&lt;IoTApp&gt; apps = removeDuplicates(Arrays.asList(appArray));</span>
+<span class="nc" id="L161">            return apps;</span>
         }
-<span class="fc" id="L158">        catch(Exception e){</span>
-<span class="fc" id="L159">            System.out.println(&quot;JsonFromUrl Exception: &quot;+e.getMessage());</span>
-<span class="fc" id="L160">            throw new NullPointerException(e.getMessage());</span>
+<span class="fc" id="L163">        catch(Exception e){</span>
+<span class="fc" id="L164">            System.out.println(&quot;JsonFromUrl Exception: &quot;+e.getMessage());</span>
+<span class="fc" id="L165">            throw new NullPointerException(e.getMessage());</span>
         }          
     }
 
     private ArrayList&lt;IoTApp&gt; removeDuplicates(List&lt;IoTApp&gt; list){
-<span class="nc" id="L165">        ArrayList&lt;IoTApp&gt; newList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L170">        ArrayList&lt;IoTApp&gt; newList = new ArrayList&lt;&gt;();</span>
 
-<span class="nc bnc" id="L167" title="All 2 branches missed.">        for(IoTApp app : list){</span>
-<span class="nc bnc" id="L168" title="All 2 branches missed.">            if(!newList.contains(app))</span>
-<span class="nc" id="L169">                newList.add(app);</span>
-<span class="nc" id="L170">        }</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">        for(IoTApp app : list){</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">            if(!newList.contains(app))</span>
+<span class="nc" id="L174">                newList.add(app);</span>
+<span class="nc" id="L175">        }</span>
 
-<span class="nc" id="L172">        return newList;</span>
+<span class="nc" id="L177">        return newList;</span>
     }
 
 
     private String cleanAppName(String name){
-<span class="nc" id="L177">        String newName = name.split(&quot;3pa-&quot;)[1].split(&quot;-&quot;)[0];</span>
-<span class="nc" id="L178">        return newName;</span>
+<span class="nc" id="L182">        String newName = name.split(&quot;3pa-&quot;)[1].split(&quot;-&quot;)[0];</span>
+<span class="nc" id="L183">        return newName;</span>
     }
 
     @Override
     public void beforeEnter(BeforeEnterEvent event){
-<span class="nc" id="L183">        priorityApp=communicationService.getApp();</span>
-<span class="nc" id="L184">    }</span>
+<span class="nc" id="L188">        priorityApp=communicationService.getApp();</span>
+<span class="nc" id="L189">    }</span>
 
-<span class="fc" id="L186">    public AppsView(DataBaseService dataBaseService, AuthenticatedUser authenticatedUser, CommunicationService communicationService){</span>
-<span class="fc" id="L187">        this.dataBaseService=dataBaseService;</span>
-<span class="fc" id="L188">        this.authenticatedUser=authenticatedUser;</span>
-<span class="fc" id="L189">        this.communicationService=communicationService;</span>
-<span class="fc" id="L190">        addClassName(&quot;grid-view&quot;);</span>
-<span class="fc" id="L191">        initilizeInfrastuctureEvaluation();</span>
-<span class="fc" id="L192">        initializeSearchText();</span>
-<span class="fc" id="L193">        initializeGrid();</span>
-<span class="fc" id="L194">        VerticalLayout appLayout = new VerticalLayout();     </span>
+<span class="fc" id="L191">    public AppsView(DataBaseService dataBaseService, AuthenticatedUser authenticatedUser, CommunicationService communicationService){</span>
+<span class="fc" id="L192">        this.dataBaseService=dataBaseService;</span>
+<span class="fc" id="L193">        this.authenticatedUser=authenticatedUser;</span>
+<span class="fc" id="L194">        this.communicationService=communicationService;</span>
+<span class="fc" id="L195">        addClassName(&quot;grid-view&quot;);</span>
+<span class="fc" id="L196">        initilizeInfrastuctureEvaluation();</span>
+<span class="fc" id="L197">        initializeSearchText();</span>
+<span class="fc" id="L198">        initializeGrid();</span>
+<span class="fc" id="L199">        VerticalLayout appLayout = new VerticalLayout();     </span>
 
         try{
-<span class="nc" id="L197">            List&lt;IoTApp&gt; apps = getJsonAppsFromUrl();</span>
-<span class="nc bnc" id="L198" title="All 2 branches missed.">            for (IoTApp app : apps) {</span>
-<span class="nc" id="L199">                appLayout.add(createApp(app));</span>
-<span class="nc" id="L200">            }            </span>
+<span class="nc" id="L202">            List&lt;IoTApp&gt; apps = getJsonAppsFromUrl();</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">            for (IoTApp app : apps) {</span>
+<span class="nc" id="L204">                appLayout.add(createApp(app));</span>
+<span class="nc" id="L205">            }            </span>
         }
-<span class="fc" id="L202">        catch(Exception e){</span>
-<span class="fc" id="L203">            System.out.println(&quot;Exception: &quot;+e);</span>
-<span class="nc" id="L204">        }</span>
+<span class="fc" id="L207">        catch(Exception e){</span>
+<span class="fc" id="L208">            System.out.println(&quot;Exception: &quot;+e);</span>
+<span class="pc bpc" id="L209" title="1 of 2 branches missed.">            Span exNotice = e.getMessage().equals(&quot;Size was 0&quot;) ? new Span(&quot;You do not have any apps.&quot;) : new Span(&quot;We could not retrieve your apps.&quot;);</span>
+<span class="fc" id="L210">            exNotice.addClassName(&quot;bold&quot;);</span>
+<span class="fc" id="L211">            appLayout.add(exNotice);</span>
+<span class="nc" id="L212">        }</span>
 
-<span class="fc" id="L206">        add(summaryEvaluation, searchText, appLayout, grid);</span>
-<span class="fc" id="L207">    }</span>
+<span class="fc" id="L214">        add(summaryEvaluation, searchText, appLayout, grid);</span>
+<span class="fc" id="L215">    }</span>
 
     private void initilizeInfrastuctureEvaluation(){
-<span class="fc" id="L210">        Span evaluationDescription= new Span(&quot;Privacy Infrastructure Evaluation: &quot;);</span>
-<span class="fc" id="L211">        evaluationDescription.addClassName(&quot;bold&quot;);</span>
-<span class="fc" id="L212">        Span evaluation= new Span();</span>
-<span class="fc" id="L213">        GlobalVariables.QuestionnaireVote vote= GlobalVariables.QuestionnaireVote.GREEN;</span>
-<span class="fc" id="L214">        int nRed=0;</span>
-<span class="fc bfc" id="L215" title="All 2 branches covered.">        for(IoTApp app : dataBaseService.getUserApps(authenticatedUser.getUser())){</span>
-<span class="fc bfc" id="L216" title="All 2 branches covered.">            if(app.getQuestionnaireVote().equals(GlobalVariables.QuestionnaireVote.RED)){</span>
-<span class="fc" id="L217">                nRed++;</span>
-<span class="fc bfc" id="L218" title="All 2 branches covered.">                if(nRed&gt;1){</span>
-<span class="fc" id="L219">                    vote= GlobalVariables.QuestionnaireVote.RED;</span>
-<span class="fc" id="L220">                    break;</span>
+<span class="fc" id="L218">        Span evaluationDescription= new Span(&quot;Privacy Infrastructure Evaluation: &quot;);</span>
+<span class="fc" id="L219">        evaluationDescription.addClassName(&quot;bold&quot;);</span>
+<span class="fc" id="L220">        Span evaluation= new Span();</span>
+<span class="fc" id="L221">        GlobalVariables.QuestionnaireVote vote= GlobalVariables.QuestionnaireVote.GREEN;</span>
+<span class="fc" id="L222">        int nRed=0;</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">        for(IoTApp app : dataBaseService.getUserApps(authenticatedUser.getUser())){</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">            if(app.getQuestionnaireVote().equals(GlobalVariables.QuestionnaireVote.RED)){</span>
+<span class="fc" id="L225">                nRed++;</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">                if(nRed&gt;1){</span>
+<span class="fc" id="L227">                    vote= GlobalVariables.QuestionnaireVote.RED;</span>
+<span class="fc" id="L228">                    break;</span>
                 }
             }
-<span class="pc bpc" id="L223" title="1 of 4 branches missed.">            if(app.getQuestionnaireVote().equals(GlobalVariables.QuestionnaireVote.RED) &amp;&amp; vote.equals(GlobalVariables.QuestionnaireVote.GREEN)){</span>
-<span class="fc" id="L224">                vote= GlobalVariables.QuestionnaireVote.ORANGE;</span>
+<span class="pc bpc" id="L231" title="1 of 4 branches missed.">            if(app.getQuestionnaireVote().equals(GlobalVariables.QuestionnaireVote.RED) &amp;&amp; vote.equals(GlobalVariables.QuestionnaireVote.GREEN)){</span>
+<span class="fc" id="L232">                vote= GlobalVariables.QuestionnaireVote.ORANGE;</span>
             }
-<span class="fc" id="L226">        }</span>
-<span class="pc bpc" id="L227" title="1 of 4 branches missed.">        switch (vote){</span>
+<span class="fc" id="L234">        }</span>
+<span class="pc bpc" id="L235" title="1 of 4 branches missed.">        switch (vote){</span>
             case GREEN:
-<span class="fc" id="L229">                evaluation.setText(&quot;GREEN&quot;);</span>
-<span class="fc" id="L230">                summaryEvaluation.addClassName(&quot;greenName&quot;);</span>
-<span class="fc" id="L231">                break;</span>
+<span class="fc" id="L237">                evaluation.setText(&quot;GREEN&quot;);</span>
+<span class="fc" id="L238">                summaryEvaluation.addClassName(&quot;greenName&quot;);</span>
+<span class="fc" id="L239">                break;</span>
             case ORANGE:
-<span class="fc" id="L233">                evaluation.setText(&quot;ORANGE&quot;);</span>
-<span class="fc" id="L234">                summaryEvaluation.addClassName(&quot;orangeName&quot;);</span>
-<span class="fc" id="L235">                break;</span>
+<span class="fc" id="L241">                evaluation.setText(&quot;ORANGE&quot;);</span>
+<span class="fc" id="L242">                summaryEvaluation.addClassName(&quot;orangeName&quot;);</span>
+<span class="fc" id="L243">                break;</span>
             case RED:
-<span class="fc" id="L237">                evaluation.setText(&quot;RED&quot;);</span>
-<span class="fc" id="L238">                summaryEvaluation.addClassName(&quot;redName&quot;);</span>
+<span class="fc" id="L245">                evaluation.setText(&quot;RED&quot;);</span>
+<span class="fc" id="L246">                summaryEvaluation.addClassName(&quot;redName&quot;);</span>
                 break;
         }
-<span class="fc" id="L241">        summaryEvaluation.add(evaluationDescription, evaluation);</span>
-<span class="fc" id="L242">        summaryEvaluation.addClassName(&quot;summaryEvaluation&quot;);</span>
-<span class="fc" id="L243">    }</span>
+<span class="fc" id="L249">        summaryEvaluation.add(evaluationDescription, evaluation);</span>
+<span class="fc" id="L250">        summaryEvaluation.addClassName(&quot;summaryEvaluation&quot;);</span>
+<span class="fc" id="L251">    }</span>
 
     private void initializeSearchText(){
-<span class="fc" id="L246">        searchText.setPlaceholder(&quot;Search...&quot;);</span>
-<span class="fc" id="L247">        searchText.setValueChangeMode(ValueChangeMode.LAZY);</span>
-<span class="pc" id="L248">        searchText.addValueChangeListener(e-&gt; updateGrid());</span>
-<span class="fc" id="L249">        searchText.addClassName(&quot;search&quot;);</span>
-<span class="fc" id="L250">    }</span>
+<span class="fc" id="L254">        searchText.setPlaceholder(&quot;Search...&quot;);</span>
+<span class="fc" id="L255">        searchText.setValueChangeMode(ValueChangeMode.LAZY);</span>
+<span class="pc" id="L256">        searchText.addValueChangeListener(e-&gt; updateGrid());</span>
+<span class="fc" id="L257">        searchText.addClassName(&quot;search&quot;);</span>
+<span class="fc" id="L258">    }</span>
 
     private void initializeGrid(){
-<span class="fc" id="L253">        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);</span>
-<span class="fc" id="L254">        grid.addComponentColumn(this::createApp);</span>
-<span class="fc" id="L255">    }</span>
+<span class="fc" id="L261">        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);</span>
+<span class="fc" id="L262">        grid.addComponentColumn(this::createApp);</span>
+<span class="fc" id="L263">    }</span>
 
     private VerticalLayout createApp(IoTApp app){
-<span class="fc" id="L258">        Avatar avatar = new Avatar(app.getName());</span>
-<span class="fc" id="L259">        Span name = new Span(app.getName());</span>
-<span class="fc" id="L260">        name.addClassName(&quot;name&quot;);</span>
-<span class="fc" id="L261">        Details details = new Details(new Span(&quot;More&quot;), initializeApp(app));</span>
-<span class="fc" id="L262">        VerticalLayout card = new VerticalLayout();</span>
-<span class="fc" id="L263">        card.addClassName(&quot;card&quot;);</span>
-<span class="fc" id="L264">        card.addClassName(&quot;canOpen&quot;);</span>
-<span class="fc" id="L265">        card.setSpacing(false);</span>
-<span class="fc" id="L266">        card.add(new HorizontalLayout(avatar , name), details);</span>
-<span class="fc" id="L267">        card.addClickListener(e-&gt; {</span>
-<span class="nc bnc" id="L268" title="All 2 branches missed.">            if(card.hasClassName(&quot;canOpen&quot;)){</span>
-<span class="nc" id="L269">                details.setOpened(true);</span>
-<span class="nc" id="L270">                card.removeClassNames(&quot;canOpen&quot;);</span>
+<span class="fc" id="L266">        Avatar avatar = new Avatar(app.getName());</span>
+<span class="fc" id="L267">        Span name = new Span(app.getName());</span>
+<span class="fc" id="L268">        name.addClassName(&quot;name&quot;);</span>
+<span class="fc" id="L269">        Details details = new Details(new Span(&quot;More&quot;), initializeApp(app));</span>
+<span class="fc" id="L270">        VerticalLayout card = new VerticalLayout();</span>
+<span class="fc" id="L271">        card.addClassName(&quot;card&quot;);</span>
+<span class="fc" id="L272">        card.addClassName(&quot;canOpen&quot;);</span>
+<span class="fc" id="L273">        card.setSpacing(false);</span>
+<span class="fc" id="L274">        card.add(new HorizontalLayout(avatar , name), details);</span>
+<span class="fc" id="L275">        card.addClickListener(e-&gt; {</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">            if(card.hasClassName(&quot;canOpen&quot;)){</span>
+<span class="nc" id="L277">                details.setOpened(true);</span>
+<span class="nc" id="L278">                card.removeClassNames(&quot;canOpen&quot;);</span>
             }
-<span class="nc bnc" id="L272" title="All 2 branches missed.">            else if(!details.isOpened()){</span>
-<span class="nc" id="L273">                card.addClassName(&quot;canOpen&quot;);</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">            else if(!details.isOpened()){</span>
+<span class="nc" id="L281">                card.addClassName(&quot;canOpen&quot;);</span>
             }
-<span class="nc" id="L275">        });</span>
+<span class="nc" id="L283">        });</span>
 
         // se c'è un priorityUser apri details
-<span class="pc bpc" id="L278" title="1 of 2 branches missed.">        if(app.equals(priorityApp)){</span>
-<span class="nc" id="L279">            details.setOpened(true);</span>
+<span class="pc bpc" id="L286" title="1 of 2 branches missed.">        if(app.equals(priorityApp)){</span>
+<span class="nc" id="L287">            details.setOpened(true);</span>
         }
-<span class="fc" id="L281">        return card;</span>
+<span class="fc" id="L289">        return card;</span>
     }
 
     private VerticalLayout initializeApp(IoTApp i){
-<span class="fc" id="L285">        Span descriptionSpan= new Span(&quot;Description:   &quot;);</span>
-<span class="fc" id="L286">        descriptionSpan.addClassName(&quot;bold&quot;);</span>
-<span class="fc" id="L287">        Span description= new Span(descriptionSpan,  new Span(i.getDescription()));</span>
-<span class="fc" id="L288">        Div vote= getEvaluation(i);</span>
-<span class="fc" id="L289">        Span privacyNotice= new Span(&quot;Privacy Notice&quot;);</span>
-<span class="fc" id="L290">        privacyNotice.addClassName(&quot;link&quot;);</span>
-<span class="pc" id="L291">        privacyNotice.addClickListener(e-&gt; goToPrivacyNotice(i));</span>
-<span class="fc" id="L292">        Details controllerDetails= new Details(new Span(&quot;Data Controllers: &quot;), getUsers(i, Role.CONTROLLER));</span>
-<span class="fc" id="L293">        Details DPODetails= new Details(new Span(&quot;Data Protection Officer: &quot;), getUsers(i, Role.DPO));</span>
+<span class="fc" id="L293">        Span descriptionSpan= new Span(&quot;Description:   &quot;);</span>
+<span class="fc" id="L294">        descriptionSpan.addClassName(&quot;bold&quot;);</span>
+<span class="fc" id="L295">        Span description= new Span(descriptionSpan,  new Span(i.getDescription()));</span>
+<span class="fc" id="L296">        Div vote= getEvaluation(i);</span>
+<span class="fc" id="L297">        Span privacyNotice= new Span(&quot;Privacy Notice&quot;);</span>
+<span class="fc" id="L298">        privacyNotice.addClassName(&quot;link&quot;);</span>
+<span class="pc" id="L299">        privacyNotice.addClickListener(e-&gt; goToPrivacyNotice(i));</span>
+<span class="fc" id="L300">        Details controllerDetails= new Details(new Span(&quot;Data Controllers: &quot;), getUsers(i, Role.CONTROLLER));</span>
+<span class="fc" id="L301">        Details DPODetails= new Details(new Span(&quot;Data Protection Officer: &quot;), getUsers(i, Role.DPO));</span>
 
-<span class="fc" id="L295">        VerticalLayout content=new VerticalLayout(description, vote, privacyNotice, controllerDetails, DPODetails);</span>
-<span class="fc bfc" id="L296" title="All 2 branches covered.">        if(authenticatedUser.getUser().getRole().equals(Role.SUBJECT)){</span>
-<span class="fc" id="L297">            content.add(new Details(new Span(&quot;Consenses: &quot;) , getConsenses(i)));</span>
-<span class="pc" id="L298">            Button removeEverythingButton= new Button(&quot;Remove everything&quot;, e-&gt;removeEverything(i));</span>
-<span class="fc" id="L299">            content.add(removeEverythingButton);</span>
-<span class="fc" id="L300">        }</span>
+<span class="fc" id="L303">        VerticalLayout content=new VerticalLayout(description, vote, privacyNotice, controllerDetails, DPODetails);</span>
+<span class="fc bfc" id="L304" title="All 2 branches covered.">        if(authenticatedUser.getUser().getRole().equals(Role.SUBJECT)){</span>
+<span class="fc" id="L305">            content.add(new Details(new Span(&quot;Consenses: &quot;) , getConsenses(i)));</span>
+<span class="pc" id="L306">            Button removeEverythingButton= new Button(&quot;Remove everything&quot;, e-&gt;removeEverything(i));</span>
+<span class="fc" id="L307">            content.add(removeEverythingButton);</span>
+<span class="fc" id="L308">        }</span>
         else{
-<span class="fc" id="L302">            content.add(new Details(new Span(&quot;Data Subjects: &quot;) , getUsers(i, Role.SUBJECT)));</span>
+<span class="fc" id="L310">            content.add(new Details(new Span(&quot;Data Subjects: &quot;) , getUsers(i, Role.SUBJECT)));</span>
         }
         //content.add(new Span(&quot;ID: &quot; + i.getId().toString()));
-<span class="fc" id="L305">        return content;</span>
+<span class="fc" id="L313">        return content;</span>
     }
 
     private Div getEvaluation(IoTApp app){
-<span class="fc" id="L309">        Span icon= new Span();</span>
-<span class="fc" id="L310">        icon.addClassNames(&quot;las la-info-circle&quot;);</span>
-<span class="fc" id="L311">        icon.addClassName(&quot;pointer&quot;);</span>
-<span class="fc" id="L312">        ContextMenu contextMenu= new ContextMenu();</span>
-<span class="fc" id="L313">        contextMenu.setTarget(icon);</span>
-<span class="fc" id="L314">        contextMenu.setOpenOnClick(true);</span>
-<span class="fc" id="L315">        contextMenu.addClassName(&quot;info&quot;);</span>
-<span class="fc" id="L316">        Span descr= new Span(&quot;Evaluation: &quot;);</span>
-<span class="fc" id="L317">        descr.addClassName(&quot;bold&quot;);</span>
-<span class="fc" id="L318">        Span vote=new Span();</span>
-<span class="fc" id="L319">        String text=&quot;&quot;;</span>
+<span class="fc" id="L317">        Span icon= new Span();</span>
+<span class="fc" id="L318">        icon.addClassNames(&quot;las la-info-circle&quot;);</span>
+<span class="fc" id="L319">        icon.addClassName(&quot;pointer&quot;);</span>
+<span class="fc" id="L320">        ContextMenu contextMenu= new ContextMenu();</span>
+<span class="fc" id="L321">        contextMenu.setTarget(icon);</span>
+<span class="fc" id="L322">        contextMenu.setOpenOnClick(true);</span>
+<span class="fc" id="L323">        contextMenu.addClassName(&quot;info&quot;);</span>
+<span class="fc" id="L324">        Span descr= new Span(&quot;Evaluation: &quot;);</span>
+<span class="fc" id="L325">        descr.addClassName(&quot;bold&quot;);</span>
+<span class="fc" id="L326">        Span vote=new Span();</span>
+<span class="fc" id="L327">        String text=&quot;&quot;;</span>
 
-<span class="fc bfc" id="L321" title="All 2 branches covered.">        if(app.getQuestionnaireVote()==null){</span>
-<span class="fc" id="L322">            vote.setText(&quot;NO EVALUATION YET&quot;);</span>
-<span class="fc" id="L323">            vote.addClassName(&quot;redName&quot;);</span>
-<span class="fc" id="L324">            text= &quot;The questionnaire to evaluate this app hasn't been performed yet&quot;;</span>
+<span class="fc bfc" id="L329" title="All 2 branches covered.">        if(app.getQuestionnaireVote()==null){</span>
+<span class="fc" id="L330">            vote.setText(&quot;NO EVALUATION YET&quot;);</span>
+<span class="fc" id="L331">            vote.addClassName(&quot;redName&quot;);</span>
+<span class="fc" id="L332">            text= &quot;The questionnaire to evaluate this app hasn't been performed yet&quot;;</span>
 
         }
         else{
-<span class="pc bpc" id="L328" title="1 of 4 branches missed.">            switch (app.getQuestionnaireVote()){</span>
+<span class="pc bpc" id="L336" title="1 of 4 branches missed.">            switch (app.getQuestionnaireVote()){</span>
                 case RED:
-<span class="fc" id="L330">                    vote.setText(&quot;RED &quot;);</span>
-<span class="fc" id="L331">                    vote.addClassName(&quot;redName&quot;);</span>
-<span class="fc" id="L332">                    text= &quot;The app is not compliant with the GDPR&quot;;</span>
-<span class="fc" id="L333">                    break;</span>
+<span class="fc" id="L338">                    vote.setText(&quot;RED &quot;);</span>
+<span class="fc" id="L339">                    vote.addClassName(&quot;redName&quot;);</span>
+<span class="fc" id="L340">                    text= &quot;The app is not compliant with the GDPR&quot;;</span>
+<span class="fc" id="L341">                    break;</span>
                 case ORANGE:
-<span class="fc" id="L335">                    vote.setText(&quot;ORANGE &quot;);</span>
-<span class="fc" id="L336">                    vote.addClassName(&quot;orangeName&quot;);</span>
-<span class="fc" id="L337">                    text= &quot;The app is not so compliant with the GDPR&quot;;</span>
-<span class="fc" id="L338">                    break;</span>
+<span class="fc" id="L343">                    vote.setText(&quot;ORANGE &quot;);</span>
+<span class="fc" id="L344">                    vote.addClassName(&quot;orangeName&quot;);</span>
+<span class="fc" id="L345">                    text= &quot;The app is not so compliant with the GDPR&quot;;</span>
+<span class="fc" id="L346">                    break;</span>
                 case GREEN:
-<span class="fc" id="L340">                    vote.setText(&quot;GREEN &quot;);</span>
-<span class="fc" id="L341">                    vote.addClassName(&quot;greenName&quot;);</span>
-<span class="fc" id="L342">                    text= &quot;The app is compliant with the GDPR&quot;;</span>
+<span class="fc" id="L348">                    vote.setText(&quot;GREEN &quot;);</span>
+<span class="fc" id="L349">                    vote.addClassName(&quot;greenName&quot;);</span>
+<span class="fc" id="L350">                    text= &quot;The app is compliant with the GDPR&quot;;</span>
                     break;
             }
         }
-<span class="fc bfc" id="L346" title="All 2 branches covered.">        if(!authenticatedUser.getUser().getRole().equals(Role.SUBJECT)) {</span>
-<span class="fc" id="L347">            contextMenu.addItem(&quot;Go to the questionnaire&quot;, e -&gt; {</span>
-<span class="nc" id="L348">                communicationService.setApp(app);</span>
-<span class="nc" id="L349">                UI.getCurrent().navigate(SingleQuestionnaire.class);</span>
-<span class="nc" id="L350">            });</span>
+<span class="fc bfc" id="L354" title="All 2 branches covered.">        if(!authenticatedUser.getUser().getRole().equals(Role.SUBJECT)) {</span>
+<span class="fc" id="L355">            contextMenu.addItem(&quot;Go to the questionnaire&quot;, e -&gt; {</span>
+<span class="nc" id="L356">                communicationService.setApp(app);</span>
+<span class="nc" id="L357">                UI.getCurrent().navigate(SingleQuestionnaire.class);</span>
+<span class="nc" id="L358">            });</span>
         }
         else {
-<span class="fc" id="L353">            contextMenu.addItem(text);</span>
+<span class="fc" id="L361">            contextMenu.addItem(text);</span>
         }
-<span class="fc" id="L355">        return new Div(descr, vote, icon);</span>
+<span class="fc" id="L363">        return new Div(descr, vote, icon);</span>
     }
 
     private void goToPrivacyNotice(IoTApp i){
-<span class="nc" id="L359">        communicationService.setPrivacyNotice(dataBaseService.getPrivacyNoticeFromApp(i));</span>
-<span class="nc" id="L360">        UI.getCurrent().navigate(PrivacyNoticeView.class);</span>
-<span class="nc" id="L361">    }</span>
+<span class="nc" id="L367">        communicationService.setPrivacyNotice(dataBaseService.getPrivacyNoticeFromApp(i));</span>
+<span class="nc" id="L368">        UI.getCurrent().navigate(PrivacyNoticeView.class);</span>
+<span class="nc" id="L369">    }</span>
 
     private VerticalLayout getUsers(IoTApp i, Role role){
-<span class="fc" id="L364">        VerticalLayout layout=new VerticalLayout();</span>
+<span class="fc" id="L372">        VerticalLayout layout=new VerticalLayout();</span>
         List&lt;User&gt; users;
-<span class="pc bpc" id="L366" title="1 of 4 branches missed.">        switch(role) {</span>
+<span class="pc bpc" id="L374" title="1 of 4 branches missed.">        switch(role) {</span>
             case SUBJECT:
-<span class="fc" id="L368">                users = dataBaseService.getSubjectsFromApp(i);</span>
-<span class="fc" id="L369">                break;</span>
+<span class="fc" id="L376">                users = dataBaseService.getSubjectsFromApp(i);</span>
+<span class="fc" id="L377">                break;</span>
             case CONTROLLER:
-<span class="fc" id="L371">                users = dataBaseService.getControllersFromApp(i);</span>
-<span class="fc" id="L372">                break;</span>
+<span class="fc" id="L379">                users = dataBaseService.getControllersFromApp(i);</span>
+<span class="fc" id="L380">                break;</span>
             case DPO:
-<span class="fc" id="L374">                users = dataBaseService.getDPOsFromApp(i);</span>
-<span class="fc" id="L375">                break;</span>
+<span class="fc" id="L382">                users = dataBaseService.getDPOsFromApp(i);</span>
+<span class="fc" id="L383">                break;</span>
             default:
-<span class="nc" id="L377">                return null;</span>
+<span class="nc" id="L385">                return null;</span>
         }
 
-<span class="fc bfc" id="L380" title="All 2 branches covered.">        for(User u : users){</span>
-<span class="pc bpc" id="L381" title="1 of 2 branches missed.">            if(u.equals(authenticatedUser.getUser())){</span>
-<span class="fc" id="L382">                continue;</span>
+<span class="fc bfc" id="L388" title="All 2 branches covered.">        for(User u : users){</span>
+<span class="pc bpc" id="L389" title="1 of 2 branches missed.">            if(u.equals(authenticatedUser.getUser())){</span>
+<span class="fc" id="L390">                continue;</span>
             }
-<span class="nc" id="L384">            Span contactLink=new Span(u.getName());</span>
-<span class="nc" id="L385">            contactLink.addClassName(&quot;link&quot;);</span>
-<span class="nc" id="L386">            contactLink.addClickListener(e-&gt;communicationService.setContact(u));</span>
-<span class="nc" id="L387">            contactLink.addClickListener(e-&gt; UI.getCurrent().navigate(ContactsView.class));</span>
-<span class="nc" id="L388">            layout.add(contactLink);</span>
-<span class="nc" id="L389">        }</span>
-<span class="fc" id="L390">        return layout;</span>
+<span class="nc" id="L392">            Span contactLink=new Span(u.getName());</span>
+<span class="nc" id="L393">            contactLink.addClassName(&quot;link&quot;);</span>
+<span class="nc" id="L394">            contactLink.addClickListener(e-&gt;communicationService.setContact(u));</span>
+<span class="nc" id="L395">            contactLink.addClickListener(e-&gt; UI.getCurrent().navigate(ContactsView.class));</span>
+<span class="nc" id="L396">            layout.add(contactLink);</span>
+<span class="nc" id="L397">        }</span>
+<span class="fc" id="L398">        return layout;</span>
     }
 
     private VerticalLayout getConsenses(IoTApp i){
-<span class="fc" id="L394">        VerticalLayout layout=new VerticalLayout();</span>
-<span class="pc bpc" id="L395" title="1 of 2 branches missed.">        if(i.getConsenses() == null){</span>
-<span class="nc" id="L396">            return layout;</span>
+<span class="fc" id="L402">        VerticalLayout layout=new VerticalLayout();</span>
+<span class="pc bpc" id="L403" title="1 of 2 branches missed.">        if(i.getConsenses() == null){</span>
+<span class="nc" id="L404">            return layout;</span>
         }
-<span class="fc" id="L398">        String[] appConsenses= i.getConsenses();</span>
-<span class="fc" id="L399">        String[] userConsenses=dataBaseService.getConsensesFromUserAndApp(authenticatedUser.getUser(), i);</span>
-<span class="fc bfc" id="L400" title="All 2 branches covered.">        for(String consens :  appConsenses){</span>
-<span class="fc" id="L401">            Button button= new Button();</span>
-<span class="pc bpc" id="L402" title="3 of 4 branches missed.">            if(userConsenses!=null &amp;&amp; List.of(userConsenses).contains(consens)){</span>
-<span class="nc" id="L403">                button.setText(&quot;Withdraw consent&quot;);</span>
-<span class="nc" id="L404">                button.addClickListener(e -&gt; changeConsent(i, consens, &quot;withdraw&quot;));</span>
+<span class="fc" id="L406">        String[] appConsenses= i.getConsenses();</span>
+<span class="fc" id="L407">        String[] userConsenses=dataBaseService.getConsensesFromUserAndApp(authenticatedUser.getUser(), i);</span>
+<span class="fc bfc" id="L408" title="All 2 branches covered.">        for(String consens :  appConsenses){</span>
+<span class="fc" id="L409">            Button button= new Button();</span>
+<span class="pc bpc" id="L410" title="3 of 4 branches missed.">            if(userConsenses!=null &amp;&amp; List.of(userConsenses).contains(consens)){</span>
+<span class="nc" id="L411">                button.setText(&quot;Withdraw consent&quot;);</span>
+<span class="nc" id="L412">                button.addClickListener(e -&gt; changeConsent(i, consens, &quot;withdraw&quot;));</span>
             }
             else{
-<span class="fc" id="L407">                button.setText(&quot;Accept consent&quot;);</span>
-<span class="pc" id="L408">                button.addClickListener(e -&gt; changeConsent(i, consens, &quot;accept&quot;));</span>
+<span class="fc" id="L415">                button.setText(&quot;Accept consent&quot;);</span>
+<span class="pc" id="L416">                button.addClickListener(e -&gt; changeConsent(i, consens, &quot;accept&quot;));</span>
             }
-<span class="fc" id="L410">            HorizontalLayout l=new HorizontalLayout(new Span(consens), button);</span>
-<span class="fc" id="L411">            l.setAlignItems(FlexComponent.Alignment.CENTER);</span>
-<span class="fc" id="L412">            l.setVerticalComponentAlignment(FlexComponent.Alignment.CENTER);</span>
-<span class="fc" id="L413">            layout.add(l);</span>
+<span class="fc" id="L418">            HorizontalLayout l=new HorizontalLayout(new Span(consens), button);</span>
+<span class="fc" id="L419">            l.setAlignItems(FlexComponent.Alignment.CENTER);</span>
+<span class="fc" id="L420">            l.setVerticalComponentAlignment(FlexComponent.Alignment.CENTER);</span>
+<span class="fc" id="L421">            layout.add(l);</span>
         }
-<span class="fc" id="L415">        return layout;</span>
+<span class="fc" id="L423">        return layout;</span>
     }
 
     private void changeConsent(IoTApp i, String consent, String action){
@@ -448,59 +456,59 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
         */
 
         // DA ELIMINARE
-<span class="nc bnc" id="L451" title="All 2 branches missed.">        if(action.equals(&quot;withdraw&quot;)){</span>
-<span class="nc" id="L452">            dataBaseService.removeConsensesFromUserAppRelation(dataBaseService.getUserAppRelationByUserAndApp(authenticatedUser.getUser(), i), List.of(consent));</span>
+<span class="nc bnc" id="L459" title="All 2 branches missed.">        if(action.equals(&quot;withdraw&quot;)){</span>
+<span class="nc" id="L460">            dataBaseService.removeConsensesFromUserAppRelation(dataBaseService.getUserAppRelationByUserAndApp(authenticatedUser.getUser(), i), List.of(consent));</span>
         }
         else{
-<span class="nc" id="L455">            dataBaseService.addConsenses(dataBaseService.getUserAppRelationByUserAndApp(authenticatedUser.getUser(), i), List.of(consent));</span>
+<span class="nc" id="L463">            dataBaseService.addConsenses(dataBaseService.getUserAppRelationByUserAndApp(authenticatedUser.getUser(), i), List.of(consent));</span>
         }
         // FINE DA ELIMINARE
 
-<span class="nc" id="L459">        RightRequest request=new RightRequest();</span>
-<span class="nc" id="L460">        request.setSender(authenticatedUser.getUser());</span>
-<span class="nc" id="L461">        request.setRightType(RightType.WITHDRAWCONSENT);</span>
-<span class="nc" id="L462">        request.setApp(i);</span>
-<span class="nc" id="L463">        request.setOther(consent);</span>
-<span class="nc" id="L464">        request.setReceiver(dataBaseService.getControllersFromApp(i).get(0));</span>
-<span class="nc" id="L465">        request.setHandled(false);</span>
-<span class="nc" id="L466">        communicationService.setRightRequest(request);</span>
-<span class="nc" id="L467">        UI.getCurrent().navigate(&quot;rights&quot;);</span>
-<span class="nc" id="L468">    }</span>
+<span class="nc" id="L467">        RightRequest request=new RightRequest();</span>
+<span class="nc" id="L468">        request.setSender(authenticatedUser.getUser());</span>
+<span class="nc" id="L469">        request.setRightType(RightType.WITHDRAWCONSENT);</span>
+<span class="nc" id="L470">        request.setApp(i);</span>
+<span class="nc" id="L471">        request.setOther(consent);</span>
+<span class="nc" id="L472">        request.setReceiver(dataBaseService.getControllersFromApp(i).get(0));</span>
+<span class="nc" id="L473">        request.setHandled(false);</span>
+<span class="nc" id="L474">        communicationService.setRightRequest(request);</span>
+<span class="nc" id="L475">        UI.getCurrent().navigate(&quot;rights&quot;);</span>
+<span class="nc" id="L476">    }</span>
 
     private void removeEverything(IoTApp app){
-<span class="nc" id="L471">        MyDialog dialog= new MyDialog();</span>
-<span class="nc" id="L472">        Button confirm=new Button(&quot;Confirm&quot;, e-&gt; {dataBaseService.removeEverythingFromUserAndApp(authenticatedUser.getUser(), app);</span>
-<span class="nc" id="L473">            Notification notification = Notification.show(&quot;The request has been sent to the Data Controllers!&quot;);</span>
-<span class="nc" id="L474">            notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);</span>
-<span class="nc" id="L475">            dialog.close();});</span>
+<span class="nc" id="L479">        MyDialog dialog= new MyDialog();</span>
+<span class="nc" id="L480">        Button confirm=new Button(&quot;Confirm&quot;, e-&gt; {dataBaseService.removeEverythingFromUserAndApp(authenticatedUser.getUser(), app);</span>
+<span class="nc" id="L481">            Notification notification = Notification.show(&quot;The request has been sent to the Data Controllers!&quot;);</span>
+<span class="nc" id="L482">            notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);</span>
+<span class="nc" id="L483">            dialog.close();});</span>
 
-<span class="nc" id="L477">        dialog.setContinueButton(confirm);</span>
-<span class="nc" id="L478">        dialog.setTitle(&quot;Confirm to remove everything&quot;);</span>
-<span class="nc" id="L479">        dialog.setContent(</span>
-<span class="nc" id="L480">                new VerticalLayout(new Span(&quot;Are you sure you want to remove all your personal information from the app &quot; +  app.getName() + &quot;?&quot;)));</span>
-<span class="nc" id="L481">        dialog.open();</span>
-<span class="nc" id="L482">    }</span>
+<span class="nc" id="L485">        dialog.setContinueButton(confirm);</span>
+<span class="nc" id="L486">        dialog.setTitle(&quot;Confirm to remove everything&quot;);</span>
+<span class="nc" id="L487">        dialog.setContent(</span>
+<span class="nc" id="L488">                new VerticalLayout(new Span(&quot;Are you sure you want to remove all your personal information from the app &quot; +  app.getName() + &quot;?&quot;)));</span>
+<span class="nc" id="L489">        dialog.open();</span>
+<span class="nc" id="L490">    }</span>
 
     private void updateGrid(){
         List&lt;IoTApp&gt; ioTAppList;
-<span class="nc bnc" id="L486" title="All 4 branches missed.">        if(searchText.getValue()==null || searchText.getValue().length()==0){</span>
-<span class="nc" id="L487">            ioTAppList=dataBaseService.getUserApps(authenticatedUser.getUser());</span>
+<span class="nc bnc" id="L494" title="All 4 branches missed.">        if(searchText.getValue()==null || searchText.getValue().length()==0){</span>
+<span class="nc" id="L495">            ioTAppList=dataBaseService.getUserApps(authenticatedUser.getUser());</span>
         }
         else{
-<span class="nc" id="L490">            ioTAppList=dataBaseService.getUserAppsByName(authenticatedUser.getUser(), searchText.getValue());</span>
+<span class="nc" id="L498">            ioTAppList=dataBaseService.getUserAppsByName(authenticatedUser.getUser(), searchText.getValue());</span>
         }
         // se esiste l'app selezionata nei parametri, mettilo al primo posto
-<span class="nc bnc" id="L493" title="All 2 branches missed.">        if(priorityApp!=null){</span>
-<span class="nc bnc" id="L494" title="All 2 branches missed.">            if(ioTAppList.contains(priorityApp)){</span>
-<span class="nc" id="L495">                Collections.swap(ioTAppList, 0, ioTAppList.indexOf(priorityApp));</span>
+<span class="nc bnc" id="L501" title="All 2 branches missed.">        if(priorityApp!=null){</span>
+<span class="nc bnc" id="L502" title="All 2 branches missed.">            if(ioTAppList.contains(priorityApp)){</span>
+<span class="nc" id="L503">                Collections.swap(ioTAppList, 0, ioTAppList.indexOf(priorityApp));</span>
             }
         }
-<span class="nc" id="L498">        grid.setItems(ioTAppList);</span>
-<span class="nc" id="L499">    }</span>
+<span class="nc" id="L506">        grid.setItems(ioTAppList);</span>
+<span class="nc" id="L507">    }</span>
 
     @Override
     public void afterNavigation(AfterNavigationEvent event) {
-<span class="nc" id="L503">        updateGrid();</span>
-<span class="nc" id="L504">    }</span>
+<span class="nc" id="L511">        updateGrid();</span>
+<span class="nc" id="L512">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

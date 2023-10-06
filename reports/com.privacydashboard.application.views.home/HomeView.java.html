@@ -23,7 +23,7 @@ public class HomeView extends VerticalLayout {
     private final AuthenticatedUser authenticatedUser;
     private final CommunicationService communicationService;
 
-<span class="fc" id="L26">    private final int nSection=6;</span>
+<span class="fc" id="L26">    private final int nSection=7;</span>
 <span class="fc" id="L27">    private final int nRows=2;</span>
 <span class="fc" id="L28">    private final VerticalLayout[] layouts= new VerticalLayout[nSection];</span>
 <span class="fc" id="L29">    private final Span[] titles= new Span[nSection];</span>
@@ -37,9 +37,9 @@ public class HomeView extends VerticalLayout {
 
 <span class="fc" id="L38">        initializeLayout();</span>
 <span class="fc" id="L39">        createSections();</span>
-<span class="fc bfc" id="L40" title="All 2 branches covered.">        for(int i=0;i&lt;nRows;i++){</span>
-<span class="fc" id="L41">            add(new HorizontalLayout(Arrays.copyOfRange(layouts, i*nSection/nRows, (i+1)*nSection/nRows)));</span>
-        }
+<span class="fc" id="L40">        add(layouts);</span>
+        /*for(int i=0;i&lt;nSection;i++){
+        }*/
         //add(new Span(&quot;ID: &quot; + authenticatedUser.getUser().getId().toString()));
 <span class="fc" id="L44">    }</span>
 
@@ -59,29 +59,30 @@ public class HomeView extends VerticalLayout {
     private void createSections(){
 <span class="fc" id="L60">        createSingleSection(0, &quot;Contacts&quot;, &quot;contacts&quot;, &quot;la-address-book&quot;);</span>
 <span class="fc" id="L61">        createSingleSection(1, &quot;Messages&quot;, &quot;messages&quot;, &quot;la-comments&quot;);</span>
-<span class="fc" id="L62">        createSingleSection(3, &quot;Apps&quot;, &quot;apps-view&quot;, &quot;la-list&quot;);</span>
-<span class="fc" id="L63">        createSingleSection(4, &quot;Privacy Notice&quot;, &quot;privacyNotice&quot;, &quot;la-file&quot;);</span>
-<span class="pc bpc" id="L64" title="1 of 4 branches missed.">        if(authenticatedUser.getUser().getRole().equals(Role.CONTROLLER) || authenticatedUser.getUser().getRole().equals(Role.DPO)){</span>
-<span class="fc" id="L65">            createSingleSection(2, &quot;Rights&quot;, &quot;rights_controller&quot;, &quot;la-school&quot;);</span>
-<span class="fc" id="L66">            createSingleSection(5, &quot;Questionnaire&quot;, &quot;questionnaire&quot;,&quot;la-archive&quot;);</span>
+<span class="fc" id="L62">        createSingleSection(3, &quot;Available Apps&quot;, &quot;available-apps-view&quot;, &quot;la-list&quot;);</span>
+<span class="fc" id="L63">        createSingleSection(4, &quot;Apps&quot;, &quot;apps-view&quot;, &quot;la-list&quot;);</span>
+<span class="fc" id="L64">        createSingleSection(5, &quot;Privacy Notice&quot;, &quot;privacyNotice&quot;, &quot;la-file&quot;);</span>
+<span class="pc bpc" id="L65" title="1 of 4 branches missed.">        if(authenticatedUser.getUser().getRole().equals(Role.CONTROLLER) || authenticatedUser.getUser().getRole().equals(Role.DPO)){</span>
+<span class="fc" id="L66">            createSingleSection(2, &quot;Rights&quot;, &quot;rights_controller&quot;, &quot;la-school&quot;);</span>
+<span class="fc" id="L67">            createSingleSection(6, &quot;Questionnaire&quot;, &quot;questionnaire&quot;,&quot;la-archive&quot;);</span>
         }
         else{
-<span class="fc" id="L69">            createSingleSection(2, &quot;Rights&quot;, &quot;rights&quot;, &quot;la-school&quot;);</span>
-<span class="fc" id="L70">            titles[5].setText(&quot;Pending Requests&quot;);</span>
-<span class="fc" id="L71">            layouts[5].addClickListener((e-&gt;{</span>
-<span class="nc" id="L72">                communicationService.setOpenPendingRequests(true);</span>
-<span class="nc" id="L73">                UI.getCurrent().navigate(&quot;rights&quot;);</span>
-<span class="nc" id="L74">            }));</span>
-<span class="fc" id="L75">            icons[5].addClassName(&quot;la-archive&quot;);</span>
+<span class="fc" id="L70">            createSingleSection(2, &quot;Rights&quot;, &quot;rights&quot;, &quot;la-school&quot;);</span>
+<span class="fc" id="L71">            titles[6].setText(&quot;Pending Requests&quot;);</span>
+<span class="fc" id="L72">            layouts[6].addClickListener((e-&gt;{</span>
+<span class="nc" id="L73">                communicationService.setOpenPendingRequests(true);</span>
+<span class="nc" id="L74">                UI.getCurrent().navigate(&quot;rights&quot;);</span>
+<span class="nc" id="L75">            }));</span>
+<span class="fc" id="L76">            icons[6].addClassName(&quot;la-archive&quot;);</span>
         }
 
-<span class="fc" id="L78">    }</span>
+<span class="fc" id="L79">    }</span>
 
     private void createSingleSection(int sectionNumber, String title, String navigationPage, String className){
-<span class="fc" id="L81">        titles[sectionNumber].setText(title);</span>
-<span class="pc" id="L82">        layouts[sectionNumber].addClickListener(e-&gt; UI.getCurrent().navigate(navigationPage));</span>
-<span class="fc" id="L83">        icons[sectionNumber].addClassName(className);</span>
-<span class="fc" id="L84">    }</span>
+<span class="fc" id="L82">        titles[sectionNumber].setText(title);</span>
+<span class="pc" id="L83">        layouts[sectionNumber].addClickListener(e-&gt; UI.getCurrent().navigate(navigationPage));</span>
+<span class="fc" id="L84">        icons[sectionNumber].addClassName(className);</span>
+<span class="fc" id="L85">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
