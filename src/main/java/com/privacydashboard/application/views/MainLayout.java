@@ -153,7 +153,7 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("Rights", "las la-school", ControllerDPORightsView.class),  //ONLY FOR CONTROLLERS AND DPOS
 
-                new MenuItemInfo("AvailableApps", "la la-list", AvailableAppsView.class), //
+                new MenuItemInfo("Available Apps", "la la-list", AvailableAppsView.class), //
 
                 new MenuItemInfo("Apps", "la la-list", AppsView.class), //
 

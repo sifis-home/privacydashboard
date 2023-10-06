@@ -47,7 +47,7 @@ import com.privacydashboard.application.views.questionnaire.SingleQuestionnaire;
 import com.privacydashboard.application.views.usefulComponents.MyDialog;
 
 @PageTitle("AvailableApps")
-@Route(value = "available_apps-view", layout = MainLayout.class)
+@Route(value = "available-apps-view", layout = MainLayout.class)
 @PermitAll
 @NpmPackage(value = "line-awesome", version = "1.3.0")
 public class AvailableAppsView extends Div {
@@ -93,6 +93,11 @@ public class AvailableAppsView extends Div {
 
             JsonNode json = new ObjectMapper().readTree(new StringReader(responseString));
             int size = json.get("packages").size();
+
+            if(size == 0){
+                throw new NullPointerException("Size was 0");
+            }
+
             IoTApp[] appArray = new IoTApp[size];
 
             Iterator<JsonNode> iterator = json.get("packages").elements();
@@ -364,6 +369,9 @@ public class AvailableAppsView extends Div {
         }
         catch(Exception e){
             System.out.println("Exception: "+e);
+            Span exNotice = e.getMessage().equals("Size was 0") ? new Span("You do not have any apps.") : new Span("We could not retrieve your apps.");
+            exNotice.addClassName("bold");
+            appLayout.add(exNotice);
         }
 
         add(appLayout);

@@ -141,6 +141,11 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
             JsonNode json = new ObjectMapper().readTree(new StringReader(responseString));
             json = json.get("value");
             int size = json.get("containers").size();
+
+            if(size == 0){
+                throw new NullPointerException("Size was 0");
+            }
+
             IoTApp[] appArray = new IoTApp[size];
 
             Iterator<JsonNode> iterator = json.get("containers").elements();
@@ -201,6 +206,9 @@ public class AppsView extends Div implements AfterNavigationObserver, BeforeEnte
         }
         catch(Exception e){
             System.out.println("Exception: "+e);
+            Span exNotice = e.getMessage().equals("Size was 0") ? new Span("You do not have any apps.") : new Span("We could not retrieve your apps.");
+            exNotice.addClassName("bold");
+            appLayout.add(exNotice);
         }
 
         add(summaryEvaluation, searchText, appLayout, grid);
