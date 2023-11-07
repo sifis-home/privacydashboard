@@ -4,7 +4,14 @@ import com.privacydashboard.application.data.GlobalVariables.QuestionnaireVote;
 import com.privacydashboard.application.data.GlobalVariables.RightType;
 import com.privacydashboard.application.data.GlobalVariables.Role;
 import com.privacydashboard.application.data.entity.*;
-import com.privacydashboard.application.data.service.*;
+import com.privacydashboard.application.data.service.IoTAppRepository;
+import com.privacydashboard.application.data.service.MessageRepository;
+import com.privacydashboard.application.data.service.NotificationRepository;
+import com.privacydashboard.application.data.service.PrivacyNoticeRepository;
+import com.privacydashboard.application.data.service.RightRequestRepository;
+import com.privacydashboard.application.data.service.UserAppRelationRepository;
+import com.privacydashboard.application.data.service.UserRepository;
+import com.privacydashboard.application.security.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 
 import java.time.LocalDateTime;
@@ -17,324 +24,324 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringComponent
-<span class="nc" id="L20">public class DataGenerator {</span>
+<span class="nc" id="L27">public class DataGenerator {</span>
 
     @Bean
     public CommandLineRunner loadData(PasswordEncoder passwordEncoder, UserRepository userRepository, IoTAppRepository ioTAppRepository, UserAppRelationRepository userAppRelationRepository, MessageRepository messageRepository, RightRequestRepository rightRequestRepository, PrivacyNoticeRepository privacyNoticeRepository, NotificationRepository notificationRepository) {
-<span class="nc" id="L24">        return args -&gt; {</span>
-<span class="nc" id="L25">            Logger logger = LoggerFactory.getLogger(getClass());</span>
-<span class="nc bnc" id="L26" title="All 2 branches missed.">            if (userRepository.count() != 0L) {</span>
-<span class="nc" id="L27">                logger.info(&quot;Using existing database&quot;);</span>
-<span class="nc" id="L28">                return;</span>
+<span class="nc" id="L31">        return args -&gt; {</span>
+<span class="nc" id="L32">            Logger logger = LoggerFactory.getLogger(getClass());</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            if (userRepository.count() != 0L) {</span>
+<span class="nc" id="L34">                logger.info(&quot;Using existing database&quot;);</span>
+<span class="nc" id="L35">                return;</span>
             }
-<span class="nc" id="L30">            int seed = 123;</span>
+<span class="nc" id="L37">            int seed = 123;</span>
 
-<span class="nc" id="L32">            logger.info(&quot;Generating demo data&quot;);</span>
+<span class="nc" id="L39">            logger.info(&quot;Generating demo data&quot;);</span>
 
             // APPS
-<span class="nc" id="L35">            String[] greenAnswers= new String[]{&quot;Yes&quot;, &quot;Yes&quot;, &quot;less than 1 month&quot;, &quot;Yes&quot;, &quot;No&quot;, &quot;&quot;, &quot;They're located only in United Europe&quot;, &quot;No&quot;, &quot;Yes&quot;,</span>
+<span class="nc" id="L42">            String[] greenAnswers= new String[]{&quot;Yes&quot;, &quot;Yes&quot;, &quot;less than 1 month&quot;, &quot;Yes&quot;, &quot;No&quot;, &quot;&quot;, &quot;They're located only in United Europe&quot;, &quot;No&quot;, &quot;Yes&quot;,</span>
                                                 &quot;I encrypt them&quot;, &quot;SHA-3&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;TLS 1.2 or 1.3&quot;, &quot;Yes&quot;, &quot;every week&quot;, &quot;Yes&quot;,
                                                 &quot;Yes, OpenChain&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;No&quot;, &quot;&quot;, &quot;Yes&quot;, &quot;Yes, &gt;=90%&quot;, &quot;Yes&quot;};
-<span class="nc" id="L38">            String[] orangeAnswers= new String[]{&quot;Yes&quot;, &quot;Yes&quot;, &quot;between 1 month and 6 months&quot;, &quot;Yes&quot;, &quot;No&quot;, &quot;&quot;, &quot;They're located only in United Europe&quot;, &quot;Yes&quot;, &quot;Yes&quot;,</span>
+<span class="nc" id="L45">            String[] orangeAnswers= new String[]{&quot;Yes&quot;, &quot;Yes&quot;, &quot;between 1 month and 6 months&quot;, &quot;Yes&quot;, &quot;No&quot;, &quot;&quot;, &quot;They're located only in United Europe&quot;, &quot;Yes&quot;, &quot;Yes&quot;,</span>
                                                 &quot;I encrypt them&quot;, &quot;SHA-3&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;TLS 1.2 or 1.3&quot;, &quot;Yes&quot;, &quot;between a week and a month&quot;, &quot;Yes&quot;,
                                                 &quot;No&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;No&quot;, &quot;No&quot;, &quot;&quot;, &quot;Yes&quot;, &quot;Yes, &gt;=90%&quot;, &quot;Yes&quot;};
-<span class="nc" id="L41">            String[] redAnswers= new String[]{&quot;Yes&quot;, &quot;Yes&quot;, &quot;less than 1 month&quot;, &quot;No&quot;, &quot;No&quot;, &quot;&quot;, &quot;They're located only in United Europe&quot;, &quot;Yes&quot;, &quot;Yes&quot;,</span>
+<span class="nc" id="L48">            String[] redAnswers= new String[]{&quot;Yes&quot;, &quot;Yes&quot;, &quot;less than 1 month&quot;, &quot;No&quot;, &quot;No&quot;, &quot;&quot;, &quot;They're located only in United Europe&quot;, &quot;Yes&quot;, &quot;Yes&quot;,</span>
                                                 &quot;Plain text&quot;, &quot;&quot;, &quot;No&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;Yes&quot;, &quot;TLS 1.2 or 1.3&quot;, &quot;Yes&quot;, &quot;never&quot;, &quot;Yes&quot;,
                                                 &quot;No&quot;, &quot;No&quot;, &quot;&quot;, &quot;No&quot;, &quot;No&quot;, &quot;Yes&quot;, &quot;I don't know&quot;, &quot;Yes&quot;, &quot;Yes, &gt;=90%&quot;, &quot;Yes&quot;};
-<span class="nc" id="L44">            IoTApp[] apps= new IoTApp[10];</span>
-<span class="nc" id="L45">            int i=0;</span>
-<span class="nc" id="L46">            apps[i]= new IoTApp();</span>
-<span class="nc" id="L47">            apps[i].setName(&quot;Thermostat&quot;);</span>
-<span class="nc" id="L48">            apps[i].setDescription(&quot;Efficiently regulates the temperature of the room using its sensors to perceive if there are people inside&quot;);</span>
-<span class="nc" id="L49">            apps[i].setQuestionnaireVote(QuestionnaireVote.GREEN);</span>
-<span class="nc" id="L50">            apps[i].setDetailVote(greenAnswers);</span>
+<span class="nc" id="L51">            IoTApp[] apps= new IoTApp[10];</span>
+<span class="nc" id="L52">            int i=0;</span>
+<span class="nc" id="L53">            apps[i]= new IoTApp();</span>
+<span class="nc" id="L54">            apps[i].setName(&quot;Thermostat&quot;);</span>
+<span class="nc" id="L55">            apps[i].setDescription(&quot;Efficiently regulates the temperature of the room using its sensors to perceive if there are people inside&quot;);</span>
+<span class="nc" id="L56">            apps[i].setQuestionnaireVote(QuestionnaireVote.GREEN);</span>
+<span class="nc" id="L57">            apps[i].setDetailVote(greenAnswers);</span>
             //apps[i].setOptionalAnswers();
-<span class="nc" id="L52">            i++;</span>
+<span class="nc" id="L59">            i++;</span>
 
 
-<span class="nc" id="L55">            apps[i]= new IoTApp();</span>
-<span class="nc" id="L56">            apps[i].setName(&quot;Door Opener&quot;);</span>
-<span class="nc" id="L57">            apps[i].setDescription(&quot;Automatically opens and closes the door when a person is near&quot;);</span>
-<span class="nc" id="L58">            apps[i].setQuestionnaireVote(QuestionnaireVote.ORANGE);</span>
-<span class="nc" id="L59">            apps[i].setDetailVote(orangeAnswers);</span>
+<span class="nc" id="L62">            apps[i]= new IoTApp();</span>
+<span class="nc" id="L63">            apps[i].setName(&quot;Door Opener&quot;);</span>
+<span class="nc" id="L64">            apps[i].setDescription(&quot;Automatically opens and closes the door when a person is near&quot;);</span>
+<span class="nc" id="L65">            apps[i].setQuestionnaireVote(QuestionnaireVote.ORANGE);</span>
+<span class="nc" id="L66">            apps[i].setDetailVote(orangeAnswers);</span>
             //apps[i].setOptionalAnswers();
-<span class="nc" id="L61">            i++;</span>
+<span class="nc" id="L68">            i++;</span>
 
-<span class="nc" id="L63">            apps[i]= new IoTApp();</span>
-<span class="nc" id="L64">            apps[i].setName(&quot;Smart TV&quot;);</span>
-<span class="nc" id="L65">            apps[i].setDescription(&quot;TV connected with internet&quot;);</span>
-<span class="nc" id="L66">            apps[i].setQuestionnaireVote(QuestionnaireVote.RED);</span>
-<span class="nc" id="L67">            apps[i].setDetailVote(redAnswers);</span>
+<span class="nc" id="L70">            apps[i]= new IoTApp();</span>
+<span class="nc" id="L71">            apps[i].setName(&quot;Smart TV&quot;);</span>
+<span class="nc" id="L72">            apps[i].setDescription(&quot;TV connected with internet&quot;);</span>
+<span class="nc" id="L73">            apps[i].setQuestionnaireVote(QuestionnaireVote.RED);</span>
+<span class="nc" id="L74">            apps[i].setDetailVote(redAnswers);</span>
             //apps[i].setOptionalAnswers();
-<span class="nc" id="L69">            i++;</span>
+<span class="nc" id="L76">            i++;</span>
 
 
-<span class="nc" id="L72">            apps[i]= new IoTApp();</span>
-<span class="nc" id="L73">            apps[i].setName(&quot;Air Purifier&quot;);</span>
-<span class="nc" id="L74">            apps[i].setDescription(&quot;Automatically analyzes and purifies the air in the room&quot;);</span>
-<span class="nc" id="L75">            apps[i].setQuestionnaireVote(QuestionnaireVote.ORANGE);</span>
-<span class="nc" id="L76">            apps[i].setDetailVote(orangeAnswers);</span>
+<span class="nc" id="L79">            apps[i]= new IoTApp();</span>
+<span class="nc" id="L80">            apps[i].setName(&quot;Air Purifier&quot;);</span>
+<span class="nc" id="L81">            apps[i].setDescription(&quot;Automatically analyzes and purifies the air in the room&quot;);</span>
+<span class="nc" id="L82">            apps[i].setQuestionnaireVote(QuestionnaireVote.ORANGE);</span>
+<span class="nc" id="L83">            apps[i].setDetailVote(orangeAnswers);</span>
             //apps[i].setOptionalAnswers();
-<span class="nc" id="L78">            i++;</span>
+<span class="nc" id="L85">            i++;</span>
 
-<span class="nc" id="L80">            apps[i]= new IoTApp();</span>
-<span class="nc" id="L81">            apps[i].setName(&quot;Security Cameras&quot;);</span>
-<span class="nc" id="L82">            apps[i].setDescription(&quot;Outdoor cameras connected with WIFI&quot;);</span>
-<span class="nc" id="L83">            apps[i].setQuestionnaireVote(QuestionnaireVote.RED);</span>
-<span class="nc" id="L84">            apps[i].setDetailVote(redAnswers);</span>
+<span class="nc" id="L87">            apps[i]= new IoTApp();</span>
+<span class="nc" id="L88">            apps[i].setName(&quot;Security Cameras&quot;);</span>
+<span class="nc" id="L89">            apps[i].setDescription(&quot;Outdoor cameras connected with WIFI&quot;);</span>
+<span class="nc" id="L90">            apps[i].setQuestionnaireVote(QuestionnaireVote.RED);</span>
+<span class="nc" id="L91">            apps[i].setDetailVote(redAnswers);</span>
             //apps[i].setOptionalAnswers();
-<span class="nc" id="L86">            i++;</span>
+<span class="nc" id="L93">            i++;</span>
 
-<span class="nc" id="L88">            apps[i]= new IoTApp();</span>
-<span class="nc" id="L89">            apps[i].setName(&quot;Video Doorbell&quot;);</span>
-<span class="nc" id="L90">            apps[i].setDescription(&quot;Allows to let you see who's there without moving from the couch&quot;);</span>
-<span class="nc" id="L91">            apps[i].setQuestionnaireVote(QuestionnaireVote.GREEN);</span>
-<span class="nc" id="L92">            apps[i].setDetailVote(greenAnswers);</span>
+<span class="nc" id="L95">            apps[i]= new IoTApp();</span>
+<span class="nc" id="L96">            apps[i].setName(&quot;Video Doorbell&quot;);</span>
+<span class="nc" id="L97">            apps[i].setDescription(&quot;Allows to let you see who's there without moving from the couch&quot;);</span>
+<span class="nc" id="L98">            apps[i].setQuestionnaireVote(QuestionnaireVote.GREEN);</span>
+<span class="nc" id="L99">            apps[i].setDetailVote(greenAnswers);</span>
             //apps[i].setOptionalAnswers();
-<span class="nc" id="L94">            i++;</span>
+<span class="nc" id="L101">            i++;</span>
 
-<span class="nc" id="L96">            apps[i]= new IoTApp();</span>
-<span class="nc" id="L97">            apps[i].setName(&quot;Voice Assistant&quot;);</span>
-<span class="nc" id="L98">            apps[i].setDescription(&quot;Takes care of all your needs&quot;);</span>
-<span class="nc" id="L99">            apps[i].setQuestionnaireVote(QuestionnaireVote.RED);</span>
-<span class="nc" id="L100">            apps[i].setDetailVote(redAnswers);</span>
+<span class="nc" id="L103">            apps[i]= new IoTApp();</span>
+<span class="nc" id="L104">            apps[i].setName(&quot;Voice Assistant&quot;);</span>
+<span class="nc" id="L105">            apps[i].setDescription(&quot;Takes care of all your needs&quot;);</span>
+<span class="nc" id="L106">            apps[i].setQuestionnaireVote(QuestionnaireVote.RED);</span>
+<span class="nc" id="L107">            apps[i].setDetailVote(redAnswers);</span>
             //apps[i].setOptionalAnswers();
-<span class="nc" id="L102">            i++;</span>
+<span class="nc" id="L109">            i++;</span>
 
-<span class="nc" id="L104">            apps[i]= new IoTApp();</span>
-<span class="nc" id="L105">            apps[i].setName(&quot;Smart Lights Bulbs&quot;);</span>
-<span class="nc" id="L106">            apps[i].setDescription(&quot;Vocally controlled light bulbs&quot;);</span>
-<span class="nc" id="L107">            apps[i].setQuestionnaireVote(QuestionnaireVote.GREEN);</span>
-<span class="nc" id="L108">            apps[i].setDetailVote(greenAnswers);</span>
+<span class="nc" id="L111">            apps[i]= new IoTApp();</span>
+<span class="nc" id="L112">            apps[i].setName(&quot;Smart Lights Bulbs&quot;);</span>
+<span class="nc" id="L113">            apps[i].setDescription(&quot;Vocally controlled light bulbs&quot;);</span>
+<span class="nc" id="L114">            apps[i].setQuestionnaireVote(QuestionnaireVote.GREEN);</span>
+<span class="nc" id="L115">            apps[i].setDetailVote(greenAnswers);</span>
             //apps[i].setOptionalAnswers();
-<span class="nc" id="L110">            i++;</span>
+<span class="nc" id="L117">            i++;</span>
 
-<span class="nc" id="L112">            apps[i]= new IoTApp();</span>
-<span class="nc" id="L113">            apps[i].setName(&quot;Windows Opener&quot;);</span>
-<span class="nc" id="L114">            apps[i].setDescription(&quot;Opens and closes the windows in the house based on the hour and on the outside climatic conditions&quot;);</span>
-<span class="nc" id="L115">            apps[i].setQuestionnaireVote(QuestionnaireVote.ORANGE);</span>
-<span class="nc" id="L116">            apps[i].setDetailVote(orangeAnswers);</span>
+<span class="nc" id="L119">            apps[i]= new IoTApp();</span>
+<span class="nc" id="L120">            apps[i].setName(&quot;Windows Opener&quot;);</span>
+<span class="nc" id="L121">            apps[i].setDescription(&quot;Opens and closes the windows in the house based on the hour and on the outside climatic conditions&quot;);</span>
+<span class="nc" id="L122">            apps[i].setQuestionnaireVote(QuestionnaireVote.ORANGE);</span>
+<span class="nc" id="L123">            apps[i].setDetailVote(orangeAnswers);</span>
             //apps[i].setOptionalAnswers();
-<span class="nc" id="L118">            i++;</span>
+<span class="nc" id="L125">            i++;</span>
 
-<span class="nc" id="L120">            apps[i]= new IoTApp();</span>
-<span class="nc" id="L121">            apps[i].setName(&quot;Smart Fridge&quot;);</span>
-<span class="nc" id="L122">            apps[i].setDescription(&quot;WiFI connected fridge with recipe database integrated&quot;);</span>
-<span class="nc" id="L123">            apps[i].setQuestionnaireVote(QuestionnaireVote.GREEN);</span>
-<span class="nc" id="L124">            apps[i].setDetailVote(greenAnswers);</span>
+<span class="nc" id="L127">            apps[i]= new IoTApp();</span>
+<span class="nc" id="L128">            apps[i].setName(&quot;Smart Fridge&quot;);</span>
+<span class="nc" id="L129">            apps[i].setDescription(&quot;WiFI connected fridge with recipe database integrated&quot;);</span>
+<span class="nc" id="L130">            apps[i].setQuestionnaireVote(QuestionnaireVote.GREEN);</span>
+<span class="nc" id="L131">            apps[i].setDetailVote(greenAnswers);</span>
             //apps[i].setOptionalAnswers();
 
-<span class="nc bnc" id="L127" title="All 2 branches missed.">            for(int m=0; m&lt;10; m++){</span>
-<span class="nc bnc" id="L128" title="All 4 branches missed.">                if(m==2 || m==6){</span>
-<span class="nc" id="L129">                    apps[m].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;, &quot;processing of personal information to personalize the content&quot;});</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">            for(int m=0; m&lt;10; m++){</span>
+<span class="nc bnc" id="L135" title="All 4 branches missed.">                if(m==2 || m==6){</span>
+<span class="nc" id="L136">                    apps[m].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;, &quot;processing of personal information to personalize the content&quot;});</span>
                 }
                 else{
-<span class="nc" id="L132">                    apps[m].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;});</span>
+<span class="nc" id="L139">                    apps[m].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;});</span>
                 }
-<span class="nc" id="L134">                logger.info(apps[m].getName());</span>
-<span class="nc" id="L135">                ioTAppRepository.save(apps[m]);</span>
+<span class="nc" id="L141">                logger.info(apps[m].getName());</span>
+<span class="nc" id="L142">                ioTAppRepository.save(apps[m]);</span>
             }
 
             // MAIN USERS
             User subject, controller, dpo;
-<span class="nc" id="L140">            subject= new User();</span>
-<span class="nc" id="L141">            subject.setRole(Role.SUBJECT);</span>
-<span class="nc" id="L142">            subject.setName(&quot;UserSubject&quot;);</span>
-<span class="nc" id="L143">            subject.setHashedPassword(passwordEncoder.encode(&quot;UserSubject&quot;));</span>
-<span class="nc" id="L144">            subject.setMail(&quot;userSubject@protonmail.com&quot;);</span>
-<span class="nc" id="L145">            userRepository.save(subject);</span>
+<span class="nc" id="L147">            subject= new User();</span>
+<span class="nc" id="L148">            subject.setRole(Role.SUBJECT);</span>
+<span class="nc" id="L149">            subject.setName(&quot;UserSubject&quot;);</span>
+<span class="nc" id="L150">            subject.setHashedPassword(passwordEncoder.encode(&quot;UserSubject&quot;));</span>
+<span class="nc" id="L151">            subject.setMail(&quot;userSubject@protonmail.com&quot;);</span>
+<span class="nc" id="L152">            userRepository.save(subject);</span>
 
-<span class="nc" id="L147">            controller= new User();</span>
-<span class="nc" id="L148">            controller.setRole(Role.CONTROLLER);</span>
-<span class="nc" id="L149">            controller.setName(&quot;UserController&quot;);</span>
-<span class="nc" id="L150">            controller.setHashedPassword(passwordEncoder.encode(&quot;UserController&quot;));</span>
-<span class="nc" id="L151">            controller.setMail(&quot;userController@protonmail.com&quot;);</span>
-<span class="nc" id="L152">            userRepository.save(controller);</span>
+<span class="nc" id="L154">            controller= new User();</span>
+<span class="nc" id="L155">            controller.setRole(Role.CONTROLLER);</span>
+<span class="nc" id="L156">            controller.setName(&quot;UserController&quot;);</span>
+<span class="nc" id="L157">            controller.setHashedPassword(passwordEncoder.encode(&quot;UserController&quot;));</span>
+<span class="nc" id="L158">            controller.setMail(&quot;userController@protonmail.com&quot;);</span>
+<span class="nc" id="L159">            userRepository.save(controller);</span>
 
-<span class="nc" id="L154">            dpo= new User();</span>
-<span class="nc" id="L155">            dpo.setRole(Role.DPO);</span>
-<span class="nc" id="L156">            dpo.setName(&quot;UserDPO&quot;);</span>
-<span class="nc" id="L157">            dpo.setHashedPassword(passwordEncoder.encode(&quot;UserDPO&quot;));</span>
-<span class="nc" id="L158">            dpo.setMail(&quot;userDPO@protonmail.com&quot;);</span>
-<span class="nc" id="L159">            userRepository.save(dpo);</span>
+<span class="nc" id="L161">            dpo= new User();</span>
+<span class="nc" id="L162">            dpo.setRole(Role.DPO);</span>
+<span class="nc" id="L163">            dpo.setName(&quot;UserDPO&quot;);</span>
+<span class="nc" id="L164">            dpo.setHashedPassword(passwordEncoder.encode(&quot;UserDPO&quot;));</span>
+<span class="nc" id="L165">            dpo.setMail(&quot;userDPO@protonmail.com&quot;);</span>
+<span class="nc" id="L166">            userRepository.save(dpo);</span>
 
             // UserAppRelation MAIN
-<span class="nc" id="L162">            UserAppRelation[] userAppRelationSubject= new UserAppRelation[10];</span>
-<span class="nc" id="L163">            UserAppRelation[] userAppRelationController= new UserAppRelation[10];</span>
-<span class="nc" id="L164">            UserAppRelation[] userAppRelationDPO= new UserAppRelation[10];</span>
-<span class="nc bnc" id="L165" title="All 2 branches missed.">            for(int j=0; j&lt;10; j++){</span>
-<span class="nc" id="L166">                userAppRelationSubject[j]=new UserAppRelation();</span>
-<span class="nc" id="L167">                userAppRelationSubject[j].setUser(subject);</span>
-<span class="nc" id="L168">                userAppRelationSubject[j].setApp(apps[j]);</span>
-<span class="nc bnc" id="L169" title="All 4 branches missed.">                if(j==2 || j==6){</span>
-<span class="nc" id="L170">                    userAppRelationSubject[j].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;, &quot;processing of personal information to personalize the content&quot;});</span>
+<span class="nc" id="L169">            UserAppRelation[] userAppRelationSubject= new UserAppRelation[10];</span>
+<span class="nc" id="L170">            UserAppRelation[] userAppRelationController= new UserAppRelation[10];</span>
+<span class="nc" id="L171">            UserAppRelation[] userAppRelationDPO= new UserAppRelation[10];</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">            for(int j=0; j&lt;10; j++){</span>
+<span class="nc" id="L173">                userAppRelationSubject[j]=new UserAppRelation();</span>
+<span class="nc" id="L174">                userAppRelationSubject[j].setUser(subject);</span>
+<span class="nc" id="L175">                userAppRelationSubject[j].setApp(apps[j]);</span>
+<span class="nc bnc" id="L176" title="All 4 branches missed.">                if(j==2 || j==6){</span>
+<span class="nc" id="L177">                    userAppRelationSubject[j].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;, &quot;processing of personal information to personalize the content&quot;});</span>
                 }
                 else{
-<span class="nc" id="L173">                    userAppRelationSubject[j].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;});</span>
+<span class="nc" id="L180">                    userAppRelationSubject[j].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;});</span>
                 }
-<span class="nc" id="L175">                userAppRelationRepository.save(userAppRelationSubject[j]);</span>
+<span class="nc" id="L182">                userAppRelationRepository.save(userAppRelationSubject[j]);</span>
 
-<span class="nc" id="L177">                userAppRelationController[j]=new UserAppRelation();</span>
-<span class="nc" id="L178">                userAppRelationController[j].setUser(controller);</span>
-<span class="nc" id="L179">                userAppRelationController[j].setApp(apps[j]);</span>
-<span class="nc bnc" id="L180" title="All 4 branches missed.">                if(j==2 || j==6){</span>
-<span class="nc" id="L181">                    userAppRelationController[j].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;, &quot;processing of personal information to personalize the content&quot;});</span>
+<span class="nc" id="L184">                userAppRelationController[j]=new UserAppRelation();</span>
+<span class="nc" id="L185">                userAppRelationController[j].setUser(controller);</span>
+<span class="nc" id="L186">                userAppRelationController[j].setApp(apps[j]);</span>
+<span class="nc bnc" id="L187" title="All 4 branches missed.">                if(j==2 || j==6){</span>
+<span class="nc" id="L188">                    userAppRelationController[j].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;, &quot;processing of personal information to personalize the content&quot;});</span>
                 }
                 else{
-<span class="nc" id="L184">                    userAppRelationController[j].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;});</span>
+<span class="nc" id="L191">                    userAppRelationController[j].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;});</span>
                 }
-<span class="nc" id="L186">                userAppRelationRepository.save(userAppRelationController[j]);</span>
+<span class="nc" id="L193">                userAppRelationRepository.save(userAppRelationController[j]);</span>
 
-<span class="nc" id="L188">                userAppRelationDPO[j]=new UserAppRelation();</span>
-<span class="nc" id="L189">                userAppRelationDPO[j].setUser(dpo);</span>
-<span class="nc" id="L190">                userAppRelationDPO[j].setApp(apps[j]);</span>
-<span class="nc bnc" id="L191" title="All 4 branches missed.">                if(j==2 || j==6){</span>
-<span class="nc" id="L192">                    userAppRelationDPO[j].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;, &quot;processing of personal information to personalize the content&quot;});</span>
+<span class="nc" id="L195">                userAppRelationDPO[j]=new UserAppRelation();</span>
+<span class="nc" id="L196">                userAppRelationDPO[j].setUser(dpo);</span>
+<span class="nc" id="L197">                userAppRelationDPO[j].setApp(apps[j]);</span>
+<span class="nc bnc" id="L198" title="All 4 branches missed.">                if(j==2 || j==6){</span>
+<span class="nc" id="L199">                    userAppRelationDPO[j].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;, &quot;processing of personal information to personalize the content&quot;});</span>
                 }
                 else{
-<span class="nc" id="L195">                    userAppRelationDPO[j].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;});</span>
+<span class="nc" id="L202">                    userAppRelationDPO[j].setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;});</span>
                 }
-<span class="nc" id="L197">                userAppRelationRepository.save(userAppRelationDPO[j]);</span>
+<span class="nc" id="L204">                userAppRelationRepository.save(userAppRelationDPO[j]);</span>
             }
 
             // SUBJECTS
-<span class="nc" id="L201">            User[] subjects= new User[30];</span>
-<span class="nc" id="L202">            String[] names= new String[]{&quot;Luca Sandini&quot;, &quot;Matt Brown&quot;, &quot;Andrea Rizzato&quot;, &quot;Alivia Wallace&quot;, &quot;Lucinda Singleton&quot;, &quot;Rehan Small&quot;, &quot;Gilbert Melton&quot;, &quot;Estelle Yates&quot;, &quot;Jade Alvarado&quot;, &quot;Tobias Bishop&quot;,</span>
+<span class="nc" id="L208">            User[] subjects= new User[30];</span>
+<span class="nc" id="L209">            String[] names= new String[]{&quot;Luca Sandini&quot;, &quot;Matt Brown&quot;, &quot;Andrea Rizzato&quot;, &quot;Alivia Wallace&quot;, &quot;Lucinda Singleton&quot;, &quot;Rehan Small&quot;, &quot;Gilbert Melton&quot;, &quot;Estelle Yates&quot;, &quot;Jade Alvarado&quot;, &quot;Tobias Bishop&quot;,</span>
                                         &quot;Enzo Pessegatto&quot;, &quot;Lucia Pianezzola&quot;, &quot;Lino Peruzzo&quot;, &quot;Margherita Dimasi&quot;, &quot;Rafael Lloyd&quot;, &quot;Stephen Moran&quot;, &quot;Dominik Gardner&quot;, &quot;Natalie Ingram&quot;, &quot;Leia Erickson&quot;, &quot;Anisa Hutchinson&quot;,
                                         &quot;Matteo Matei&quot;, &quot;Daniele De Santi&quot;, &quot;Victor Moran&quot;, &quot;Todd Lyin&quot;, &quot;Nicola Pozzato&quot;, &quot;Benedetta Zenere&quot;, &quot;Giorgia Gissi&quot;, &quot;Nate Shelton&quot;, &quot;Sofia Holman&quot;, &quot;Teresa Silva&quot;};
 
-<span class="nc bnc" id="L206" title="All 2 branches missed.">            for(int j=0; j&lt;30; j++){</span>
-<span class="nc" id="L207">                subjects[j]=new User();</span>
-<span class="nc" id="L208">                subjects[j].setRole(Role.SUBJECT);</span>
-<span class="nc" id="L209">                subjects[j].setName(names[j]);</span>
-<span class="nc" id="L210">                subjects[j].setHashedPassword(passwordEncoder.encode(names[j]));</span>
-<span class="nc" id="L211">                subjects[j].setMail(names[j].replaceAll(&quot;\\s&quot;,&quot;&quot;) + &quot;@protonmail.com&quot;);</span>
-<span class="nc" id="L212">                userRepository.save(subjects[j]);</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">            for(int j=0; j&lt;30; j++){</span>
+<span class="nc" id="L214">                subjects[j]=new User();</span>
+<span class="nc" id="L215">                subjects[j].setRole(Role.SUBJECT);</span>
+<span class="nc" id="L216">                subjects[j].setName(names[j]);</span>
+<span class="nc" id="L217">                subjects[j].setHashedPassword(passwordEncoder.encode(names[j]));</span>
+<span class="nc" id="L218">                subjects[j].setMail(names[j].replaceAll(&quot;\\s&quot;,&quot;&quot;) + &quot;@protonmail.com&quot;);</span>
+<span class="nc" id="L219">                userRepository.save(subjects[j]);</span>
 
-<span class="nc bnc" id="L214" title="All 2 branches missed.">                for(int k=j-2;k&lt;j+2;k++){</span>
-<span class="nc bnc" id="L215" title="All 2 branches missed.">                    if(k&lt;0){</span>
-<span class="nc" id="L216">                        k*=-1;</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">                for(int k=j-2;k&lt;j+2;k++){</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">                    if(k&lt;0){</span>
+<span class="nc" id="L223">                        k*=-1;</span>
                     }
-<span class="nc" id="L218">                    int m=k%10;</span>
-<span class="nc" id="L219">                    UserAppRelation userAppRelation= new UserAppRelation();</span>
-<span class="nc" id="L220">                    userAppRelation.setApp(apps[m]);</span>
-<span class="nc" id="L221">                    userAppRelation.setUser(subjects[j]);</span>
-<span class="nc bnc" id="L222" title="All 4 branches missed.">                    if(m==2 || m==6){</span>
-<span class="nc" id="L223">                        userAppRelation.setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;, &quot;processing of personal information to personalize the content&quot;});</span>
+<span class="nc" id="L225">                    int m=k%10;</span>
+<span class="nc" id="L226">                    UserAppRelation userAppRelation= new UserAppRelation();</span>
+<span class="nc" id="L227">                    userAppRelation.setApp(apps[m]);</span>
+<span class="nc" id="L228">                    userAppRelation.setUser(subjects[j]);</span>
+<span class="nc bnc" id="L229" title="All 4 branches missed.">                    if(m==2 || m==6){</span>
+<span class="nc" id="L230">                        userAppRelation.setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;, &quot;processing of personal information to personalize the content&quot;});</span>
                     }
                     else{
-<span class="nc" id="L226">                        userAppRelation.setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;});</span>
+<span class="nc" id="L233">                        userAppRelation.setConsenses(new String[]{&quot;processing of personal information to provide the service&quot;});</span>
                     }
-<span class="nc" id="L228">                    userAppRelationRepository.save(userAppRelation);</span>
+<span class="nc" id="L235">                    userAppRelationRepository.save(userAppRelation);</span>
                 }
             }
 
             // CONTROLLERS
-<span class="nc" id="L233">            User[] controllers= new User[5];</span>
-<span class="nc" id="L234">            String[] names2= new String[]{&quot;Yuvraj Allison&quot;, &quot;Vincent Houston&quot;, &quot;Yousef Horne&quot;, &quot;Wayne Cohen&quot;, &quot;Xanthe Blackburn&quot;};</span>
+<span class="nc" id="L240">            User[] controllers= new User[5];</span>
+<span class="nc" id="L241">            String[] names2= new String[]{&quot;Yuvraj Allison&quot;, &quot;Vincent Houston&quot;, &quot;Yousef Horne&quot;, &quot;Wayne Cohen&quot;, &quot;Xanthe Blackburn&quot;};</span>
 
-<span class="nc bnc" id="L236" title="All 2 branches missed.">            for(int j=0; j&lt;5; j++){</span>
-<span class="nc" id="L237">                controllers[j]=new User();</span>
-<span class="nc" id="L238">                controllers[j].setRole(Role.CONTROLLER);</span>
-<span class="nc" id="L239">                controllers[j].setName(names2[j]);</span>
-<span class="nc" id="L240">                controllers[j].setHashedPassword(names2[j]);</span>
-<span class="nc" id="L241">                controllers[j].setMail(names2[j].replaceAll(&quot;\\s&quot;,&quot;&quot;) + &quot;@protonmail.com&quot;);</span>
-<span class="nc" id="L242">                userRepository.save(controllers[j]);</span>
+<span class="nc bnc" id="L243" title="All 2 branches missed.">            for(int j=0; j&lt;5; j++){</span>
+<span class="nc" id="L244">                controllers[j]=new User();</span>
+<span class="nc" id="L245">                controllers[j].setRole(Role.CONTROLLER);</span>
+<span class="nc" id="L246">                controllers[j].setName(names2[j]);</span>
+<span class="nc" id="L247">                controllers[j].setHashedPassword(names2[j]);</span>
+<span class="nc" id="L248">                controllers[j].setMail(names2[j].replaceAll(&quot;\\s&quot;,&quot;&quot;) + &quot;@protonmail.com&quot;);</span>
+<span class="nc" id="L249">                userRepository.save(controllers[j]);</span>
 
-<span class="nc" id="L244">                UserAppRelation userAppRelation= new UserAppRelation();</span>
-<span class="nc" id="L245">                userAppRelation.setUser(controllers[j]);</span>
-<span class="nc" id="L246">                userAppRelation.setApp(apps[j]);</span>
-<span class="nc" id="L247">                userAppRelationRepository.save(userAppRelation);</span>
+<span class="nc" id="L251">                UserAppRelation userAppRelation= new UserAppRelation();</span>
+<span class="nc" id="L252">                userAppRelation.setUser(controllers[j]);</span>
+<span class="nc" id="L253">                userAppRelation.setApp(apps[j]);</span>
+<span class="nc" id="L254">                userAppRelationRepository.save(userAppRelation);</span>
             }
 
             // DPOs
-<span class="nc" id="L251">            User[] dpos= new User[5];</span>
-<span class="nc" id="L252">            String[] names3= new String[]{&quot;Xander Mcconnell&quot;, &quot;Virginia Santini&quot;, &quot;Zaira Romani&quot;, &quot;Walter Santi&quot;, &quot;Walter Treschi&quot;};</span>
+<span class="nc" id="L258">            User[] dpos= new User[5];</span>
+<span class="nc" id="L259">            String[] names3= new String[]{&quot;Xander Mcconnell&quot;, &quot;Virginia Santini&quot;, &quot;Zaira Romani&quot;, &quot;Walter Santi&quot;, &quot;Walter Treschi&quot;};</span>
 
-<span class="nc bnc" id="L254" title="All 2 branches missed.">            for(int j=0; j&lt;5; j++){</span>
-<span class="nc" id="L255">                dpos[j]=new User();</span>
-<span class="nc" id="L256">                dpos[j].setRole(Role.DPO);</span>
-<span class="nc" id="L257">                dpos[j].setName(names3[j]);</span>
-<span class="nc" id="L258">                dpos[j].setHashedPassword(names3[j]);</span>
-<span class="nc" id="L259">                dpos[j].setMail(names3[j].replaceAll(&quot;\\s&quot;,&quot;&quot;) + &quot;@protonmail.com&quot;);</span>
-<span class="nc" id="L260">                userRepository.save(dpos[j]);</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">            for(int j=0; j&lt;5; j++){</span>
+<span class="nc" id="L262">                dpos[j]=new User();</span>
+<span class="nc" id="L263">                dpos[j].setRole(Role.DPO);</span>
+<span class="nc" id="L264">                dpos[j].setName(names3[j]);</span>
+<span class="nc" id="L265">                dpos[j].setHashedPassword(names3[j]);</span>
+<span class="nc" id="L266">                dpos[j].setMail(names3[j].replaceAll(&quot;\\s&quot;,&quot;&quot;) + &quot;@protonmail.com&quot;);</span>
+<span class="nc" id="L267">                userRepository.save(dpos[j]);</span>
 
-<span class="nc" id="L262">                UserAppRelation userAppRelation= new UserAppRelation();</span>
-<span class="nc" id="L263">                userAppRelation.setUser(dpos[j]);</span>
-<span class="nc" id="L264">                userAppRelation.setApp(apps[j+5]);</span>
-<span class="nc" id="L265">                userAppRelationRepository.save(userAppRelation);</span>
+<span class="nc" id="L269">                UserAppRelation userAppRelation= new UserAppRelation();</span>
+<span class="nc" id="L270">                userAppRelation.setUser(dpos[j]);</span>
+<span class="nc" id="L271">                userAppRelation.setApp(apps[j+5]);</span>
+<span class="nc" id="L272">                userAppRelationRepository.save(userAppRelation);</span>
             }
 
             // RIGHTS
-<span class="nc bnc" id="L269" title="All 2 branches missed.">            for(int j=0; j&lt;6; j++){</span>
-<span class="nc" id="L270">                RightRequest request= new RightRequest();</span>
-<span class="nc" id="L271">                request.setReceiver(controller);</span>
-<span class="nc" id="L272">                request.setSender(subjects[j]);</span>
-<span class="nc" id="L273">                request.setApp(apps[j]);</span>
-<span class="nc bnc" id="L274" title="All 2 branches missed.">                request.setHandled(j%2!=0);</span>
-<span class="nc" id="L275">                request.setTime(LocalDateTime.now());</span>
-<span class="nc bnc" id="L276" title="All 2 branches missed.">                if(j==0){</span>
-<span class="nc" id="L277">                    request.setSender(subject);</span>
-<span class="nc" id="L278">                    request.setRightType(RightType.PORTABILITY);</span>
-<span class="nc" id="L279">                    request.setDetails(&quot;Could you send me by my mail?&quot;);</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">            for(int j=0; j&lt;6; j++){</span>
+<span class="nc" id="L277">                RightRequest request= new RightRequest();</span>
+<span class="nc" id="L278">                request.setReceiver(controller);</span>
+<span class="nc" id="L279">                request.setSender(subjects[j]);</span>
+<span class="nc" id="L280">                request.setApp(apps[j]);</span>
+<span class="nc bnc" id="L281" title="All 2 branches missed.">                request.setHandled(j%2!=0);</span>
+<span class="nc" id="L282">                request.setTime(LocalDateTime.now());</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">                if(j==0){</span>
+<span class="nc" id="L284">                    request.setSender(subject);</span>
+<span class="nc" id="L285">                    request.setRightType(RightType.PORTABILITY);</span>
+<span class="nc" id="L286">                    request.setDetails(&quot;Could you send me by my mail?&quot;);</span>
                 }
-<span class="nc bnc" id="L281" title="All 2 branches missed.">                else if(j==1){</span>
-<span class="nc" id="L282">                    request.setSender(subject);</span>
-<span class="nc" id="L283">                    request.setRightType(RightType.DELTEEVERYTHING);</span>
-<span class="nc" id="L284">                    request.setDetails(&quot;I would like ALL my data to be deleted&quot;);</span>
+<span class="nc bnc" id="L288" title="All 2 branches missed.">                else if(j==1){</span>
+<span class="nc" id="L289">                    request.setSender(subject);</span>
+<span class="nc" id="L290">                    request.setRightType(RightType.DELTEEVERYTHING);</span>
+<span class="nc" id="L291">                    request.setDetails(&quot;I would like ALL my data to be deleted&quot;);</span>
                 }
-<span class="nc bnc" id="L286" title="All 2 branches missed.">                else if(j==2){</span>
-<span class="nc" id="L287">                    request.setRightType(RightType.WITHDRAWCONSENT);</span>
-<span class="nc" id="L288">                    request.setOther(&quot;processing of personal information to personalize the content&quot;);</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">                else if(j==2){</span>
+<span class="nc" id="L294">                    request.setRightType(RightType.WITHDRAWCONSENT);</span>
+<span class="nc" id="L295">                    request.setOther(&quot;processing of personal information to personalize the content&quot;);</span>
                 }
-<span class="nc bnc" id="L290" title="All 2 branches missed.">                else if(j==3){</span>
-<span class="nc" id="L291">                    request.setRightType(RightType.INFO);</span>
-<span class="nc" id="L292">                    request.setOther(&quot;The period for which the personal data will be stored&quot;);</span>
-<span class="nc" id="L293">                    request.setResponse(&quot;For 1 year&quot;);</span>
+<span class="nc bnc" id="L297" title="All 2 branches missed.">                else if(j==3){</span>
+<span class="nc" id="L298">                    request.setRightType(RightType.INFO);</span>
+<span class="nc" id="L299">                    request.setOther(&quot;The period for which the personal data will be stored&quot;);</span>
+<span class="nc" id="L300">                    request.setResponse(&quot;For 1 year&quot;);</span>
                 }
-<span class="nc bnc" id="L295" title="All 2 branches missed.">                else if(j==4){</span>
-<span class="nc" id="L296">                    request.setRightType(RightType.ERASURE);</span>
-<span class="nc" id="L297">                    request.setOther(&quot;The video made on August 19 2022&quot;);</span>
+<span class="nc bnc" id="L302" title="All 2 branches missed.">                else if(j==4){</span>
+<span class="nc" id="L303">                    request.setRightType(RightType.ERASURE);</span>
+<span class="nc" id="L304">                    request.setOther(&quot;The video made on August 19 2022&quot;);</span>
                 }
-<span class="nc bnc" id="L299" title="All 2 branches missed.">                else if(j==5){</span>
-<span class="nc" id="L300">                    request.setRightType(RightType.PORTABILITY);</span>
-<span class="nc" id="L301">                    request.setDetails(&quot;As soon as possible, thanks&quot;);</span>
+<span class="nc bnc" id="L306" title="All 2 branches missed.">                else if(j==5){</span>
+<span class="nc" id="L307">                    request.setRightType(RightType.PORTABILITY);</span>
+<span class="nc" id="L308">                    request.setDetails(&quot;As soon as possible, thanks&quot;);</span>
                 }
-<span class="nc" id="L303">                rightRequestRepository.save(request);</span>
+<span class="nc" id="L310">                rightRequestRepository.save(request);</span>
             }
 
-<span class="nc bnc" id="L306" title="All 2 branches missed.">            for(int j=0; j&lt;4; j++){</span>
-<span class="nc" id="L307">                RightRequest request= new RightRequest();</span>
-<span class="nc" id="L308">                request.setReceiver(controllers[j]);</span>
-<span class="nc" id="L309">                request.setSender(subject);</span>
-<span class="nc" id="L310">                request.setApp(apps[j]);</span>
-<span class="nc bnc" id="L311" title="All 2 branches missed.">                request.setHandled(j%2!=0);</span>
-<span class="nc" id="L312">                request.setTime(LocalDateTime.now());</span>
-<span class="nc bnc" id="L313" title="All 2 branches missed.">                if(j==0){</span>
-<span class="nc" id="L314">                    request.setRightType(RightType.DELTEEVERYTHING);</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">            for(int j=0; j&lt;4; j++){</span>
+<span class="nc" id="L314">                RightRequest request= new RightRequest();</span>
+<span class="nc" id="L315">                request.setReceiver(controllers[j]);</span>
+<span class="nc" id="L316">                request.setSender(subject);</span>
+<span class="nc" id="L317">                request.setApp(apps[j]);</span>
+<span class="nc bnc" id="L318" title="All 2 branches missed.">                request.setHandled(j%2!=0);</span>
+<span class="nc" id="L319">                request.setTime(LocalDateTime.now());</span>
+<span class="nc bnc" id="L320" title="All 2 branches missed.">                if(j==0){</span>
+<span class="nc" id="L321">                    request.setRightType(RightType.DELTEEVERYTHING);</span>
                 }
-<span class="nc bnc" id="L316" title="All 2 branches missed.">                else if(j==1){</span>
-<span class="nc" id="L317">                    request.setRightType(RightType.PORTABILITY);</span>
+<span class="nc bnc" id="L323" title="All 2 branches missed.">                else if(j==1){</span>
+<span class="nc" id="L324">                    request.setRightType(RightType.PORTABILITY);</span>
                 }
-<span class="nc bnc" id="L319" title="All 2 branches missed.">                else if(j==2){</span>
-<span class="nc" id="L320">                    request.setRightType(RightType.WITHDRAWCONSENT);</span>
-<span class="nc" id="L321">                    request.setOther(&quot;processing of personal information to personalize the content&quot;);</span>
+<span class="nc bnc" id="L326" title="All 2 branches missed.">                else if(j==2){</span>
+<span class="nc" id="L327">                    request.setRightType(RightType.WITHDRAWCONSENT);</span>
+<span class="nc" id="L328">                    request.setOther(&quot;processing of personal information to personalize the content&quot;);</span>
                 }
-<span class="nc bnc" id="L323" title="All 2 branches missed.">                else if(j==3){</span>
-<span class="nc" id="L324">                    request.setRightType(RightType.INFO);</span>
-<span class="nc" id="L325">                    request.setOther(&quot;The contact details of the data protection officer&quot;);</span>
-<span class="nc" id="L326">                    request.setResponse(&quot;his mail is: carlocarli@protonmail.com&quot;);</span>
+<span class="nc bnc" id="L330" title="All 2 branches missed.">                else if(j==3){</span>
+<span class="nc" id="L331">                    request.setRightType(RightType.INFO);</span>
+<span class="nc" id="L332">                    request.setOther(&quot;The contact details of the data protection officer&quot;);</span>
+<span class="nc" id="L333">                    request.setResponse(&quot;his mail is: carlocarli@protonmail.com&quot;);</span>
                 }
-<span class="nc" id="L328">                rightRequestRepository.save(request);</span>
+<span class="nc" id="L335">                rightRequestRepository.save(request);</span>
             }
 
 
             // PRIVACY NOTICE
-<span class="nc bnc" id="L333" title="All 2 branches missed.">            for(int j=0; j&lt;10; j++){</span>
-<span class="nc" id="L334">                PrivacyNotice privacyNotice= new PrivacyNotice();</span>
-<span class="nc" id="L335">                privacyNotice.setApp(apps[j]);</span>
-<span class="nc bnc" id="L336" title="All 2 branches missed.">                if(j==0){</span>
-<span class="nc" id="L337">                    privacyNotice.setText(&quot;Information Collected: We collect data about your heating and cooling preferences, temperature settings, and usage patterns to provide you our services.\n&quot; +</span>
+<span class="nc bnc" id="L340" title="All 2 branches missed.">            for(int j=0; j&lt;10; j++){</span>
+<span class="nc" id="L341">                PrivacyNotice privacyNotice= new PrivacyNotice();</span>
+<span class="nc" id="L342">                privacyNotice.setApp(apps[j]);</span>
+<span class="nc bnc" id="L343" title="All 2 branches missed.">                if(j==0){</span>
+<span class="nc" id="L344">                    privacyNotice.setText(&quot;Information Collected: We collect data about your heating and cooling preferences, temperature settings, and usage patterns to provide you our services.\n&quot; +</span>
                             &quot;\n&quot; +
                             &quot;Use of Information: The information collected is used to improve the performance and functionality of the thermostat, as well as to offer personalized features and services.\n&quot; +
                             &quot;\n&quot; +
@@ -348,8 +355,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                             &quot;\n&quot; +
                             &quot;Your Data will be stored for 6 months. &quot;);
                 }
-<span class="nc bnc" id="L351" title="All 2 branches missed.">                if(j==1){</span>
-<span class="nc" id="L352">                    privacyNotice.setText(&quot;Information Collected: We collect information about your use of the door opener, including the dates and times when the door is opened and closed.\n&quot; +</span>
+<span class="nc bnc" id="L358" title="All 2 branches missed.">                if(j==1){</span>
+<span class="nc" id="L359">                    privacyNotice.setText(&quot;Information Collected: We collect information about your use of the door opener, including the dates and times when the door is opened and closed.\n&quot; +</span>
                             &quot;\n&quot; +
                             &quot;Use of Information: The information collected is used to improve the performance and functionality of the door opener\n&quot; +
                             &quot;\n&quot; +
@@ -363,8 +370,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                             &quot;\n&quot; +
                             &quot;Contact Us: If you have any questions or concerns about our privacy notice or practices, please contact us at fakemail@protonmail.com. &quot;);
                 }
-<span class="nc bnc" id="L366" title="All 2 branches missed.">                if(j==2){</span>
-<span class="nc" id="L367">                    privacyNotice.setText(&quot;Information Collected: We collect information about your TV usage, such as the channels you watch, the programs you record, and the on-demand content you access.\n&quot; +</span>
+<span class="nc bnc" id="L373" title="All 2 branches missed.">                if(j==2){</span>
+<span class="nc" id="L374">                    privacyNotice.setText(&quot;Information Collected: We collect information about your TV usage, such as the channels you watch, the programs you record, and the on-demand content you access.\n&quot; +</span>
                             &quot;\n&quot; +
                             &quot;Use of Information: The information collected is used to personalize your viewing experience, to improve the performance and functionality of the TV and, with your consent, to provide you personalized content.\n&quot; +
                             &quot;\n&quot; +
@@ -378,8 +385,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                             &quot;\n&quot; +
                             &quot;Contact Us: If you have any questions or concerns about our privacy notice or practices, please contact us at fakemail@protonmail.com.&quot;);
                 }
-<span class="nc bnc" id="L381" title="All 2 branches missed.">                if(j==3){</span>
-<span class="nc" id="L382">                    privacyNotice.setText(&quot;Information Collected: We collect information about your air purifier usage, such as the dates and times when it is turned on and off, the history of the air quality in your room and the settings you use.\n&quot; +</span>
+<span class="nc bnc" id="L388" title="All 2 branches missed.">                if(j==3){</span>
+<span class="nc" id="L389">                    privacyNotice.setText(&quot;Information Collected: We collect information about your air purifier usage, such as the dates and times when it is turned on and off, the history of the air quality in your room and the settings you use.\n&quot; +</span>
                             &quot;\n&quot; +
                             &quot;Use of Information: The information collected is used to improve the performance and functionality of the air purifier, and to offer personalized features and services.\n&quot; +
                             &quot;\n&quot; +
@@ -393,8 +400,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                             &quot;\n&quot; +
                             &quot;Contact Us: If you have any questions or concerns about our privacy notice or practices, please contact us at fakemail@protonmail.com. &quot;);
                 }
-<span class="nc bnc" id="L396" title="All 2 branches missed.">                if(j==4){</span>
-<span class="nc" id="L397">                    privacyNotice.setText(&quot;Information Collected: We collect video and audio recordings captured by your security cameras, as well as information about when and how the cameras are used.\n&quot; +</span>
+<span class="nc bnc" id="L403" title="All 2 branches missed.">                if(j==4){</span>
+<span class="nc" id="L404">                    privacyNotice.setText(&quot;Information Collected: We collect video and audio recordings captured by your security cameras, as well as information about when and how the cameras are used.\n&quot; +</span>
                             &quot;\n&quot; +
                             &quot;Use of Information: The information collected is used to provide the security features and services, and to improve their performance.\n&quot; +
                             &quot;\n&quot; +
@@ -408,8 +415,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                             &quot;\n&quot; +
                             &quot;Contact Us: If you have any questions or concerns about our privacy notice or practices, please contact us at fakemail@protonmail.com. &quot;);
                 }
-<span class="nc bnc" id="L411" title="All 2 branches missed.">                if(j==5){</span>
-<span class="nc" id="L412">                    privacyNotice.setText(&quot;Information Collected: We collect video and audio recordings captured by your doorbell, as well as information about when and how the doorbell is used. \n&quot; +</span>
+<span class="nc bnc" id="L418" title="All 2 branches missed.">                if(j==5){</span>
+<span class="nc" id="L419">                    privacyNotice.setText(&quot;Information Collected: We collect video and audio recordings captured by your doorbell, as well as information about when and how the doorbell is used. \n&quot; +</span>
                             &quot;\n&quot; +
                             &quot;Use of Information: The information collected is used to provide the doorbell's features and services, and to improve their performance.\n&quot; +
                             &quot;\n&quot; +
@@ -423,8 +430,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                             &quot;\n&quot; +
                             &quot;Contact Us: If you have any questions or concerns about our privacy notice or practices, please contact us at fakemail@protonmail.com. \n&quot;);
                 }
-<span class="nc bnc" id="L426" title="All 2 branches missed.">                if(j==6){</span>
-<span class="nc" id="L427">                    privacyNotice.setText(&quot;Information Collected: We collect information about your use of the voice assistant, including voice commands and queries, and any related audio recordings.\n&quot; +</span>
+<span class="nc bnc" id="L433" title="All 2 branches missed.">                if(j==6){</span>
+<span class="nc" id="L434">                    privacyNotice.setText(&quot;Information Collected: We collect information about your use of the voice assistant, including voice commands and queries, and any related audio recordings.\n&quot; +</span>
                             &quot;\n&quot; +
                             &quot;Use of Information: The information collected is used to provide the voice assistant features and services, and to improve their performance, and, with your consent, to provide you personalized content\n&quot; +
                             &quot;\n&quot; +
@@ -438,8 +445,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                             &quot;\n&quot; +
                             &quot;Contact Us: If you have any questions or concerns about our privacy notice or practices, please contact us at fakemail@protonmail.com. &quot;);
                 }
-<span class="nc bnc" id="L441" title="All 2 branches missed.">                if(j==7){</span>
-<span class="nc" id="L442">                    privacyNotice.setText(&quot;Information Collected: We collect information about your use of the smart light bulbs, including the dates and times when they are turned on and off, the settings you use, and the time of day that is needed to provide the automatic on and off switching feature.\n&quot; +</span>
+<span class="nc bnc" id="L448" title="All 2 branches missed.">                if(j==7){</span>
+<span class="nc" id="L449">                    privacyNotice.setText(&quot;Information Collected: We collect information about your use of the smart light bulbs, including the dates and times when they are turned on and off, the settings you use, and the time of day that is needed to provide the automatic on and off switching feature.\n&quot; +</span>
                             &quot;\n&quot; +
                             &quot;Use of Information: The information collected is used to improve the performance and functionality of the smart light bulbs, and to offer personalized features and services.\n&quot; +
                             &quot;\n&quot; +
@@ -453,8 +460,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                             &quot;\n&quot; +
                             &quot;Contact Us: If you have any questions or concerns about our privacy notice or practices, please contact us at fakemail@protonmail.com. &quot;);
                 }
-<span class="nc bnc" id="L456" title="All 2 branches missed.">                if(j==8){</span>
-<span class="nc" id="L457">                    privacyNotice.setText(&quot;Information Collected: We collect information about your use of the window opener, including the dates and times when it is activated and the settings you use.\n&quot; +</span>
+<span class="nc bnc" id="L463" title="All 2 branches missed.">                if(j==8){</span>
+<span class="nc" id="L464">                    privacyNotice.setText(&quot;Information Collected: We collect information about your use of the window opener, including the dates and times when it is activated and the settings you use.\n&quot; +</span>
                             &quot;\n&quot; +
                             &quot;Use of Information: The information collected is used to improve the performance and functionality of the window opener, and to offer personalized features and services.\n&quot; +
                             &quot;\n&quot; +
@@ -468,8 +475,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                             &quot;\n&quot; +
                             &quot;Contact Us: If you have any questions or concerns about our privacy notice or practices, please contact us at fakemail@protonmail.com.&quot;);
                 }
-<span class="nc bnc" id="L471" title="All 2 branches missed.">                if(j==9){</span>
-<span class="nc" id="L472">                    privacyNotice.setText(&quot;Information Collected: We collect information about your use of the smart fridge, including the items you store and the dates and times when you open and close the fridge.\n&quot; +</span>
+<span class="nc bnc" id="L478" title="All 2 branches missed.">                if(j==9){</span>
+<span class="nc" id="L479">                    privacyNotice.setText(&quot;Information Collected: We collect information about your use of the smart fridge, including the items you store and the dates and times when you open and close the fridge.\n&quot; +</span>
                             &quot;\n&quot; +
                             &quot;Use of Information: The information collected is used to improve the performance and functionality of the smart fridge, and to offer personalized features and services.\n&quot; +
                             &quot;\n&quot; +
@@ -483,15 +490,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                             &quot;\n&quot; +
                             &quot;Contact Us: If you have any questions or concerns about our privacy notice or practices, please contact us at fakemail@protonmail.com. &quot;);
                 }
-<span class="nc" id="L486">                privacyNoticeRepository.save(privacyNotice);</span>
+<span class="nc" id="L493">                privacyNoticeRepository.save(privacyNotice);</span>
             }
 
 
             // MESSAGGI
-<span class="nc" id="L491">            Message message= new Message();</span>
-<span class="nc" id="L492">            message.setSender(subject);</span>
-<span class="nc" id="L493">            message.setReceiver(controller);</span>
-<span class="nc" id="L494">            message.setMessage(&quot;Dear UserController,\n&quot; +</span>
+<span class="nc" id="L498">            Message message= new Message();</span>
+<span class="nc" id="L499">            message.setSender(subject);</span>
+<span class="nc" id="L500">            message.setReceiver(controller);</span>
+<span class="nc" id="L501">            message.setMessage(&quot;Dear UserController,\n&quot; +</span>
                     &quot;\n&quot; +
                     &quot;I am writing to request the removal of my personal information in accordance with the General Data Protection Regulation (GDPR). As the owner of the smart light bulbs, I have the right to have my personal data erased.\n&quot; +
                     &quot;\n&quot; +
@@ -499,13 +506,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                     &quot;\n&quot; +
                     &quot;Sincerely,\n&quot; +
                     &quot;UserSubject \n&quot;);
-<span class="nc" id="L502">            message.setTime(LocalDateTime.now());</span>
-<span class="nc" id="L503">            messageRepository.save(message);</span>
+<span class="nc" id="L509">            message.setTime(LocalDateTime.now());</span>
+<span class="nc" id="L510">            messageRepository.save(message);</span>
 
-<span class="nc" id="L505">            Message message2= new Message();</span>
-<span class="nc" id="L506">            message2.setSender(subjects[0]);</span>
-<span class="nc" id="L507">            message2.setReceiver(controller);</span>
-<span class="nc" id="L508">            message2.setMessage(&quot;Dear UserController,\n&quot; +</span>
+<span class="nc" id="L512">            Message message2= new Message();</span>
+<span class="nc" id="L513">            message2.setSender(subjects[0]);</span>
+<span class="nc" id="L514">            message2.setReceiver(controller);</span>
+<span class="nc" id="L515">            message2.setMessage(&quot;Dear UserController,\n&quot; +</span>
                     &quot;\n&quot; +
                     &quot;I am writing to request the removal of my personal information in accordance with the General Data Protection Regulation (GDPR). As the owner of the smart light bulbs, I have the right to have my personal data erased.\n&quot; +
                     &quot;\n&quot; +
@@ -513,8 +520,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                     &quot;\n&quot; +
                     &quot;Sincerely,\n&quot; +
                     &quot;Luca Sandini \n&quot;);
-<span class="nc" id="L516">            message2.setTime(LocalDateTime.now());</span>
-<span class="nc" id="L517">            messageRepository.save(message2);</span>
+<span class="nc" id="L523">            message2.setTime(LocalDateTime.now());</span>
+<span class="nc" id="L524">            messageRepository.save(message2);</span>
 
 
 
@@ -1053,8 +1060,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
             */
             //FINE AGGIUNTA
 
-<span class="nc" id="L1056">            logger.info(&quot;Generated demo data&quot;);</span>
-<span class="nc" id="L1057">        };</span>
+<span class="nc" id="L1063">            logger.info(&quot;Generated demo data&quot;);</span>
+<span class="nc" id="L1064">        };</span>
     }
 
 }
