@@ -4,7 +4,14 @@ import com.privacydashboard.application.data.GlobalVariables.QuestionnaireVote;
 import com.privacydashboard.application.data.GlobalVariables.RightType;
 import com.privacydashboard.application.data.GlobalVariables.Role;
 import com.privacydashboard.application.data.entity.*;
-import com.privacydashboard.application.data.service.*;
+import com.privacydashboard.application.data.service.IoTAppRepository;
+import com.privacydashboard.application.data.service.MessageRepository;
+import com.privacydashboard.application.data.service.NotificationRepository;
+import com.privacydashboard.application.data.service.PrivacyNoticeRepository;
+import com.privacydashboard.application.data.service.RightRequestRepository;
+import com.privacydashboard.application.data.service.UserAppRelationRepository;
+import com.privacydashboard.application.data.service.UserRepository;
+import com.privacydashboard.application.security.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 
 import java.time.LocalDateTime;
